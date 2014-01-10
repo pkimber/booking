@@ -1,0 +1,9 @@
+recursive-include story/static *
+recursive-include story/templates *
+
+include LICENSE
+include README
+include requirements/*.txt
+include *.txt
+
+prune example/

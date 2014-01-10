@@ -1,0 +1,44 @@
+{% extends "story/base.html" %}
+{% load staticfiles %}
+
+{% block sub_title %}
+  Home
+{% endblock sub_title %}
+
+{% block sub_heading %}
+  Home
+{% endblock sub_heading %}
+
+{% block content %}
+  <div class="pure-g-r">
+    <div class="pure-u-1">
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          {% if user.is_active %}
+            <li>
+              <a href="{% url 'story.create.trust' %}">
+                <i class="fa fa-edit"></i>
+                Create
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'story.list' %}">
+                <i class="fa fa-list"></i>
+                List news
+              </a>
+            </li>
+          {% else %}
+            <li>
+              <a href="{% url 'story.create.anon' %}">
+                <i class="fa fa-edit"></i>
+                Create news
+              </a>
+            </li>
+          {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
