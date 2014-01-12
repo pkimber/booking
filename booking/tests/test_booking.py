@@ -39,3 +39,15 @@ class TestBooking(TestCase):
         Not going to check this for now.
         """
         pass
+
+    def test_start_equals_end(self):
+        """Booking - start date and end date are the same!"""
+        today = datetime.today()
+        next_week = today + timedelta(days=7)
+        self.assertRaises(
+            ValidationError,
+            make_booking,
+            next_week,
+            next_week,
+            'Not even one day in the sun',
+        )

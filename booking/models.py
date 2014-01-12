@@ -31,5 +31,9 @@ class Booking(TimeStampedModel):
             raise ValidationError(
                 'A booking cannot end before it has started.'
             )
+        if (self.from_date == self.to_date):
+            raise ValidationError(
+                'A booking cannot start and end on the same day.'
+            )
 
 reversion.register(Booking)
