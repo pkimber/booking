@@ -11,6 +11,16 @@ from booking.tests.model_maker import make_booking
 
 class TestBooking(TestCase):
 
+    def test_booking(self):
+        """A simple booking."""
+        today = datetime.today()
+        next_week = today + timedelta(days=7)
+        make_booking(
+            next_week,
+            next_week + timedelta(days=3),
+            'Three days in the sun'
+        )
+
     def test_end_before_start(self):
         """Booking - start before the end!"""
         today = datetime.today()
@@ -22,3 +32,10 @@ class TestBooking(TestCase):
             next_week + timedelta(days=-2),
             'Two days in the sun',
         )
+
+    def test_double_booking(self):
+        """Don't allow a double booking.
+
+        Not going to check this for now.
+        """
+        pass
