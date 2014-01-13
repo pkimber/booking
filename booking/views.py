@@ -15,9 +15,15 @@ from braces.views import (
     StaffuserRequiredMixin,
 )
 
+from base.view_utils import BaseMixin
+
 from .forms import BookingForm
 from .models import Booking
-from base.view_utils import BaseMixin
+from .service import (
+    first_next_month,
+    first_prev_month,
+    first_this_month,
+)
 
 
 class BookingCreateView(
@@ -49,6 +55,20 @@ class BookingListMonthView(
             return datetime(year, month, 1).date()
         except ValueError:
             raise Http404("Invalid date.")
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListMonthView, self).get_context_data(**kwargs)
+        d = self._get_date()
+        today = datetime.today().date()
+        is_current_month = d.month == today.month and d.year == today.year
+        context.update(dict(
+            first_this_month=first_this_month(d),
+            first_next_month=first_next_month(d),
+            first_prev_month=first_prev_month(d),
+            is_current_month=is_current_month,
+            today=first_this_month(today),
+        ))
+        return context
 
     def get_queryset(self):
         d = self._get_date()

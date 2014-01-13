@@ -43,7 +43,6 @@ class TestView(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         # check booking
-        # check booking
         try:
             Booking.objects.get(title='Hatherleigh')
         except Booking.DoesNotExist:

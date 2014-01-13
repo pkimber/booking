@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block sub_heading %}
-  Bookings
+Bookings for {{ first_this_month|date:"F Y" }}
 {% endblock sub_heading %}
 
 {% block content %}
@@ -15,8 +15,32 @@
         <ul>
           <li>
             <a href="{% url "booking.create" %}">
-              <i class="fa fa-calendar"></i>
+              <i class="fa fa-calendar-o"></i>
               New booking
+            </a>
+          </li>
+          {% if not is_current_month %}
+            <li>
+              <a href="{% url "booking.list.month" today|date:"Y" today|date:"m" %}">
+                <i class="fa fa-calendar"></i>
+                {{ today|date:"F Y" }}
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li>
+            <a href="{% url "booking.list.month" first_prev_month|date:"Y" first_prev_month|date:"m" %}">
+              <i class="fa fa-calendar"></i>
+              {{ first_prev_month|date:"M Y" }}
+            </a>
+          </li>
+          <li>
+            <a href="{% url "booking.list.month" first_next_month|date:"Y" first_next_month|date:"m" %}">
+              <i class="fa fa-calendar"></i>
+              {{ first_next_month|date:"M Y" }}
             </a>
           </li>
         </ul>
