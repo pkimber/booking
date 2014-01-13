@@ -27,6 +27,7 @@ def grouper(iterable, n, fillvalue=None):
 
 
 class BookingCount(object):
+    """Keep track of booking dates, when they start and end."""
 
     def __init__(self):
         self.morning = False
