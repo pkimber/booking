@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import (
     CreateView,
     ListView,
+    UpdateView,
 )
 
 from braces.views import (
@@ -28,3 +29,13 @@ class BookingCreateView(
 class BookingListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
 
     model = Booking
+
+
+class BookingUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = BookingForm
+    model = Booking
+
+    def get_success_url(self):
+        return reverse('booking.list')

@@ -28,18 +28,24 @@ class Booking(TimeStampedModel):
             self.title,
         ))
 
+    def _is_in_the_past(self):
+        return self.to_date < datetime.today().date()
+
     def clean(self):
-        if (self.from_date > self.to_date):
+        if self.from_date > self.to_date:
             raise ValidationError(
                 'A booking cannot end before it has started.'
             )
-        if (self.from_date == self.to_date):
+        if self.from_date == self.to_date:
             raise ValidationError(
                 'A booking cannot start and end on the same day.'
             )
-        if (self.to_date < datetime.today().date()):
+        if self._is_in_the_past():
             raise ValidationError(
                 'You cannot make a booking in the past.'
             )
+
+    def can_update(self):
+        return not self._is_in_the_past()
 
 reversion.register(Booking)

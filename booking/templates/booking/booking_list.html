@@ -35,7 +35,6 @@
             <tr valign="top">
               <td>
                 {{ b.pk }}
-                <i class="fa fa-edit"></i>
               </td>
               <td>
                 {{ b.from_date|date:"D jS M Y" }}
@@ -44,7 +43,14 @@
                 {{ b.to_date|date:"D jS M Y" }}
               </td>
               <td>
-                <strong>{{ b.title }}</strong>
+                {% if b.can_update %}
+                  <a href="{% url "booking.update" b.pk %}">
+                    <i class="fa fa-edit"></i>
+                    {{ b.title }}
+                  </a>
+                {% else %}
+                  {{ b.title }}
+                {% endif %}
                 {% if b.description %}
                   <br />
                   {{ b.description|urlize|linebreaksbr }}
