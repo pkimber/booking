@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -10,7 +12,6 @@ import reversion
 
 from base.model_utils import TimeStampedModel
 
-from .service import first_this_month
 
 class BookingManager(models.Manager):
 
@@ -20,9 +21,19 @@ class BookingManager(models.Manager):
         If the to date is in this month, then include the booking.
 
         """
-        today = datetime.today().date()
-        first = first_this_month(today)
+        first = datetime.today().date() + relativedelta(day=1)
         return self.model.objects.filter(to_date__gte=first)
+
+    def calendar(self, start_date, end_date):
+        """Return a list of booking objects starting with this month.
+
+        If the to date is in this month, then include the booking.
+
+        """
+        return self.model.objects.filter(
+            to_date__gte=start_date,
+            from_date__lte=end_date,
+        )
 
     def month(self, month, year):
         """Return booking objects for a month.
