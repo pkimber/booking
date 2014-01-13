@@ -4,6 +4,7 @@ from django.conf.urls import (
 
 from .views import (
     BookingCreateView,
+    BookingDeleteView,
     BookingListMonthView,
     BookingListView,
     BookingUpdateView,
@@ -19,6 +20,10 @@ urlpatterns = patterns(
     url(regex=r'^$',
         view=BookingListView.as_view(),
         name='booking.list'
+        ),
+    url(regex=r'^(?P<pk>\d+)/delete/$',
+        view=BookingDeleteView.as_view(),
+        name='booking.delete'
         ),
     url(regex=r'^(?P<pk>\d+)/update/$',
         view=BookingUpdateView.as_view(),

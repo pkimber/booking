@@ -1,10 +1,12 @@
 from datetime import datetime
 
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404
 from django.views.generic import (
     CreateView,
+    DeleteView,
     ListView,
     UpdateView,
 )
@@ -34,6 +36,26 @@ class BookingCreateView(
     def get_success_url(self):
         return reverse('booking.list')
 
+
+class BookingDeleteView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, DeleteView):
+
+    model = Booking
+
+    def delete(self, request, *args, **kwargs):
+        result = super(BookingDeleteView, self).delete(request, *args, **kwargs)
+        messages.info(
+            self.request,
+            "Deleted booking from {} to {}, {}".format(
+                self.object.from_date.strftime('%d/%m/%Y'),
+                self.object.to_date.strftime('%d/%m/%Y'),
+                self.object.title,
+            )
+        )
+        return result
+
+    def get_success_url(self):
+        return reverse('booking.list')
 
 
 class BookingListView(

@@ -46,6 +46,7 @@
             <th>From</th>
             <th>To</th>
             <th>Description</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -77,6 +78,11 @@
                   <br />
                   {{ b.description|urlize|linebreaksbr }}
                 {% endif %}
+              </td>
+              <td>
+                <a href="{% url "booking.delete" b.pk %}">
+                  <i class="fa fa-eraser"></i>
+                </a>
               </td>
             </tr>
           {% endfor %}

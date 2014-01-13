@@ -21,6 +21,11 @@ class TestViewPerm(PermTestCase):
         url = reverse('booking.create')
         self.assert_staff_only(url)
 
+    def test_delete(self):
+        b = get_alpe_d_huez()
+        url = reverse('booking.delete', kwargs={'pk': b.pk})
+        self.assert_staff_only(url)
+
     def test_list(self):
         url = reverse('booking.list')
         self.assert_staff_only(url)

@@ -48,6 +48,19 @@ class TestView(TestCase):
         except Booking.DoesNotExist:
             self.fail('cannot find new booking')
 
+    def test_delete(self):
+        b = get_alpe_d_huez()
+        response = self.client.post(
+            reverse('booking.delete', kwargs=dict(pk=b.pk)),
+        )
+        self.assertEqual(response.status_code, 302)
+        # check booking
+        try:
+            b = get_alpe_d_huez()
+            self.fail('booking was not deleted')
+        except Booking.DoesNotExist:
+            pass
+
     def test_list(self):
         response = self.client.get(reverse('booking.list'))
         self.assertEqual(response.status_code, 200)

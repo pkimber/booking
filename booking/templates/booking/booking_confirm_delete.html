@@ -1,0 +1,37 @@
+{% extends "booking/base.html" %}
+
+{% block sub_title %}
+  Delete booking
+{% endblock sub_title %}
+
+{% block sub_heading %}
+  Delete booking
+{% endblock sub_heading %}
+
+{% block content %}
+  <div class="pure-g-r">
+    <div class="pure-u-1">
+      <form action="" method="post">{% csrf_token %}
+        <p>
+          Are you sure you want to delete this booking?
+        </p>
+        <p>
+          From
+          <strong>{{ booking.from_date|date:"D jS M Y" }}</strong>
+          to
+          <strong>{{ booking.to_date|date:"D jS M Y" }}</strong>
+        </p>
+        <p>
+          <strong>{{ booking.title }}</strong>
+        </p>
+        {% if booking.description %}
+          <p>
+            {{ booking.description }}
+          </p>
+        {% endif %}
+        <input type="submit" value="Confirm" class="pure-button pure-button-primary" />
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+
