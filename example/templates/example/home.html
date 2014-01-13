@@ -9,6 +9,11 @@
   Example app
 {% endblock sub_heading %}
 
+{% block stylesheets %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'example/css/example.css' %}">
+{% endblock stylesheets %}
+
 {% block content %}
   <div class="pure-g-r">
     <div class="pure-u-1">
@@ -27,6 +32,17 @@
             </a>
           </li>
         </ul>
+        {% for c in calendar %}
+          <div class="pure-g-r">
+            {% for month in c %}
+              <div class="pure-u-1-3">
+                <div class="l-box">
+                  {{ month }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>

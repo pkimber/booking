@@ -1,0 +1,87 @@
+body,
+.pure-g [class *= "pure-u"],
+.pure-g-r [class *= "pure-u"] {
+    /* Set your content font stack here:
+    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+     */
+    font-family: 'Raleway', sans-serif;
+}
+
+h1 {
+    color: #2D9493;
+}
+
+h2 {
+    color: #2D9493;
+}
+
+h3 {
+    color: #2D9493;
+    margin: 0;
+}
+
+h4 {
+    color: #E88656;
+}
+
+p {
+    color: #060606;
+}
+
+.content {
+    margin: 0 auto;
+    max-width: 960px;
+}
+
+.content .content-ribbon {
+    margin: 0;
+}
+
+.content .content-subhead {
+    border-bottom: 2px solid #E88656;
+    display: inline-block;
+}
+
+p {
+    margin: 0px 0px 15px 0px;
+}
+
+.pure-button-xsmall {
+    font-size: 70%;
+}
+
+.pure-button-small {
+    font-size: 85%;
+}
+
+table {
+    border-collapse:collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #2D9493;
+}
+
+td {
+    text-align: center;
+    width: 14%;
+}
+
+td.afternoon {
+    background-image:url(afternoon.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+td.booked {
+    background: #7ED9B6;
+}
+
+
+td.morning {
+    background-image:url(morning.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
