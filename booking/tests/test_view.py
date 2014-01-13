@@ -7,7 +7,10 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from booking.models import Booking
-from booking.tests.scenario import default_scenario_booking
+from booking.tests.scenario import (
+    default_scenario_booking,
+    get_alpe_d_huez,
+)
 from login.tests.scenario import (
     default_scenario_login,
     get_user_staff,
@@ -40,8 +43,11 @@ class TestView(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         # check booking
-        b = Booking.objects.get(title='Hatherleigh')
-        self.assertEqual('Hatherleigh', b.title)
+        # check booking
+        try:
+            Booking.objects.get(title='Hatherleigh')
+        except Booking.DoesNotExist:
+            self.fail('cannot find new booking')
 
     def test_list(self):
         response = self.client.get(reverse('booking.list'))
@@ -56,3 +62,20 @@ class TestView(TestCase):
             )
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_update(self):
+        b = get_alpe_d_huez()
+        response = self.client.post(
+            reverse('booking.update', kwargs=dict(pk=b.pk)),
+            dict(
+                from_date=b.from_date,
+                to_date=b.to_date,
+                title='Zeal Monachorum',
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        # check booking
+        try:
+            Booking.objects.get(title='Zeal Monachorum')
+        except Booking.DoesNotExist:
+            self.fail('cannot find updated booking')
