@@ -2,11 +2,11 @@
 {% load staticfiles %}
 
 {% block sub_title %}
-  Home
+  Example app
 {% endblock sub_title %}
 
 {% block sub_heading %}
-  Home
+  Example app
 {% endblock sub_heading %}
 
 {% block content %}
@@ -14,24 +14,20 @@
     <div class="pure-u-1">
       <div class="pure-menu pure-menu-open pure-menu-horizontal">
         <ul>
-          {% if user.is_active %}
-            <li>
-              <a href="{% url 'booking.create' %}">
-                <i class="fa fa-calendar"></i>
-                New booking
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'booking.list' %}">
-                <i class="fa fa-list"></i>
-                List bookings
-              </a>
-            </li>
-          {% endif %}
+          <li>
+            <a href="{% url 'booking.list' %}">
+              <i class="fa fa-calendar"></i>
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'booking.create' %}">
+              <i class="fa fa-calendar-o"></i>
+              New booking
+            </a>
           </li>
         </ul>
       </div>
     </div>
   </div>
 {% endblock content %}
-
