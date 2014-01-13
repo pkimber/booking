@@ -1,5 +1,5 @@
-recursive-include story/static *
-recursive-include story/templates *
+recursive-include booking/static *
+recursive-include booking/templates *
 
 include LICENSE
 include README
