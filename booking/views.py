@@ -22,7 +22,6 @@ from .models import Booking
 from .service import (
     first_next_month,
     first_prev_month,
-    first_this_month,
 )
 
 
@@ -42,6 +41,20 @@ class BookingListView(
 
     model = Booking
 
+    def get_context_data(self, **kwargs):
+        context = super(BookingListView, self).get_context_data(**kwargs)
+        today = datetime.today().date()
+        context.update(dict(
+            first_next_month=first_next_month(today),
+            first_prev_month=first_prev_month(today),
+            sub_heading="Home",
+        ))
+        return context
+
+    def get_queryset(self):
+        """Maximum 31 bookings."""
+        return Booking.objects.bookings()[:31]
+
 
 class BookingListMonthView(
         LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
@@ -59,14 +72,10 @@ class BookingListMonthView(
     def get_context_data(self, **kwargs):
         context = super(BookingListMonthView, self).get_context_data(**kwargs)
         d = self._get_date()
-        today = datetime.today().date()
-        is_current_month = d.month == today.month and d.year == today.year
         context.update(dict(
-            first_this_month=first_this_month(d),
             first_next_month=first_next_month(d),
             first_prev_month=first_prev_month(d),
-            is_current_month=is_current_month,
-            today=first_this_month(today),
+            sub_heading="Bookings for {}".format(d.strftime("%B %Y"))
         ))
         return context
 

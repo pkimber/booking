@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block sub_heading %}
-Bookings for {{ first_this_month|date:"F Y" }}
+  {{ sub_heading }}
 {% endblock sub_heading %}
 
 {% block content %}
@@ -14,23 +14,17 @@ Bookings for {{ first_this_month|date:"F Y" }}
       <div class="pure-menu pure-menu-open pure-menu-horizontal">
         <ul>
           <li>
+            <a href="{% url 'booking.list' %}">
+              <i class="fa fa-calendar"></i>
+              Home
+            </a>
+          </li>
+          <li>
             <a href="{% url "booking.create" %}">
               <i class="fa fa-calendar-o"></i>
               New booking
             </a>
           </li>
-          {% if not is_current_month %}
-            <li>
-              <a href="{% url "booking.list.month" today|date:"Y" today|date:"m" %}">
-                <i class="fa fa-calendar"></i>
-                {{ today|date:"F Y" }}
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
-      <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <ul>
           <li>
             <a href="{% url "booking.list.month" first_prev_month|date:"Y" first_prev_month|date:"m" %}">
               <i class="fa fa-calendar"></i>
@@ -61,13 +55,17 @@ Bookings for {{ first_this_month|date:"F Y" }}
                 {{ b.pk }}
               </td>
               <td>
+                {% if not b.is_current %}<del>{% endif %}
                 {{ b.from_date|date:"D jS M Y" }}
+                {% if not b.is_current %}</del>{% endif %}
               </td>
               <td>
+                {% if not b.is_current %}<del>{% endif %}
                 {{ b.to_date|date:"D jS M Y" }}
+                {% if not b.is_current %}</del>{% endif %}
               </td>
               <td>
-                {% if b.can_update %}
+                {% if b.is_current %}
                   <a href="{% url "booking.update" b.pk %}">
                     <i class="fa fa-edit"></i>
                     {{ b.title }}

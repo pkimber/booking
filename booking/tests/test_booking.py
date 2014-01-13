@@ -22,7 +22,7 @@ class TestBooking(TestCase):
             'Three days in the sun'
         )
 
-    def test_can_update(self):
+    def test_is_current(self):
         """A simple booking."""
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
@@ -31,9 +31,9 @@ class TestBooking(TestCase):
             next_week + timedelta(days=3),
             'Three days in the sun'
         )
-        self.assertTrue(b.can_update())
+        self.assertTrue(b.is_current())
 
-    def test_can_update_in_the_past(self):
+    def test_s_current_in_the_past(self):
         """A simple booking."""
         today = datetime.today().date()
         last_week = today + timedelta(days=-7)
@@ -43,7 +43,7 @@ class TestBooking(TestCase):
             title='Three days in the sun'
         ))
         b.save()
-        self.assertFalse(b.can_update())
+        self.assertFalse(b.is_current())
 
     def test_booking_in_the_past(self):
         """Cannot create a booking in the past."""

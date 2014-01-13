@@ -10,8 +10,19 @@ import reversion
 
 from base.model_utils import TimeStampedModel
 
+from .service import first_this_month
 
 class BookingManager(models.Manager):
+
+    def bookings(self):
+        """Return a list of booking objects starting with this month.
+
+        If the to date is in this month, then include the booking.
+
+        """
+        today = datetime.today().date()
+        first = first_this_month(today)
+        return self.model.objects.filter(to_date__gte=first)
 
     def month(self, month, year):
         """Return booking objects for a month.
@@ -62,7 +73,7 @@ class Booking(TimeStampedModel):
                 'You cannot make a booking in the past.'
             )
 
-    def can_update(self):
+    def is_current(self):
         return not self._is_in_the_past()
 
 reversion.register(Booking)
