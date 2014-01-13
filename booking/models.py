@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -9,8 +11,8 @@ from base.model_utils import TimeStampedModel
 
 
 class Booking(TimeStampedModel):
-    from_date = models.DateField()
-    to_date = models.DateField()
+    from_date = models.DateField(help_text="(dd/mm/yyyy)")
+    to_date = models.DateField(help_text="(dd/mm/yyyy)")
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
@@ -34,6 +36,10 @@ class Booking(TimeStampedModel):
         if (self.from_date == self.to_date):
             raise ValidationError(
                 'A booking cannot start and end on the same day.'
+            )
+        if (self.to_date < datetime.today().date()):
+            raise ValidationError(
+                'You cannot make a booking in the past.'
             )
 
 reversion.register(Booking)

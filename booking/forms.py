@@ -8,14 +8,14 @@ from .models import Booking
 class BookingEmptyForm(forms.ModelForm):
 
     class Meta:
-        model = Story
+        model = Booking
         fields = ()
 
 
 class BookingForm(RequiredFieldForm):
 
     def __init__(self, *args, **kwargs):
-        super(StoryTrustForm, self).__init__(*args, **kwargs)
+        super(BookingForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update(
             {'class': 'pure-input-2-3'}
         )

@@ -1,17 +1,59 @@
 {% extends "booking/base.html" %}
 
 {% block title %}
-  News stories
+  Bookings
 {% endblock title %}
 
 {% block sub_heading %}
-  News stories
+  Bookings
 {% endblock sub_heading %}
 
 {% block content %}
   <div class="pure-g-r">
     <div class="pure-u-1">
-      Booking System
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li>
+            <a href="{% url "booking.create" %}">
+              <i class="fa fa-calendar"></i>
+              New booking
+            </a>
+          </li>
+        </ul>
+      </div>
+      <table class="pure-table pure-table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in booking_list %}
+            <tr valign="top">
+              <td>
+                {{ b.pk }}
+                <i class="fa fa-edit"></i>
+              </td>
+              <td>
+                {{ b.from_date|date:"D jS M Y" }}
+              </td>
+              <td>
+                {{ b.to_date|date:"D jS M Y" }}
+              </td>
+              <td>
+                <strong>{{ b.title }}</strong>
+                {% if b.description %}
+                  <br />
+                  {{ b.description|urlize|linebreaksbr }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 {% endblock content %}

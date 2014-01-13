@@ -21,6 +21,18 @@ class TestBooking(TestCase):
             'Three days in the sun'
         )
 
+    def test_booking_in_the_past(self):
+        """Cannot create a booking in the past."""
+        today = datetime.today()
+        last_week = today + timedelta(days=-7)
+        self.assertRaises(
+            ValidationError,
+            make_booking,
+            last_week,
+            last_week + timedelta(days=3),
+            'Missed our holiday'
+        )
+
     def test_end_before_start(self):
         """Booking - start before the end!"""
         today = datetime.today()

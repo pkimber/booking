@@ -1,4 +1,4 @@
-{% extends "story/base.html" %}
+{% extends "booking/base.html" %}
 {% load staticfiles %}
 
 {% block sub_title %}
@@ -16,22 +16,15 @@
         <ul>
           {% if user.is_active %}
             <li>
-              <a href="{% url 'story.create.trust' %}">
-                <i class="fa fa-edit"></i>
-                Create
+              <a href="{% url 'booking.create' %}">
+                <i class="fa fa-calendar"></i>
+                New booking
               </a>
             </li>
             <li>
-              <a href="{% url 'story.list' %}">
+              <a href="{% url 'booking.list' %}">
                 <i class="fa fa-list"></i>
-                List news
-              </a>
-            </li>
-          {% else %}
-            <li>
-              <a href="{% url 'story.create.anon' %}">
-                <i class="fa fa-edit"></i>
-                Create news
+                List bookings
               </a>
             </li>
           {% endif %}
