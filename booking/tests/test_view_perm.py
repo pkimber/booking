@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -21,6 +23,14 @@ class TestViewPerm(PermTestCase):
 
     def test_list(self):
         url = reverse('booking.list')
+        self.assert_staff_only(url)
+
+    def test_list_month(self):
+        today = datetime.today().date()
+        url = reverse(
+            'booking.list.month',
+            kwargs=dict(year=today.year, month=today.month)
+        )
         self.assert_staff_only(url)
 
     def test_update(self):

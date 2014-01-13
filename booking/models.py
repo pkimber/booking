@@ -4,10 +4,22 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 
 import reversion
 
 from base.model_utils import TimeStampedModel
+
+
+class BookingManager(models.Manager):
+
+    def month(self, month, year):
+        """Return booking objects for a month."""
+        return self.model.objects.filter(
+            (Q(from_date__month=month) & Q(from_date__year=year))
+            |
+            (Q(to_date__month=month) & Q(to_date__year=year))
+        )
 
 
 class Booking(TimeStampedModel):
@@ -15,6 +27,7 @@ class Booking(TimeStampedModel):
     to_date = models.DateField(help_text="(dd/mm/yyyy)")
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    objects = BookingManager()
 
     class Meta:
         ordering = ['from_date']

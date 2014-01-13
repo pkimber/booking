@@ -55,6 +55,10 @@ def default_scenario_booking():
     # later this month starting Tuesday
     from_date = next_weekday(first_this_month + timedelta(days=10), 1)
     make_booking_in_past(from_date, from_date + timedelta(days=3), 'Dorset')
+    # span this and next month
+    from_date = datetime(today.year, today.month, 27).date()
+    to_date = datetime(next_month.year, next_month.month, 2).date()
+    make_booking_in_past(from_date, to_date, 'Devon')
     # next month
     from_date = next_weekday(first_next_month + timedelta(days=3), 2)
     to_date = next_weekday(from_date, 5)
