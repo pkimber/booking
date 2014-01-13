@@ -14,7 +14,11 @@ from base.model_utils import TimeStampedModel
 class BookingManager(models.Manager):
 
     def month(self, month, year):
-        """Return booking objects for a month."""
+        """Return booking objects for a month.
+
+        If the from date or to date are in the month, then include them.
+
+        """
         return self.model.objects.filter(
             (Q(from_date__month=month) & Q(from_date__year=year))
             |

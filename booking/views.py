@@ -53,11 +53,6 @@ class BookingListMonthView(
     def get_queryset(self):
         d = self._get_date()
         return Booking.objects.month(d.month, d.year)
-        #return Booking.objects.filter(
-        #    (Q(from_date__month=d.month) & Q(from_date__year=d.year))
-        #    |
-        #    (Q(to_date__month=d.month) & Q(to_date__year=d.year))
-        #)
 
 
 class BookingUpdateView(
