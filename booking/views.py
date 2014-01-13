@@ -32,7 +32,13 @@ class BookingCreateView(
     model = Booking
 
     def get_success_url(self):
-        return reverse('booking.list')
+        return reverse(
+            'booking.list.month',
+            kwargs=dict(
+                year=self.object.from_date.year,
+                month=self.object.from_date.month
+            )
+        )
 
 
 class BookingDeleteView(
@@ -115,4 +121,10 @@ class BookingUpdateView(
     model = Booking
 
     def get_success_url(self):
-        return reverse('booking.list')
+        return reverse(
+            'booking.list.month',
+            kwargs=dict(
+                year=self.object.from_date.year,
+                month=self.object.from_date.month
+            )
+        )
