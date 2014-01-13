@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -21,10 +23,6 @@ from base.view_utils import BaseMixin
 
 from .forms import BookingForm
 from .models import Booking
-from .service import (
-    first_next_month,
-    first_prev_month,
-)
 
 
 class BookingCreateView(
@@ -66,9 +64,11 @@ class BookingListView(
     def get_context_data(self, **kwargs):
         context = super(BookingListView, self).get_context_data(**kwargs)
         today = datetime.today().date()
+        first_next_month = today + relativedelta(months=+1, day=1)
+        first_prev_month = today + relativedelta(months=-1, day=1)
         context.update(dict(
-            first_next_month=first_next_month(today),
-            first_prev_month=first_prev_month(today),
+            first_next_month=first_next_month,
+            first_prev_month=first_prev_month,
             sub_heading="Home",
         ))
         return context
@@ -94,9 +94,11 @@ class BookingListMonthView(
     def get_context_data(self, **kwargs):
         context = super(BookingListMonthView, self).get_context_data(**kwargs)
         d = self._get_date()
+        first_next_month = d + relativedelta(months=+1, day=1)
+        first_prev_month = d + relativedelta(months=-1, day=1)
         context.update(dict(
-            first_next_month=first_next_month(d),
-            first_prev_month=first_prev_month(d),
+            first_next_month=first_next_month,
+            first_prev_month=first_prev_month,
             sub_heading="Bookings for {}".format(d.strftime("%B %Y"))
         ))
         return context

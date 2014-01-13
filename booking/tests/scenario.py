@@ -3,12 +3,9 @@ from datetime import (
     timedelta,
 )
 
+from dateutil.relativedelta import relativedelta
+
 from booking.models import Booking
-from booking.service import (
-    first_next_month,
-    first_prev_month,
-    first_this_month,
-)
 from booking.tests.model_maker import make_booking
 
 
@@ -44,23 +41,26 @@ def default_scenario_booking():
     # set-up some dates
     today = datetime.today().date()
     # 1st week last month starting Saturday
-    from_date = next_weekday(first_prev_month(today), 5)
+    first_prev_month = today + relativedelta(months=-1, day=1)
+    from_date = next_weekday(first_prev_month, 5)
     to_date = from_date + timedelta(days=7)
     make_booking_in_past(from_date, to_date, 'Tignes')
     # 2nd week last month
     make_booking_in_past(to_date, to_date + timedelta(days=7), 'Meribel')
     # 1st week this month starting Saturday
-    from_date = next_weekday(first_this_month(today), 5)
+    first_this_month = today + relativedelta(day=1)
+    from_date = next_weekday(first_this_month, 5)
     make_booking_in_past(from_date, from_date + timedelta(days=3), 'Whistler')
     # later this month starting Tuesday
-    from_date = next_weekday(first_this_month(today) + timedelta(days=10), 1)
+    from_date = next_weekday(first_this_month + timedelta(days=10), 1)
     make_booking_in_past(from_date, from_date + timedelta(days=3), 'Dorset')
     # span this and next month
     from_date = datetime(today.year, today.month, 27).date()
-    to_date = datetime(first_next_month(today).year, first_next_month(today).month, 2).date()
+    first_next_month = today + relativedelta(months=+1, day=1)
+    to_date = datetime(first_next_month.year, first_next_month.month, 2).date()
     make_booking_in_past(from_date, to_date, 'Devon')
     # next month
-    from_date = next_weekday(first_next_month(today) + timedelta(days=3), 2)
+    from_date = next_weekday(first_next_month + timedelta(days=3), 2)
     to_date = next_weekday(from_date, 5)
     make_booking(from_date, to_date, 'Alpe D Huez')
     make_booking(to_date, to_date + timedelta(days=4), 'Cornwall')

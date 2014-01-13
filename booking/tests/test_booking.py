@@ -3,6 +3,8 @@ from datetime import (
     timedelta,
 )
 
+from dateutil.relativedelta import relativedelta
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
@@ -33,7 +35,7 @@ class TestBooking(TestCase):
         )
         self.assertTrue(b.is_current())
 
-    def test_s_current_in_the_past(self):
+    def test_is_current_in_the_past(self):
         """A simple booking."""
         today = datetime.today().date()
         last_week = today + timedelta(days=-7)
