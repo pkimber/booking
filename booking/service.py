@@ -13,6 +13,19 @@ from django.utils.safestring import mark_safe
 from booking.models import Booking
 
 
+def grouper(iterable, n, fillvalue=None):
+    """"Collect data into fixed-length chunks or blocks.
+
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+
+    From
+    http://docs.python.org/2/library/itertools.html#recipes
+
+    """
+    args = [iter(iterable)] * n
+    return izip_longest(fillvalue=fillvalue, *args)
+
+
 class BookingCount(object):
 
     def __init__(self):
@@ -57,92 +70,80 @@ class BookingCount(object):
         self.morning = True
 
 
-def _get_bookings(start_date, end_date):
-    #print start_date, end_date
-    qs = Booking.objects.calendar(start_date, end_date)
-    result = {}
-    for b in qs:
-        if not b.from_date in result:
-            result[b.from_date] = BookingCount()
-        result[b.from_date].set_afternoon()
-        if not b.to_date in result:
-            result[b.to_date] = BookingCount()
-        result[b.to_date].set_morning()
-        for dt in rrule(DAILY, dtstart=b.from_date, until=b.to_date):
-            if not dt.date() in result:
-                result[dt.date()] = BookingCount()
-            result[dt.date()].increment()
-    #for k, v in result.items():
-    #    print k, v.get_count(), v.is_afternoon(), v.is_morning()
-    return result
+class HtmlCalendar(object):
 
+    def __init__(self):
+        """From the 1st of this month, for 12 months."""
+        self.from_date = datetime.now().date() + relativedelta(day=1)
+        self.to_date = self.from_date + relativedelta(years=+1, days=-1)
 
-def _get_month(year, month, bookings):
-    c = calendar.Calendar(calendar.SATURDAY)
-    data = c.monthdatescalendar(year, month)
-    html = ""
-    #html = html + "<table class='pure-table pure-table-bordered'>"
-    html = html + "<table>"
-    if data:
-        html = html + "<thead>"
-        html = html + "<tr>"
-        html = html + "<th colspan='7'>{}</th>".format(datetime(year, month, 1).strftime("%B %Y"))
-        html = html + "</tr>"
+    def _get_bookings(self):
+        qs = Booking.objects.calendar(self.from_date, self.to_date)
+        result = {}
+        for b in qs:
+            if not b.from_date in result:
+                result[b.from_date] = BookingCount()
+            result[b.from_date].set_afternoon()
+            if not b.to_date in result:
+                result[b.to_date] = BookingCount()
+            result[b.to_date].set_morning()
+            for d in rrule(DAILY, dtstart=b.from_date, until=b.to_date):
+                if not d.date() in result:
+                    result[d.date()] = BookingCount()
+                result[d.date()].increment()
+        return result
+
+    def _generate_html(self, d, bookings):
+        c = calendar.Calendar(calendar.SATURDAY)
+        data = c.monthdatescalendar(d.year, d.month)
+        html = ""
+        html = html + "<table>"
+        if data:
+            html = html + "<thead>"
+            html = html + "<tr>"
+            html = html + "<th colspan='7'>{}</th>".format(datetime(d.year, d.month, 1).strftime("%B %Y"))
+            html = html + "</tr>"
+            for row in data:
+                html = html + "<tr>"
+                for col in row:
+                    html = html + "<th>{}</th>".format(col.strftime("%a"))
+                html = html + "</tr>"
+                break
+            html = html + "</thead>"
+        html = html + "<tbody>"
         for row in data:
             html = html + "<tr>"
             for col in row:
-                html = html + "<th>{}</th>".format(col.strftime("%a"))
-            html = html + "</tr>"
-            break
-        html = html + "</thead>"
-    html = html + "<tbody>"
-    for row in data:
-        html = html + "<tr>"
-        for col in row:
-            if col.month == month:
-                is_morning = False
-                is_afternoon = False
-                is_all_day = False
-                if col in bookings:
-                    is_all_day = bookings[col].is_all_day()
-                    is_afternoon = bookings[col].is_afternoon()
-                    is_morning = bookings[col].is_morning()
-                if is_all_day:
-                    html = html + "<td class='booked'>{}</td>".format(col.strftime("%d"))
-                elif is_afternoon:
-                    html = html + "<td class='afternoon'>{}</td>".format(col.strftime("%d"))
-                elif is_morning:
-                    html = html + "<td class='morning'>{}</td>".format(col.strftime("%d"))
+                if col.month == d.month:
+                    is_morning = False
+                    is_afternoon = False
+                    is_all_day = False
+                    if col in bookings:
+                        is_all_day = bookings[col].is_all_day()
+                        is_afternoon = bookings[col].is_afternoon()
+                        is_morning = bookings[col].is_morning()
+                    if is_all_day:
+                        html = html + "<td class='booked'>{}</td>".format(col.strftime("%d"))
+                    elif is_afternoon:
+                        html = html + "<td class='afternoon'>{}</td>".format(col.strftime("%d"))
+                    elif is_morning:
+                        html = html + "<td class='morning'>{}</td>".format(col.strftime("%d"))
+                    else:
+                        html = html + "<td>{}</td>".format(col.strftime("%d"))
                 else:
-                    html = html + "<td>{}</td>".format(col.strftime("%d"))
-            else:
-                html = html + "<td></td>"
-        html = html + "</tr>"
-    html = html + "</tbody>"
-    html = html + "</table>"
-    return html
+                    html = html + "<td></td>"
+            html = html + "</tr>"
+        html = html + "</tbody>"
+        html = html + "</table>"
+        return html
 
-
-def get_calendars():
-    result = []
-    dt = datetime.now().date() + relativedelta(day=1)
-    e = dt + relativedelta(years=+1, days=-1)
-    bookings = _get_bookings(dt, e)
-    for i in range(0, 12):
-        html = _get_month(dt.year, dt.month, bookings)
-        dt = dt + relativedelta(months=+1)
-        result.append(mark_safe(html))
-    return result
-
-
-def grouper(iterable, n, fillvalue=None):
-    """"Collect data into fixed-length chunks or blocks.
-
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
-
-    From
-    http://docs.python.org/2/library/itertools.html#recipes
-
-    """
-    args = [iter(iterable)] * n
-    return izip_longest(fillvalue=fillvalue, *args)
+    def get_calendars(self):
+        result = []
+        bookings = self._get_bookings()
+        d = self.from_date
+        for i in range(0, 12):
+            html = self._generate_html(d, bookings)
+            # move to the 1st day of the next month
+            d = d + relativedelta(months=+1, day=1)
+            result.append(mark_safe(html))
+        return result
