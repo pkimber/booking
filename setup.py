@@ -20,7 +20,7 @@ def get_readme():
 
 setup(
     name='pkimber-booking',
-    packages=['booking', 'booking.tests', 'booking.management', 'booking.management.commands'],
+    packages=['booking', 'booking.migrations', 'booking.tests', 'booking.management', 'booking.management.commands'],
     package_data={
         'booking': [
             'static/*.*',
@@ -28,7 +28,7 @@ setup(
             'templates/booking/*.*',
         ],
     },
-    version='0.0.03',
+    version='0.0.04',
     description='booking',
     author='Patrick Kimber',
     author_email='code@pkimber.net',
