@@ -28,7 +28,7 @@ setup(
             'templates/booking/*.*',
         ],
     },
-    version='0.0.04',
+    version='0.0.05',
     description='booking',
     author='Patrick Kimber',
     author_email='code@pkimber.net',
