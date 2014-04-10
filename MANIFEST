@@ -14,6 +14,7 @@ booking/management/commands/demo_data_booking.py
 booking/management/commands/init_app_booking.py
 booking/migrations/0001_initial.py
 booking/migrations/__init__.py
+booking/templates/booking/_key.html
 booking/templates/booking/base.html
 booking/templates/booking/booking_confirm_delete.html
 booking/templates/booking/booking_form.html

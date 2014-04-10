@@ -1,6 +1,9 @@
+# -*- encoding: utf-8 -*-
+
+from __future__ import unicode_literals
 import calendar
 from datetime import datetime
-from itertools import izip_longest
+from itertools import zip_longest
 
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import (
@@ -23,7 +26,7 @@ def grouper(iterable, n, fillvalue=None):
 
     """
     args = [iter(iterable)] * n
-    return izip_longest(fillvalue=fillvalue, *args)
+    return zip_longest(fillvalue=fillvalue, *args)
 
 
 class BookingCount(object):

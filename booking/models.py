@@ -1,3 +1,6 @@
+# -*- encoding: utf-8 -*-
+
+from __future__ import unicode_literals
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -60,12 +63,12 @@ class Booking(TimeStampedModel):
         verbose_name = 'Booking'
         verbose_name_plural = 'Bookings'
 
-    def __unicode__(self):
-        return unicode('{}-{}: {}'.format(
+    def __str__(self):
+        return '{}-{}: {}'.format(
             self.from_date.strftime("%a %d %b %Y"),
             self.to_date.strftime("%a %d %b %Y"),
             self.title,
-        ))
+        )
 
     def _is_in_the_past(self):
         return self.to_date < datetime.today().date()
