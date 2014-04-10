@@ -1,6 +1,3 @@
-# -*- encoding: utf-8 -*-
-
-from __future__ import unicode_literals
 import os
 from distutils.core import setup
 
@@ -31,7 +28,7 @@ setup(
             'templates/booking/*.*',
         ],
     },
-    version='0.0.06',
+    version='0.0.07',
     description='booking',
     author='Patrick Kimber',
     author_email='code@pkimber.net',
