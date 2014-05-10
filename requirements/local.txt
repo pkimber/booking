@@ -1,6 +1,8 @@
 -r base.txt
+-e .
+-e ../base
+-e ../login
 beautifulsoup4
-fabric
 gitpython
 ipdb
 hgapi
