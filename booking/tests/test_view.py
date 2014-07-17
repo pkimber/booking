@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-
 from __future__ import unicode_literals
+
 from datetime import (
     datetime,
     timedelta,
@@ -14,10 +14,10 @@ from booking.tests.scenario import (
     default_scenario_booking,
     get_alpe_d_huez,
 )
+from login.tests.factories import TEST_PASSWORD
 from login.tests.scenario import (
     default_scenario_login,
     get_user_staff,
-    STAFF,
 )
 
 
@@ -29,7 +29,7 @@ class TestView(TestCase):
         staff = get_user_staff()
         # update simple content
         self.assertTrue(
-            self.client.login(username=staff.username, password=STAFF)
+            self.client.login(username=staff.username, password=TEST_PASSWORD)
         )
 
     def test_create(self):
