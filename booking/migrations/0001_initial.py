@@ -1,42 +1,31 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Booking'
-        db.create_table('booking_booking', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('from_date', self.gf('django.db.models.fields.DateField')()),
-            ('to_date', self.gf('django.db.models.fields.DateField')()),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('booking', ['Booking'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Booking'
-        db.delete_table('booking_booking')
-
-
-    models = {
-        'booking.booking': {
-            'Meta': {'ordering': "['from_date']", 'object_name': 'Booking'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'from_date': ('django.db.models.fields.DateField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'to_date': ('django.db.models.fields.DateField', [], {})
-        }
-    }
-
-    complete_apps = ['booking']
+    operations = [
+        migrations.CreateModel(
+            name='Booking',
+            fields=[
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('modified', models.DateTimeField(auto_now=True)),
+                ('from_date', models.DateField(help_text='(dd/mm/yyyy)')),
+                ('to_date', models.DateField(help_text='(dd/mm/yyyy)')),
+                ('title', models.CharField(max_length=100)),
+                ('description', models.TextField(blank=True, null=True)),
+            ],
+            options={
+                'verbose_name_plural': 'Bookings',
+                'verbose_name': 'Booking',
+                'ordering': ['from_date'],
+            },
+            bases=(models.Model,),
+        ),
+    ]
