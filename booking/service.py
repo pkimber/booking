@@ -100,6 +100,8 @@ class HtmlCalendar(object):
     def _generate_html(self, d, bookings):
         c = calendar.Calendar(calendar.SATURDAY)
         data = c.monthdatescalendar(d.year, d.month)
+        while len(data) < 6:
+            data.append([None, None, None, None, None, None, None])
         html = ""
         html = html + "<table>"
         if data:
@@ -118,7 +120,7 @@ class HtmlCalendar(object):
         for row in data:
             html = html + "<tr>"
             for col in row:
-                if col.month == d.month:
+                if col and col.month == d.month:
                     is_morning = False
                     is_afternoon = False
                     is_all_day = False
