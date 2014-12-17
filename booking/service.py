@@ -100,6 +100,7 @@ class HtmlCalendar(object):
     def _generate_html(self, d, bookings):
         c = calendar.Calendar(calendar.SATURDAY)
         data = c.monthdatescalendar(d.year, d.month)
+        # every month to display with 6 rows so they can be lined up.
         while len(data) < 6:
             data.append([None, None, None, None, None, None, None])
         html = ""
@@ -137,7 +138,8 @@ class HtmlCalendar(object):
                     else:
                         html = html + "<td>{}</td>".format(col.strftime("%d"))
                 else:
-                    html = html + "<td></td>"
+                    # the space keeps all the rows the same height
+                    html = html + "<td>&nbsp;</td>"
             html = html + "</tr>"
         html = html + "</tbody>"
         html = html + "</table>"
