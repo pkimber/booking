@@ -6,9 +6,12 @@ beautifulsoup4
 devpi-client
 factory-boy
 gitpython
-ipdb
 hgapi
+ipdb
 psycopg2
 pytest-django
+pytest-flakes
+pytest-pep8
+pytest-sugar
 pyyaml
 walkdir

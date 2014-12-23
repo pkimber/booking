@@ -91,7 +91,7 @@ MIDDLEWARE_CLASSES = (
     'reversion.middleware.RevisionMiddleware',
 )
 
-ROOT_URLCONF = 'example.urls'
+ROOT_URLCONF = 'example_booking.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'example.wsgi.application'
@@ -121,7 +121,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'base',
-    'example',
+    'example_booking',
     'booking',
     'login',
 )
