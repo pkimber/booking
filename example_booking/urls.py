@@ -29,9 +29,9 @@ urlpatterns = patterns(
     url(regex=r'^booking/',
         view=include('booking.urls')
         ),
-    url(regex=r'^event/',
-        view=include('booking.urls_event')
-        ),
+    #url(regex=r'^event/',
+    #    view=include('booking.urls_event')
+    #    ),
     url(r'^home/user/$',
         view=RedirectView.as_view(url=reverse_lazy('project.home')),
         name='project.dash'

@@ -22,7 +22,7 @@ class TestViewPerm(PermTestCase):
         self.setup_users()
 
     def test_event_create(self):
-        self.assert_staff_only(reverse('event.create'))
+        self.assert_staff_only(reverse('booking.create'))
 
     def test_event_list(self):
         self.assert_logged_in(reverse('booking.list'))
@@ -36,12 +36,9 @@ class TestViewPerm(PermTestCase):
         self.assert_logged_in(url)
 
     def test_event_update(self):
-        event = BookingFactory(
-            start_date=date(2013, 3, 30),
-            start_time=timezone.now().time(),
-        )
+        event = BookingFactory(start_date=date(2013, 3, 30))
         url = reverse(
-            'event.update',
+            'booking.update',
             kwargs=dict(pk=event.pk)
         )
         self.assert_staff_only(url)
