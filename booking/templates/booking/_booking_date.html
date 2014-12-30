@@ -1,0 +1,5 @@
+{{ b.start_date|date:'d/m/Y l' }}
+{% if b.end_date %}
+  <br />
+  {{ b.end_date|date:'d/m/Y l' }}
+{% endif %}

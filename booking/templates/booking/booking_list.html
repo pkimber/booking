@@ -1,4 +1,9 @@
 {% extends "booking/base.html" %}
+{% load static %}
+
+{% block stylesheets_extra %}
+  <link rel="stylesheet" href="{% static 'booking/css/booking.css' %}">
+{% endblock stylesheets_extra %}
 
 {% block title %}
   Bookings
@@ -69,12 +74,8 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>From</th>
-              <th>To</th>
+              <th>Date</th>
               <th>Description</th>
-              {% if user.is_staff %}
-                <th>Delete</th>
-              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -85,36 +86,25 @@
                 </td>
                 <td>
                   {% if not b.is_current %}<del>{% endif %}
-                  {{ b.start_date|date:"D jS M Y" }}
+                  {% include 'booking/_booking_date.html' %}
+                  {% include 'booking/_booking_time.html' %}
                   {% if not b.is_current %}</del>{% endif %}
                 </td>
                 <td>
-                  {% if not b.is_current %}<del>{% endif %}
-                  {{ b.end_date|date:"D jS M Y" }}
-                  {% if not b.is_current %}</del>{% endif %}
-                </td>
-                <td>
-                  {% if b.is_current %}
+                  {% if user.is_staff and b.is_current %}
                     <a href="{% url "booking.update" b.pk %}">
                       <i class="fa fa-edit"></i>
-                      {{ b.title }}
+                      {% include 'booking/_booking_title.html' %}
                     </a>
                   {% else %}
-                    {{ b.title }}
+                    {% include 'booking/_booking_title.html' %}
                   {% endif %}
-                  {% if b.description %}
-                    <br />
-                    {{ b.description|urlize|linebreaksbr }}
+                  {% include 'booking/_booking_description.html' %}
+                  {% include 'booking/_booking_notes_user.html' %}
+                  {% if user.is_staff and b.is_current %}
+                    {% include 'booking/_booking_status.html' %}
                   {% endif %}
                 </td>
-                {% if user.is_staff %}
-                  <td>
-                    <a href="{% url "booking.delete" b.pk %}">
-                      <i class="fa fa-times"></i>
-                      <small>Delete</small>
-                    </a>
-                  </td>
-                {% endif %}
               </tr>
             {% endfor %}
           </tbody>

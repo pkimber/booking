@@ -1,0 +1,45 @@
+{% extends 'project/base.html' %}
+
+{% block sub_title %}
+  Calendar event
+{% endblock sub_title %}
+
+{% block sub_heading %}
+  Calendar event
+{% endblock sub_heading %}
+
+{% block content %}
+  <div class="pure-g">
+    <div class="pure-u-1">
+      <div class="l-box">
+        <table class="pure-table pure-table-bordered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description and location</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr valign="top">
+              <td>
+                {% include 'booking/_booking_date.html' with b=object %}
+                {% include 'booking/_booking_time.html' with b=object %}
+              </td>
+              <td>
+                {% include 'booking/_booking_description.html' with b=object %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {% include '_form.html' %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block script_extra %}
+  {% include 'base/_ckeditor.html' with id_textarea='id_notes_user' %}
+  <script type="text/javascript">
+    CKEDITOR.replace('id_notes_staff');
+  </script>
+{% endblock script_extra %}

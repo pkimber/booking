@@ -13,6 +13,22 @@ from django.utils import timezone
 import reversion
 
 from base.model_utils import TimeStampedModel
+from base.singleton import SingletonModel
+
+
+class BookingSettings(SingletonModel):
+
+    notes_user_staff = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Booking settings'
+
+    def __str__(self):
+        return "Edit notes for user and staff: {}".format(
+            self.notes_user_staff,
+        )
+
+reversion.register(BookingSettings)
 
 
 class Category(TimeStampedModel):
@@ -176,8 +192,14 @@ class Booking(TimeStampedModel):
     location = models.ForeignKey(Location, blank=True, null=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='booking', blank=True)
-    notes_user = models.TextField(blank=True)
-    notes_staff = models.TextField(blank=True)
+    notes_user = models.TextField(
+        blank=True,
+        help_text="Notes for your users who are logged into the site.",
+    )
+    notes_staff = models.TextField(
+        blank=True,
+        help_text="Notes for members of staff.",
+    )
     deleted = models.BooleanField(default=False)
     objects = BookingManager()
 

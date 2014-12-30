@@ -25,7 +25,10 @@ from braces.views import (
 from base.view_utils import BaseMixin
 
 from .forms import BookingForm
-from .models import Booking
+from .models import (
+    Booking,
+    BookingSettings,
+)
 
 
 class BookingCreateView(
@@ -65,7 +68,17 @@ class BookingDeleteView(
         return reverse('booking.list')
 
 
-class BookingListView(LoginRequiredMixin, BaseMixin, ListView):
+class BookingListMixin(LoginRequiredMixin, BaseMixin, ListView):
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListMixin, self).get_context_data(**kwargs)
+        context.update(dict(
+            booking_settings=BookingSettings.load(),
+        ))
+        return context
+
+
+class BookingListView(BookingListMixin):
 
     model = Booking
 
@@ -86,7 +99,7 @@ class BookingListView(LoginRequiredMixin, BaseMixin, ListView):
         return Booking.objects.bookings()[:31]
 
 
-class BookingListMonthView(LoginRequiredMixin, BaseMixin, ListView):
+class BookingListMonthView(BookingListMixin):
 
     model = Booking
 

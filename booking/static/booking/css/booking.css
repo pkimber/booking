@@ -1,0 +1,47 @@
+.event {
+    border-top: 1px solid #989898;
+    margin-top: 5px;
+}
+
+.notes {
+    text-align: right;
+    border-top: 1px solid #E0E0E0;
+}
+
+.pending {
+    background: rgb(220, 220, 220);
+}
+
+.public {
+    border-left: 4px solid #66FF33;
+    padding-left: 10px;
+    padding-top: 6px;
+}
+
+.public-text {
+    background: #66FF33;
+}
+
+.staff {
+    border-left: 4px solid #FF9999;
+    padding-left: 10px;
+    padding-top: 6px;
+}
+
+.staff-text {
+    background: #FF9999;
+}
+
+.status {
+    text-align: right;
+}
+
+.user {
+    border-left: 4px solid #FFFF00;
+    padding-left: 10px;
+    padding-top: 6px;
+}
+
+.user-text {
+    background: #FFFF00;
+}

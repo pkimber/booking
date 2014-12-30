@@ -80,7 +80,7 @@ class EventUpdateNotesView(
 
     form_class = EventNotesForm
     model = Booking
-    template_name = 'event/event_notes_form.html'
+    template_name = 'booking/booking_notes_form.html'
 
     #def get_context_data(self, **kwargs):
     #    context = super(EventUpdateNotesView, self).get_context_data(**kwargs)
