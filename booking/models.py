@@ -1,12 +1,9 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone

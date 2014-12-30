@@ -7,8 +7,6 @@ from .models import (
     Booking,
     Category,
     Location,
-    Permission,
-    #Status,
 )
 
 
@@ -92,25 +90,6 @@ class EventNotesForm(RequiredFieldForm):
             'notes_user',
             'notes_staff',
         )
-
-#class PermissionForm(RequiredFieldForm):
-#
-#    def __init__(self, *args, **kwargs):
-#        super(PermissionForm, self).__init__(*args, **kwargs)
-#        for name in ('description',):
-#            self.fields[name].widget.attrs.update(
-#                {'class': 'pure-input-2-3'}
-#            )
-#
-#    class Meta:
-#        model = Permission
-#        fields = (
-#            'description',
-#            'public',
-#            'web',
-#            'staff',
-#        )
-
 
 #class StatusForm(RequiredFieldForm):
 #

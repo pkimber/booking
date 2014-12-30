@@ -7,7 +7,6 @@ from dateutil.relativedelta import relativedelta
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.http import Http404
 from django.views.generic import (
     CreateView,
@@ -15,7 +14,6 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from django.views.generic.dates import MonthArchiveView
 
 from braces.views import (
     LoginRequiredMixin,

@@ -1,12 +1,5 @@
 # -*- encoding: utf-8 -*-
-
 from __future__ import unicode_literals
-from datetime import (
-    datetime,
-    timedelta,
-)
-
-from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase
 

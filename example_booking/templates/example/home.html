@@ -9,10 +9,10 @@
   Example app
 {% endblock sub_heading %}
 
-{% block stylesheets %}
-  {{ block.super }}
+{% block stylesheets_extra %}
   <link rel="stylesheet" href="{% static 'example/css/example.css' %}">
-{% endblock stylesheets %}
+  <link rel="stylesheet" href="{% static 'booking/css/booking.css' %}">
+{% endblock stylesheets_extra %}
 
 {% block content %}
   <div class="pure-g">
@@ -22,7 +22,7 @@
           <li>
             <a href="{% url 'booking.list' %}">
               <i class="fa fa-calendar"></i>
-              Calendar
+              Bookings
             </a>
           </li>
           {% if user.is_staff %}
@@ -34,6 +34,12 @@
             </li>
           {% endif %}
         </ul>
+        <div class="l-box">
+          <h3>Public bookings for the next couple of months</h3>
+          {% for b in public_calendar %}
+            {% include 'booking/_booking.html' %}
+          {% endfor %}
+        </div>
         {% for c in calendar %}
           <div class="pure-g">
             {% for month in c %}

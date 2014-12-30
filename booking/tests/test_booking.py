@@ -6,18 +6,13 @@ from datetime import (
     timedelta,
 )
 
-from dateutil.relativedelta import relativedelta
-
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from base.tests.model_maker import clean_and_save
 from booking.models import Booking
-#from booking.tests.model_maker import make_booking
 
-from .factories import (
-    BookingFactory,
-)
+from .factories import BookingFactory
 
 
 class TestBooking(TestCase):

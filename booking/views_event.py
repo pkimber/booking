@@ -20,15 +20,11 @@ from .forms_event import (
     EventForm,
     EventNotesForm,
     LocationForm,
-    #PermissionForm,
-    #StatusForm,
 )
 from .models import (
     Booking,
     Category,
     Location,
-    Permission,
-    #Status,
 )
 
 

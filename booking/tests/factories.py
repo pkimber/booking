@@ -9,7 +9,6 @@ from booking.models import (
     Booking,
     Category,
     Location,
-    Permission,
 )
 
 
@@ -25,13 +24,6 @@ class LocationFactory(factory.django.DjangoModelFactory):
         model = Location
 
 
-#class PermissionFactory(factory.django.DjangoModelFactory):
-#    """TODO Remove this factory when the default permission is set."""
-#
-#    class Meta:
-#        model = Permission
-
-
 class BookingFactory(factory.django.DjangoModelFactory):
 
     class Meta:
@@ -39,5 +31,4 @@ class BookingFactory(factory.django.DjangoModelFactory):
 
     category = factory.SubFactory(CategoryFactory)
     location = factory.SubFactory(LocationFactory)
-    #permission = factory.SubFactory(PermissionFactory)
     start_date = timezone.now().date()
