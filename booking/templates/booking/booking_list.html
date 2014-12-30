@@ -67,49 +67,33 @@
       </div>
     </div>
   </div>
-  <div class="pure-g">
-    <div class="pure-u-1">
-      <div class="l-box">
-        <table class="pure-table pure-table-bordered">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Date</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for b in booking_list %}
-              <tr valign="top">
-                <td>
-                  {{ b.pk }}
-                </td>
-                <td>
-                  {% if not b.is_current %}<del>{% endif %}
-                  {% include 'booking/_booking_date.html' %}
-                  {% include 'booking/_booking_time.html' %}
-                  {% if not b.is_current %}</del>{% endif %}
-                </td>
-                <td>
-                  {% if user.is_staff and b.is_current %}
-                    <a href="{% url "booking.update" b.pk %}">
-                      <i class="fa fa-edit"></i>
-                      {% include 'booking/_booking_title.html' %}
-                    </a>
-                  {% else %}
-                    {% include 'booking/_booking_title.html' %}
-                  {% endif %}
-                  {% include 'booking/_booking_description.html' %}
-                  {% include 'booking/_booking_notes_user.html' %}
-                  {% if user.is_staff and b.is_current %}
-                    {% include 'booking/_booking_status.html' %}
-                  {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+  {% for b in booking_list %}
+    <div class="event {{ b.css_class_name }}">
+      <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-6-24">
+           {% if not b.is_current %}<del>{% endif %}
+           {% include 'booking/_booking_date.html' %}
+           {% include 'booking/_booking_time.html' %}
+           {% if not b.is_current %}</del>{% endif %}
+        </div>
+        <div class="pure-u-1 pure-u-md-18-24">
+          {% if user.is_staff and b.is_current %}
+            <a href="{% url "booking.update" b.pk %}">
+              <i class="fa fa-edit"></i>
+              {% include 'booking/_booking_title.html' %}
+            </a>
+          {% else %}
+            {% include 'booking/_booking_title.html' %}
+          {% endif %}
+          {% include 'booking/_booking_description.html' %}
+          {% include 'booking/_booking_notes_user.html' %}
+          {% include 'booking/_booking_notes_staff.html' %}
+          {% if user.is_staff and b.is_current %}
+            {% include 'booking/_booking_status.html' %}
+          {% endif %}
+        </div>
       </div>
     </div>
-  </div>
+  {% endfor %}
 {% endblock content %}

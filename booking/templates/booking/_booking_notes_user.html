@@ -1,7 +1,10 @@
 {% if user.is_authenticated %}
-{% if b.notes_user %}
-{% autoescape off %}
-  {{ b.notes_user }}
-{% endautoescape %}
-{% endif %}
+  {% if b.notes_user %}
+    {% if user.is_staff %}
+      <small class="user">[ User ]</small>
+    {% endif %}
+    {% autoescape off %}
+      {{ b.notes_user }}
+    {% endautoescape %}
+  {% endif %}
 {% endif %}

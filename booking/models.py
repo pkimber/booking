@@ -236,4 +236,11 @@ class Booking(TimeStampedModel):
     def is_current(self):
         return not self._is_in_the_past()
 
+    @property
+    def css_class_name(self):
+        if self.permission:
+            return permission.slug
+        else:
+            return Permission.PUBLIC
+
 reversion.register(Booking)

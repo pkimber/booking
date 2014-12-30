@@ -1,0 +1,8 @@
+{% if user.is_staff %}
+  {% if b.notes_staff %}
+    <small class="staff">[ Staff ]</small>
+    {% autoescape off %}
+      {{ b.notes_staff }}
+    {% endautoescape %}
+  {% endif %}
+{% endif %}

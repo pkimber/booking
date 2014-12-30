@@ -13,7 +13,7 @@
 }
 
 .public {
-    border-left: 4px solid #66FF33;
+    border-left: 1px solid #989898;
     padding-left: 10px;
     padding-top: 6px;
 }
@@ -23,9 +23,7 @@
 }
 
 .staff {
-    border-left: 4px solid #FF9999;
-    padding-left: 10px;
-    padding-top: 6px;
+    background: #FF9999;
 }
 
 .staff-text {
@@ -37,9 +35,7 @@
 }
 
 .user {
-    border-left: 4px solid #FFFF00;
-    padding-left: 10px;
-    padding-top: 6px;
+    background: #FFFF00;
 }
 
 .user-text {
