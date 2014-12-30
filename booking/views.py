@@ -100,7 +100,13 @@ class BookingListView(BookingListMixin):
         return context
 
     def get_queryset(self):
-        return Booking.objects.public_calendar()
+        if self.request.user.is_staff:
+            qs = Booking.objects.staff_calendar()
+        elif self.request.user.is_authenticated():
+            qs = Booking.objects.user_calendar()
+        else:
+            qs = Booking.objects.public_calendar()
+        return qs
 
 
 class BookingListMonthView(BookingListMixin):
@@ -129,7 +135,13 @@ class BookingListMonthView(BookingListMixin):
 
     def get_queryset(self):
         d = self._get_date()
-        return Booking.objects.public_month(d.month, d.year)
+        if self.request.user.is_staff:
+            qs = Booking.objects.staff_month(d.month, d.year)
+        elif self.request.user.is_authenticated():
+            qs = Booking.objects.user_month(d.month, d.year)
+        else:
+            qs = Booking.objects.public_month(d.month, d.year)
+        return qs
 
 
 class BookingUpdateNotesView(

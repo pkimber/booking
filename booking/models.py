@@ -167,7 +167,7 @@ class BookingManager(models.Manager):
 
     def _filter_by_month(self, qs, month, year):
         """
-        Filter booking objects which are in the month.
+        Find booking objects which are in the month.
 
         If the start date or end date are in the month, then include them.
 
@@ -188,14 +188,10 @@ class BookingManager(models.Manager):
             #status__publish=True,
         )
 
-    #def bookings(self):
-    #    """Return a list of booking objects starting with this month.
-
-    #    If the to date is in this month, then include the booking.
-
-    #    """
-    #    first = timezone.now().date() + relativedelta(day=1)
-    #    return self.model.objects.filter(end_date__gte=first)
+    def _user(self):
+        return self._current().filter(
+            permission__slug__in=(Permission.PUBLIC, Permission.USER),
+        )
 
     def public_calendar(self):
         return self._filter_by_date(
@@ -215,6 +211,22 @@ class BookingManager(models.Manager):
             start_date__lte=self._eight_months(),
             category__promote=True,
         )
+
+    def user_calendar(self):
+        return self._filter_by_date(
+            self._user(), timezone.now().date(), self._two_months()
+        )
+
+    def user_month(self, month, year):
+        return self._filter_by_month(self._user(), month, year)
+
+    def staff_calendar(self):
+        return self._filter_by_date(
+            self._current(), timezone.now().date(), self._two_months()
+        )
+
+    def staff_month(self, month, year):
+        return self._filter_by_month(self._current(), month, year)
 
 
 class Booking(TimeStampedModel):

@@ -26,16 +26,17 @@ class BookingEventForm(RequiredFieldForm):
 
     def __init__(self, *args, **kwargs):
         super(BookingEventForm, self).__init__(*args, **kwargs)
-        for name in ('description', 'location'): #, 'notes_public'):
+        for name in ('description', 'location'):
             self.fields[name].widget.attrs.update(
                 {'class': 'pure-input-2-3'}
             )
+        set_widget_required(self.fields['location'])
+        set_widget_required(self.fields['permission'])
 
     class Meta:
         model = Booking
         fields = (
             'permission',
-            #'status',
             'category',
             'start_date',
             'start_time',
@@ -43,15 +44,12 @@ class BookingEventForm(RequiredFieldForm):
             'end_time',
             'description',
             'location',
-            #'notes_public',
-            #'notes_user',
-            #'notes_staff',
         )
 
 
 class BookingForm(RequiredFieldForm):
     """
-    Form for booking a self-catering cottage.
+    Form for simple booking e.g. self-catering cottage.
 
     Require: 'start_date', 'end_date' and 'title'.
 
@@ -72,6 +70,13 @@ class BookingForm(RequiredFieldForm):
 
 
 class BookingNotesForm(RequiredFieldForm):
+    """
+    Notes for logged in users and members of staff.
+
+    This form will only be used if 'booking.BookingSettings.notes_user_staff'
+    is set to 'True'.
+
+    """
 
     def __init__(self, *args, **kwargs):
         super(BookingNotesForm, self).__init__(*args, **kwargs)
