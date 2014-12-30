@@ -20,13 +20,13 @@ from .factories import (
 class TestEvent(TestCase):
 
     def test_public_calendar(self):
-        public = Permission.objects.get(slug=Permission.PUBLIC)
         user = Permission.objects.get(slug=Permission.USER)
         staff = Permission.objects.get(slug=Permission.STAFF)
-        BookingFactory(title='a', permission=public)
+        # default permission is 'public'
+        BookingFactory(title='a')
         BookingFactory(title='b', permission=user)
         BookingFactory(title='c', permission=staff)
-        BookingFactory(title='d', permission=public)
+        BookingFactory(title='d')
         events = Booking.objects.public_calendar()
         self.assertEquals(
             ['a', 'd'],
@@ -40,26 +40,22 @@ class TestEvent(TestCase):
         one = today + relativedelta(days=7)
         two = today + relativedelta(days=14)
         year = today + relativedelta(years=1)
-        public = Permission.objects.get(slug=Permission.PUBLIC)
+        #public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
             title='a', start_date=one, start_time=start, #status=publish,
-            permission=public,
         )
         BookingFactory(
             title='b', start_date=two, start_time=start, #status=publish,
-            permission=public,
         )
-        # do NOT include this one because it is older than two months
+        # do NOT include this one because it is more than two months in future.
         BookingFactory(
             title='c', start_date=year, start_time=start, #status=publish,
-            permission=public,
         )
         # do NOT include this one because it for yesterday
         BookingFactory(
             title='d', start_date=b4, start_time=start, #status=publish,
-            permission=public,
         )
         events = Booking.objects.public_calendar()
         self.assertEquals(
@@ -70,17 +66,18 @@ class TestEvent(TestCase):
     def test_public_delete(self):
         today = timezone.now().date()
         one = today + relativedelta(days=7)
-        public = Permission.objects.get(slug=Permission.PUBLIC)
+        #public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
             title='a', start_date=one, start_time=start, #status=publish,
-            permission=public,
+            #permission=public,
         )
         # do NOT include this one because it is deleted
         BookingFactory(
             title='b', start_date=one, start_time=start, #status=publish,
-            permission=public, deleted=True,
+            #permission=public,
+            deleted=True,
         )
         events = Booking.objects._public()
         self.assertEquals(
@@ -94,7 +91,7 @@ class TestEvent(TestCase):
         one = today + relativedelta(days=7)
         six = today + relativedelta(months=6)
         year = today + relativedelta(years=1)
-        public = Permission.objects.get(slug=Permission.PUBLIC)
+        #public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         #pending = StatusFactory(publish=False)
         promote = CategoryFactory(promote=True)
@@ -103,31 +100,34 @@ class TestEvent(TestCase):
         # do NOT include this one because it is less than 2 months
         BookingFactory(
             title='a', start_date=one, start_time=start, #status=publish,
-            permission=public,
+            #permission=public,
         )
         BookingFactory(
             title='b', start_date=six, start_time=start, #status=publish,
-            permission=public, category=promote,
+            #permission=public,
+            category=promote,
         )
         # do NOT include this one because it is a routine event (not promoted)
         BookingFactory(
             title='c', start_date=six, start_time=start, #status=publish,
-            permission=public, category=routine,
+            #permission=public,
+            category=routine,
         )
         # do NOT include this one because it is older than 8 months
         BookingFactory(
             title='d', start_date=year, start_time=start, #status=publish,
-            permission=public,
+            #permission=public,
         )
         # do NOT include this one because it is deleted
         BookingFactory(
             title='e', start_date=six, start_time=start, #status=publish,
-            permission=public, deleted=True,
+            #permission=public,
+            deleted=True,
         )
         # do NOT include this one because it is not published
         BookingFactory(
             title='e', start_date=six, start_time=start, #status=pending,
-            permission=public,
+            #permission=public,
         )
         events = Booking.objects.public_promoted()
         self.assertEquals(

@@ -95,8 +95,7 @@ class BookingListView(BookingListMixin):
         return context
 
     def get_queryset(self):
-        """Maximum 31 bookings."""
-        return Booking.objects.bookings()[:31]
+        return Booking.objects.public_calendar()
 
 
 class BookingListMonthView(BookingListMixin):

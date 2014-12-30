@@ -82,7 +82,9 @@ class HtmlCalendar(object):
         self.end_date = self.start_date + relativedelta(years=+1, days=-1)
 
     def _get_bookings(self):
-        qs = Booking.objects.calendar(self.start_date, self.end_date)
+        qs = Booking.objects.public_calendar_widget(
+            self.start_date, self.end_date
+        )
         result = {}
         for b in qs:
             if not b.start_date in result:

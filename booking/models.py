@@ -122,6 +122,19 @@ class BookingManager(models.Manager):
         today = timezone.now().date()
         return today + relativedelta(months=8)
 
+    def _filter_by_date(self, qs, start_date, end_date):
+        """
+        Filter booking objects which are in this date ranage.
+
+        If the start date or end date are in the range, then include them.
+
+        """
+        return qs.filter(
+            (Q(start_date__gte=start_date) & Q(start_date__lte=end_date))
+            |
+            (Q(end_date__lte=end_date) & Q(end_date__gte=start_date))
+        )
+
     def _filter_by_month(self, qs, month, year):
         """
         Filter booking objects which are in the month.
@@ -145,33 +158,25 @@ class BookingManager(models.Manager):
             #status__publish=True,
         )
 
-    def bookings(self):
-        """Return a list of booking objects starting with this month.
+    #def bookings(self):
+    #    """Return a list of booking objects starting with this month.
 
-        If the to date is in this month, then include the booking.
+    #    If the to date is in this month, then include the booking.
 
-        """
-        first = timezone.now().date() + relativedelta(day=1)
-        return self.model.objects.filter(end_date__gte=first)
-
-    def calendar(self, start_date, end_date):
-        """Return a list of booking objects starting with this month.
-
-        If the to date is in this month, then include the booking.
-
-        """
-        return self.model.objects.filter(
-            end_date__gte=start_date,
-            start_date__lte=end_date,
-        )
+    #    """
+    #    first = timezone.now().date() + relativedelta(day=1)
+    #    return self.model.objects.filter(end_date__gte=first)
 
     def public_calendar(self):
-        return self._public().filter(
-            start_date__gte=timezone.now().date(),
-            start_date__lte=self._two_months(),
+        return self._filter_by_date(
+            self._public(), timezone.now().date(), self._two_months()
         )
 
+    def public_calendar_widget(self, start_date, end_date):
+        return self._filter_by_date(self._public(), start_date,end_date)
+
     def public_month(self, month, year):
+        """Public bookings for this month."""
         return self._filter_by_month(self._public(), month, year)
 
     def public_promoted(self):
