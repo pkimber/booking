@@ -8,10 +8,10 @@ from base.tests.model_maker import clean_and_save
 from booking.models import Booking
 
 
-#def make_booking(from_date, to_date, title, **kwargs):
+#def make_booking(start_date, end_date, title, **kwargs):
 #    defaults = dict(
-#        from_date=from_date,
-#        to_date=to_date,
+#        start_date=start_date,
+#        end_date=end_date,
 #        title=title,
 #    )
 #    defaults.update(kwargs)

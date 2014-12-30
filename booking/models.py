@@ -116,17 +116,17 @@ class BookingManager(models.Manager):
 
         """
         first = timezone.now().date() + relativedelta(day=1)
-        return self.model.objects.filter(to_date__gte=first)
+        return self.model.objects.filter(end_date__gte=first)
 
-    def calendar(self, from_date, to_date):
+    def calendar(self, start_date, end_date):
         """Return a list of booking objects starting with this month.
 
         If the to date is in this month, then include the booking.
 
         """
         return self.model.objects.filter(
-            to_date__gte=from_date,
-            from_date__lte=to_date,
+            end_date__gte=start_date,
+            start_date__lte=end_date,
         )
 
     def month(self, month, year):
@@ -136,21 +136,21 @@ class BookingManager(models.Manager):
 
         """
         return self.model.objects.filter(
-            (Q(from_date__month=month) & Q(from_date__year=year))
+            (Q(start_date__month=month) & Q(start_date__year=year))
             |
-            (Q(to_date__month=month) & Q(to_date__year=year))
+            (Q(end_date__month=month) & Q(end_date__year=year))
         )
 
     def public_calendar(self):
         return self._public().filter(
-            from_date__gte=timezone.now().date(),
-            from_date__lte=self._two_months(),
+            start_date__gte=timezone.now().date(),
+            start_date__lte=self._two_months(),
         )
 
     def public_promoted(self):
         return self._public().filter(
-            from_date__gt=self._two_months(),
-            from_date__lte=self._eight_months(),
+            start_date__gt=self._two_months(),
+            start_date__lte=self._eight_months(),
             category__promote=True,
         )
 
@@ -160,16 +160,16 @@ class Booking(TimeStampedModel):
     permission= models.ForeignKey(Permission, blank=True, null=True)
     category = models.ForeignKey(Category, blank=True, null=True)
     title = models.CharField(max_length=200, blank=True)
-    from_date = models.DateField(help_text='(dd/mm/yyyy)')
-    from_time = models.TimeField(
+    start_date = models.DateField(help_text='(dd/mm/yyyy)')
+    start_time = models.TimeField(
         blank=True, null=True,
         help_text="Please enter in 24 hour format e.g. 19:00",
     )
-    to_date = models.DateField(
+    end_date = models.DateField(
         blank=True, null=True,
         help_text='(dd/mm/yyyy)'
     )
-    to_time = models.TimeField(
+    end_time = models.TimeField(
         blank=True, null=True,
         help_text="Please enter in 24 hour format e.g. 21:00",
     )
@@ -182,29 +182,30 @@ class Booking(TimeStampedModel):
     objects = BookingManager()
 
     class Meta:
-        ordering = ('from_date', 'from_time')
+        ordering = ('start_date', 'start_time')
         verbose_name = 'Booking'
         verbose_name_plural = 'Bookings'
 
     def __str__(self):
         end = ''
-        if self.to_date:
-            end = '-{}'.format(self.to_date.strftime("%a %d %b %Y"))
+        if self.end_date:
+            end = '-{}'.format(self.end_date.strftime("%a %d %b %Y"))
         return '{}{}: {}'.format(
-            self.from_date.strftime("%a %d %b %Y"), end, self.title)
+            self.start_date.strftime("%a %d %b %Y"), end, self.title)
 
     def _is_in_the_past(self):
-        return self.to_date < timezone.now().date()
+        return self.end_date and self.end_date < timezone.now().date()
 
     def clean(self):
-        if self.from_date > self.to_date:
-            raise ValidationError(
-                'A booking cannot end before it has started.'
-            )
-        if self.from_date == self.to_date:
-            raise ValidationError(
-                'A booking cannot start and end on the same day.'
-            )
+        if self.end_date:
+            if self.start_date > self.end_date:
+                raise ValidationError(
+                    'A booking cannot end before it has started.'
+                )
+            if self.start_date == self.end_date:
+                raise ValidationError(
+                    'A booking cannot start and end on the same day.'
+                )
         if self._is_in_the_past():
             raise ValidationError(
                 'You cannot make a booking in the past.'

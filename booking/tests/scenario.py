@@ -16,21 +16,21 @@ def get_alpe_d_huez():
     return Booking.objects.get(title='Alpe D Huez')
 
 
-def make_booking(from_date, to_date, title, **kwargs):
+def make_booking(start_date, end_date, title, **kwargs):
     defaults = dict(
-        from_date=from_date,
-        to_date=to_date,
+        start_date=start_date,
+        end_date=end_date,
         title=title,
     )
     defaults.update(kwargs)
     return clean_and_save(Booking(**defaults))
 
 
-def make_booking_in_past(from_date, to_date, title):
+def make_booking_in_past(start_date, end_date, title):
     """Save a booking without cleaning (validating) the data."""
     b = Booking(**dict(
-        from_date=from_date,
-        to_date=to_date,
+        start_date=start_date,
+        end_date=end_date,
         title=title,
     ))
     b.save()
@@ -55,25 +55,25 @@ def default_scenario_booking():
     today = datetime.today().date()
     # 1st week last month starting Saturday
     first_prev_month = today + relativedelta(months=-1, day=1)
-    from_date = next_weekday(first_prev_month, 5)
-    to_date = from_date + timedelta(days=7)
-    make_booking_in_past(from_date, to_date, 'Tignes')
+    start_date = next_weekday(first_prev_month, 5)
+    end_date = start_date + timedelta(days=7)
+    make_booking_in_past(start_date, end_date, 'Tignes')
     # 2nd week last month
-    make_booking_in_past(to_date, to_date + timedelta(days=7), 'Meribel')
+    make_booking_in_past(end_date, end_date + timedelta(days=7), 'Meribel')
     # 1st week this month starting Saturday
     first_this_month = today + relativedelta(day=1)
-    from_date = next_weekday(first_this_month, 5)
-    make_booking_in_past(from_date, from_date + timedelta(days=3), 'Whistler')
+    start_date = next_weekday(first_this_month, 5)
+    make_booking_in_past(start_date, start_date + timedelta(days=3), 'Whistler')
     # later this month starting Tuesday
-    from_date = next_weekday(first_this_month + timedelta(days=10), 1)
-    make_booking_in_past(from_date, from_date + timedelta(days=3), 'Dorset')
+    start_date = next_weekday(first_this_month + timedelta(days=10), 1)
+    make_booking_in_past(start_date, start_date + timedelta(days=3), 'Dorset')
     # span this and next month
-    from_date = datetime(today.year, today.month, 27).date()
+    start_date = datetime(today.year, today.month, 27).date()
     first_next_month = today + relativedelta(months=+1, day=1)
-    to_date = datetime(first_next_month.year, first_next_month.month, 2).date()
-    make_booking_in_past(from_date, to_date, 'Devon')
+    end_date = datetime(first_next_month.year, first_next_month.month, 2).date()
+    make_booking_in_past(start_date, end_date, 'Devon')
     # next month
-    from_date = next_weekday(first_next_month + timedelta(days=3), 2)
-    to_date = next_weekday(from_date, 5)
-    make_booking(from_date, to_date, 'Alpe D Huez')
-    make_booking(to_date, to_date + timedelta(days=4), 'Cornwall')
+    start_date = next_weekday(first_next_month + timedelta(days=3), 2)
+    end_date = next_weekday(start_date, 5)
+    make_booking(start_date, end_date, 'Alpe D Huez')
+    make_booking(end_date, end_date + timedelta(days=4), 'Cornwall')

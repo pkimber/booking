@@ -27,8 +27,8 @@ class TestBooking(TestCase):
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
         clean_and_save(BookingFactory(
-            from_date=next_week,
-            to_date=next_week + timedelta(days=3),
+            start_date=next_week,
+            end_date=next_week + timedelta(days=3),
             title='Three days in the sun'
         ))
 
@@ -37,8 +37,8 @@ class TestBooking(TestCase):
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
         b = BookingFactory(
-            from_date=next_week,
-            to_date=next_week + timedelta(days=3),
+            start_date=next_week,
+            end_date=next_week + timedelta(days=3),
             title='Three days in the sun'
         )
         self.assertTrue(b.is_current())
@@ -48,8 +48,8 @@ class TestBooking(TestCase):
         today = datetime.today().date()
         last_week = today + timedelta(days=-7)
         b = Booking(**dict(
-            from_date=last_week,
-            to_date=last_week + timedelta(days=3),
+            start_date=last_week,
+            end_date=last_week + timedelta(days=3),
             title='Three days in the sun'
         ))
         b.save()
@@ -61,8 +61,8 @@ class TestBooking(TestCase):
         last_week = today + timedelta(days=-7)
         with self.assertRaises(ValidationError):
             clean_and_save(BookingFactory(
-                from_date=last_week,
-                to_date=last_week + timedelta(days=3),
+                start_date=last_week,
+                end_date=last_week + timedelta(days=3),
                 title='Missed our holiday'
             ))
 
@@ -72,8 +72,8 @@ class TestBooking(TestCase):
         next_week = today + timedelta(days=7)
         with self.assertRaises(ValidationError):
             clean_and_save(BookingFactory(
-            from_date=next_week,
-            to_date=next_week + timedelta(days=-2),
+            start_date=next_week,
+            end_date=next_week + timedelta(days=-2),
             title='Two days in the sun',
             ))
 
@@ -90,7 +90,7 @@ class TestBooking(TestCase):
         next_week = today + timedelta(days=7)
         with self.assertRaises(ValidationError):
             clean_and_save(BookingFactory(
-            from_date=next_week,
-            to_date=next_week,
+            start_date=next_week,
+            end_date=next_week,
             title='Not even one day in the sun',
             ))

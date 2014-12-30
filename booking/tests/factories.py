@@ -38,4 +38,4 @@ class BookingFactory(factory.django.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
     location = factory.SubFactory(LocationFactory)
     permission = factory.SubFactory(PermissionFactory)
-    from_date = timezone.now().date()
+    start_date = timezone.now().date()

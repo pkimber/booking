@@ -78,20 +78,20 @@ class HtmlCalendar(object):
 
     def __init__(self):
         """From the 1st of this month, for 12 months."""
-        self.from_date = datetime.now().date() + relativedelta(day=1)
-        self.to_date = self.from_date + relativedelta(years=+1, days=-1)
+        self.start_date = datetime.now().date() + relativedelta(day=1)
+        self.end_date = self.start_date + relativedelta(years=+1, days=-1)
 
     def _get_bookings(self):
-        qs = Booking.objects.calendar(self.from_date, self.to_date)
+        qs = Booking.objects.calendar(self.start_date, self.end_date)
         result = {}
         for b in qs:
-            if not b.from_date in result:
-                result[b.from_date] = BookingCount()
-            result[b.from_date].set_afternoon()
-            if not b.to_date in result:
-                result[b.to_date] = BookingCount()
-            result[b.to_date].set_morning()
-            for d in rrule(DAILY, dtstart=b.from_date, until=b.to_date):
+            if not b.start_date in result:
+                result[b.start_date] = BookingCount()
+            result[b.start_date].set_afternoon()
+            if not b.end_date in result:
+                result[b.end_date] = BookingCount()
+            result[b.end_date].set_morning()
+            for d in rrule(DAILY, dtstart=b.start_date, until=b.end_date):
                 if not d.date() in result:
                     result[d.date()] = BookingCount()
                 result[d.date()].increment()
@@ -148,7 +148,7 @@ class HtmlCalendar(object):
     def get_calendars(self):
         result = []
         bookings = self._get_bookings()
-        d = self.from_date
+        d = self.start_date
         for i in range(0, 12):
             html = self._generate_html(d, bookings)
             # move to the 1st day of the next month

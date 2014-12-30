@@ -38,8 +38,8 @@ class BookingCreateView(
         return reverse(
             'booking.list.month',
             kwargs=dict(
-                year=self.object.from_date.year,
-                month=self.object.from_date.month
+                year=self.object.start_date.year,
+                month=self.object.start_date.month
             )
         )
 
@@ -54,8 +54,8 @@ class BookingDeleteView(
         messages.info(
             self.request,
             "Deleted booking from {} to {}, {}".format(
-                self.object.from_date.strftime('%d/%m/%Y'),
-                self.object.to_date.strftime('%d/%m/%Y'),
+                self.object.start_date.strftime('%d/%m/%Y'),
+                self.object.end_date.strftime('%d/%m/%Y'),
                 self.object.title,
             )
         )
@@ -127,7 +127,7 @@ class BookingUpdateView(
         return reverse(
             'booking.list.month',
             kwargs=dict(
-                year=self.object.from_date.year,
-                month=self.object.from_date.month
+                year=self.object.start_date.year,
+                month=self.object.start_date.month
             )
         )

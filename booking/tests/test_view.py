@@ -34,13 +34,13 @@ class TestView(TestCase):
 
     def test_create(self):
         today = datetime.today().date()
-        from_date = today + timedelta(days=2)
-        to_date = today + timedelta(days=5)
+        start_date = today + timedelta(days=2)
+        end_date = today + timedelta(days=5)
         response = self.client.post(
             reverse('booking.create'),
             dict(
-                from_date=from_date,
-                to_date=to_date,
+                start_date=start_date,
+                end_date=end_date,
                 title='Hatherleigh',
             )
         )
@@ -50,6 +50,43 @@ class TestView(TestCase):
             Booking.objects.get(title='Hatherleigh')
         except Booking.DoesNotExist:
             self.fail('cannot find new booking')
+
+    def test_create_no_title(self):
+        """Booking a self-catering cottage requires from/to date and title."""
+        today = datetime.today().date()
+        start_date = today + timedelta(days=2)
+        end_date = today + timedelta(days=5)
+        response = self.client.post(
+            reverse('booking.create'),
+            dict(
+                start_date=start_date,
+                end_date=end_date,
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        form = response.context_data['form']
+        self.assertEqual(
+            {'title': ['This field is required.']},
+            form.errors,
+        )
+
+    def test_create_no_end_date(self):
+        """Booking a self-catering cottage requires from/to date and title."""
+        today = datetime.today().date()
+        start_date = today + timedelta(days=2)
+        response = self.client.post(
+            reverse('booking.create'),
+            dict(
+                start_date=start_date,
+                title='Hatherleigh',
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        form = response.context_data['form']
+        self.assertEqual(
+            {'end_date': ['This field is required.']},
+            form.errors,
+        )
 
     def test_delete(self):
         b = get_alpe_d_huez()
@@ -83,8 +120,8 @@ class TestView(TestCase):
         response = self.client.post(
             reverse('booking.update', kwargs=dict(pk=b.pk)),
             dict(
-                from_date=b.from_date,
-                to_date=b.to_date,
+                start_date=b.start_date,
+                end_date=b.end_date,
                 title='Zeal Monachorum',
             )
         )

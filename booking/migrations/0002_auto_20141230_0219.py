@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('description', models.CharField(max_length=200)),
@@ -22,49 +22,59 @@ class Migration(migrations.Migration):
                 ('routine', models.BooleanField(default=True)),
             ],
             options={
-                'verbose_name': 'Event type',
                 'ordering': ('description',),
                 'verbose_name_plural': 'Event types',
+                'verbose_name': 'Event type',
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Location',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('description', models.CharField(max_length=200)),
-                ('url', models.URLField(blank=True, null=True)),
-                ('url_map', models.URLField(blank=True, null=True)),
+                ('url', models.URLField(null=True, blank=True)),
+                ('url_map', models.URLField(null=True, blank=True)),
                 ('notes', models.TextField(blank=True)),
             ],
             options={
-                'verbose_name': 'Location',
                 'ordering': ('description',),
                 'verbose_name_plural': 'Locations',
+                'verbose_name': 'Location',
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Permission',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('slug', models.SlugField(unique=True)),
                 ('description', models.CharField(max_length=200)),
             ],
             options={
-                'verbose_name': 'Permission',
                 'ordering': ('slug',),
                 'verbose_name_plural': 'Permissions',
+                'verbose_name': 'Permission',
             },
             bases=(models.Model,),
         ),
         migrations.AlterModelOptions(
             name='booking',
-            options={'verbose_name': 'Booking', 'ordering': ('from_date', 'from_time'), 'verbose_name_plural': 'Bookings'},
+            options={'ordering': ('start_date', 'start_time'), 'verbose_name_plural': 'Bookings', 'verbose_name': 'Booking'},
+        ),
+        migrations.RenameField(
+            model_name='booking',
+            old_name='to_date',
+            new_name='end_date',
+        ),
+        migrations.RenameField(
+            model_name='booking',
+            old_name='from_date',
+            new_name='start_date',
         ),
         migrations.AddField(
             model_name='booking',
@@ -80,8 +90,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='booking',
-            name='from_time',
-            field=models.TimeField(help_text='Please enter in 24 hour format e.g. 19:00', blank=True, null=True),
+            name='end_time',
+            field=models.TimeField(null=True, help_text='Please enter in 24 hour format e.g. 21:00', blank=True),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -116,8 +126,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='booking',
-            name='to_time',
-            field=models.TimeField(help_text='Please enter in 24 hour format e.g. 21:00', blank=True, null=True),
+            name='start_time',
+            field=models.TimeField(null=True, help_text='Please enter in 24 hour format e.g. 19:00', blank=True),
             preserve_default=True,
         ),
         migrations.AlterField(
@@ -129,13 +139,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='booking',
             name='title',
-            field=models.CharField(blank=True, max_length=200),
-            preserve_default=True,
-        ),
-        migrations.AlterField(
-            model_name='booking',
-            name='to_date',
-            field=models.DateField(help_text='(dd/mm/yyyy)', blank=True, null=True),
+            field=models.CharField(max_length=200, blank=True),
             preserve_default=True,
         ),
     ]

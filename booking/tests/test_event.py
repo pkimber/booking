@@ -45,21 +45,21 @@ class TestEvent(TestCase):
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
-            title='a', from_date=one, from_time=start, #status=publish,
+            title='a', start_date=one, start_time=start, #status=publish,
             permission=public,
         )
         BookingFactory(
-            title='b', from_date=two, from_time=start, #status=publish,
+            title='b', start_date=two, start_time=start, #status=publish,
             permission=public,
         )
         # do NOT include this one because it is older than two months
         BookingFactory(
-            title='c', from_date=year, from_time=start, #status=publish,
+            title='c', start_date=year, start_time=start, #status=publish,
             permission=public,
         )
         # do NOT include this one because it for yesterday
         BookingFactory(
-            title='d', from_date=b4, from_time=start, #status=publish,
+            title='d', start_date=b4, start_time=start, #status=publish,
             permission=public,
         )
         events = Booking.objects.public_calendar()
@@ -75,12 +75,12 @@ class TestEvent(TestCase):
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
-            title='a', from_date=one, from_time=start, #status=publish,
+            title='a', start_date=one, start_time=start, #status=publish,
             permission=public,
         )
         # do NOT include this one because it is deleted
         BookingFactory(
-            title='b', from_date=one, from_time=start, #status=publish,
+            title='b', start_date=one, start_time=start, #status=publish,
             permission=public, deleted=True,
         )
         events = Booking.objects._public()
@@ -103,31 +103,31 @@ class TestEvent(TestCase):
         start = timezone.now().time()
         # do NOT include this one because it is less than 2 months
         BookingFactory(
-            title='a', from_date=one, from_time=start, #status=publish,
+            title='a', start_date=one, start_time=start, #status=publish,
             permission=public,
         )
         BookingFactory(
-            title='b', from_date=six, from_time=start, #status=publish,
+            title='b', start_date=six, start_time=start, #status=publish,
             permission=public, category=promote,
         )
         # do NOT include this one because it is a routine event (not promoted)
         BookingFactory(
-            title='c', from_date=six, from_time=start, #status=publish,
+            title='c', start_date=six, start_time=start, #status=publish,
             permission=public, category=routine,
         )
         # do NOT include this one because it is older than 8 months
         BookingFactory(
-            title='d', from_date=year, from_time=start, #status=publish,
+            title='d', start_date=year, start_time=start, #status=publish,
             permission=public,
         )
         # do NOT include this one because it is deleted
         BookingFactory(
-            title='e', from_date=six, from_time=start, #status=publish,
+            title='e', start_date=six, start_time=start, #status=publish,
             permission=public, deleted=True,
         )
         # do NOT include this one because it is not published
         BookingFactory(
-            title='e', from_date=six, from_time=start, #status=pending,
+            title='e', start_date=six, start_time=start, #status=pending,
             permission=public,
         )
         events = Booking.objects.public_promoted()
@@ -144,11 +144,11 @@ class TestEvent(TestCase):
     #    #pending = StatusFactory(publish=False)
     #    start = timezone.now().time()
     #    BookingFactory(
-    #        title='a', from_date=one, from_time=start, #status=pending,
+    #        title='a', start_date=one, start_time=start, #status=pending,
     #        permission=public,
     #    )
     #    BookingFactory(
-    #        title='b', from_date=one, from_time=start, #status=publish,
+    #        title='b', start_date=one, start_time=start, #status=publish,
     #        permission=public,
     #    )
     #    events = Booking.objects._public()
