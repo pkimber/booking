@@ -1,0 +1,75 @@
+{% extends 'project/base.html' %}
+
+{% block title %}
+  Event locations
+{% endblock title %}
+
+{% block sub_heading %}
+  Event locations
+{% endblock sub_heading %}
+
+{% block content %}
+  <div class="pure-g">
+    <div class="pure-u-1">
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li>
+            <a href="{% url 'booking.list' %}">
+              <i class="fa fa-reply"></i>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'event.location.create' %}">
+              <i class="fa fa-calendar"></i>
+              Add location
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pure-g">
+    <div class="pure-u-1">
+      <div class="l-box">
+        <table class="pure-table pure-table-bordered">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Links</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in object_list %}
+              <tr valign="top">
+                <td>
+                  <a href="{% url 'event.location.update' o.pk %}">
+                    <i class="fa fa-edit"></i>
+                    {{ o.description }}
+                  </a>
+                  {% if o.notes %}
+                    <br />
+                    {{ o.notes }}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if o.url %}
+                    {{ o.url }}
+                  {% endif %}
+                  {% if o.url and o.url_map %}
+                    <br />
+                  {% endif %}
+                  {% if o.url_map %}
+                    <strong>Map</strong>
+                    <br />
+                    {{ o.url_map }}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+

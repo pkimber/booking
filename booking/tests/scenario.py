@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-
 from __future__ import unicode_literals
+
 from datetime import (
     datetime,
     timedelta,
@@ -8,12 +8,22 @@ from datetime import (
 
 from dateutil.relativedelta import relativedelta
 
+from base.tests.model_maker import clean_and_save
 from booking.models import Booking
-from booking.tests.model_maker import make_booking
 
 
 def get_alpe_d_huez():
     return Booking.objects.get(title='Alpe D Huez')
+
+
+def make_booking(from_date, to_date, title, **kwargs):
+    defaults = dict(
+        from_date=from_date,
+        to_date=to_date,
+        title=title,
+    )
+    defaults.update(kwargs)
+    return clean_and_save(Booking(**defaults))
 
 
 def make_booking_in_past(from_date, to_date, title):

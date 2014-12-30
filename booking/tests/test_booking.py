@@ -11,8 +11,13 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from base.tests.model_maker import clean_and_save
 from booking.models import Booking
-from booking.tests.model_maker import make_booking
+#from booking.tests.model_maker import make_booking
+
+from .factories import (
+    BookingFactory,
+)
 
 
 class TestBooking(TestCase):
@@ -21,20 +26,20 @@ class TestBooking(TestCase):
         """A simple booking."""
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
-        make_booking(
-            next_week,
-            next_week + timedelta(days=3),
-            'Three days in the sun'
-        )
+        clean_and_save(BookingFactory(
+            from_date=next_week,
+            to_date=next_week + timedelta(days=3),
+            title='Three days in the sun'
+        ))
 
     def test_is_current(self):
         """A simple booking."""
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
-        b = make_booking(
-            next_week,
-            next_week + timedelta(days=3),
-            'Three days in the sun'
+        b = BookingFactory(
+            from_date=next_week,
+            to_date=next_week + timedelta(days=3),
+            title='Three days in the sun'
         )
         self.assertTrue(b.is_current())
 
@@ -54,25 +59,23 @@ class TestBooking(TestCase):
         """Cannot create a booking in the past."""
         today = datetime.today().date()
         last_week = today + timedelta(days=-7)
-        self.assertRaises(
-            ValidationError,
-            make_booking,
-            last_week,
-            last_week + timedelta(days=3),
-            'Missed our holiday'
-        )
+        with self.assertRaises(ValidationError):
+            clean_and_save(BookingFactory(
+                from_date=last_week,
+                to_date=last_week + timedelta(days=3),
+                title='Missed our holiday'
+            ))
 
     def test_end_before_start(self):
         """Booking - start before the end!"""
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
-        self.assertRaises(
-            ValidationError,
-            make_booking,
-            next_week,
-            next_week + timedelta(days=-2),
-            'Two days in the sun',
-        )
+        with self.assertRaises(ValidationError):
+            clean_and_save(BookingFactory(
+            from_date=next_week,
+            to_date=next_week + timedelta(days=-2),
+            title='Two days in the sun',
+            ))
 
     def test_double_booking(self):
         """Don't allow a double booking.
@@ -85,10 +88,9 @@ class TestBooking(TestCase):
         """Booking - start date and end date are the same!"""
         today = datetime.today().date()
         next_week = today + timedelta(days=7)
-        self.assertRaises(
-            ValidationError,
-            make_booking,
-            next_week,
-            next_week,
-            'Not even one day in the sun',
-        )
+        with self.assertRaises(ValidationError):
+            clean_and_save(BookingFactory(
+            from_date=next_week,
+            to_date=next_week,
+            title='Not even one day in the sun',
+            ))

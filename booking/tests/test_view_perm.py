@@ -1,47 +1,95 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime
+from datetime import date
+from django.utils import timezone
 
 from django.core.urlresolvers import reverse
-from django.test import TestCase
 
 from base.tests.test_utils import PermTestCase
-from booking.tests.scenario import (
-    default_scenario_booking,
-    get_alpe_d_huez,
+
+from .factories import (
+    BookingFactory,
+    CategoryFactory,
+    LocationFactory,
+    PermissionFactory,
 )
-from login.tests.scenario import default_scenario_login
 
 
 class TestViewPerm(PermTestCase):
 
     def setUp(self):
-        default_scenario_login()
-        default_scenario_booking()
+        self.setup_users()
 
-    def test_create(self):
-        url = reverse('booking.create')
-        self.assert_staff_only(url)
+    def test_event_create(self):
+        self._assert_staff(reverse('event.create'))
 
-    def test_delete(self):
-        b = get_alpe_d_huez()
-        url = reverse('booking.delete', kwargs={'pk': b.pk})
-        self.assert_staff_only(url)
+    def test_event_list(self):
+        self._assert_staff(reverse('booking.list'))
 
-    def test_list(self):
-        url = reverse('booking.list')
-        self.assert_staff_only(url)
-
-    def test_list_month(self):
-        today = datetime.today().date()
-        url = reverse(
-            'booking.list.month',
-            kwargs=dict(year=today.year, month=today.month)
+    def test_event_update(self):
+        event = BookingFactory(
+            from_date=date(2013, 3, 30),
+            from_time=timezone.now().time(),
         )
-        self.assert_staff_only(url)
+        url = reverse(
+            'event.update',
+            kwargs=dict(pk=event.pk)
+        )
+        self._assert_staff(url)
 
-    def test_update(self):
-        b = get_alpe_d_huez()
-        url = reverse('booking.update', kwargs={'pk': b.pk})
-        self.assert_staff_only(url)
+    def test_event_category_create(self):
+        self._assert_staff(reverse('event.category.create'))
+
+    def test_event_category_list(self):
+        self._assert_staff(reverse('event.category.list'))
+
+    def test_event_category_update(self):
+        category = CategoryFactory()
+        url = reverse(
+            'event.category.update',
+            kwargs=dict(pk=category.pk)
+        )
+        self._assert_staff(url)
+
+    def test_event_location_create(self):
+        self._assert_staff(reverse('event.location.create'))
+
+    def test_event_location_list(self):
+        self._assert_staff(reverse('event.location.list'))
+
+    def test_event_location_update(self):
+        location = LocationFactory()
+        url = reverse(
+            'event.location.update',
+            kwargs=dict(pk=location.pk)
+        )
+        self._assert_staff(url)
+
+    #def test_event_permission_create(self):
+    #    self._assert_staff(reverse('event.permission.create'))
+
+    #def test_event_permission_list(self):
+    #    self._assert_staff(reverse('event.permission.list'))
+
+    #def test_event_permission_update(self):
+    #    permission = PermissionFactory()
+    #    url = reverse(
+    #        'event.permission.update',
+    #        kwargs=dict(pk=permission.pk)
+    #    )
+    #    self._assert_staff(url)
+
+    #def test_event_status_create(self):
+    #    self._assert_staff(reverse('event.status.create'))
+
+    #def test_event_status_list(self):
+    #    self._assert_staff(reverse('event.status.list'))
+
+    #def test_event_status_update(self):
+    #    status = StatusFactory()
+    #    url = reverse(
+    #        'event.status.update',
+    #        kwargs=dict(pk=status.pk)
+    #    )
+    #    self._assert_staff(url)

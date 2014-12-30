@@ -120,8 +120,8 @@ THIRD_PARTY_APPS = (
 )
 
 LOCAL_APPS = (
-    'base',
     'example_booking',
+    'base',
     'booking',
     'login',
 )

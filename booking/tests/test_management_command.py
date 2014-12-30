@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-
 from __future__ import unicode_literals
+
 from django.test import TestCase
 
 from booking.management.commands import demo_data_booking
@@ -17,7 +17,7 @@ class TestCommand(TestCase):
         command = demo_data_booking.Command()
         command.handle()
 
-    def test_init_app(self):
+    def test_init_app_booking(self):
         """ Test the management command """
         command = init_app_booking.Command()
         command.handle()
