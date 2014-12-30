@@ -1,3 +1,9 @@
 {% if b.title %}
-{{ b.title }}
+  {{ b.title }}
+{% endif %}
+{% if b.category %}
+  <strong>{{ b.category }}</strong>
+{% endif %}
+{% if b.location %}
+  at {{ b.location.description }}
 {% endif %}

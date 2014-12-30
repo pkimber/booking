@@ -7,18 +7,18 @@ from booking.service import (
     BookingCount,
     HtmlCalendar,
 )
-from booking.tests.scenario import default_scenario_booking
+from booking.tests.scenario import demo_data
 
 
 class TestService(TestCase):
 
     def test_get_bookings(self):
-        default_scenario_booking()
+        demo_data()
         c = HtmlCalendar()
         c._get_bookings()
 
     def test_get_calendars(self):
-        default_scenario_booking()
+        demo_data()
         c = HtmlCalendar()
         c.get_calendars()
 

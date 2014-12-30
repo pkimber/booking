@@ -16,21 +16,21 @@ from braces.views import (
 from base.view_utils import BaseMixin
 
 from .forms_event import (
-    EventForm,
-    EventNotesForm,
+    #EventForm,
+    BookingNotesForm,
 )
 from .models import Booking
 
 
 
-class EventCreateView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
-
-    form_class = EventForm
-    model = Booking
-
-    def get_success_url(self):
-        return reverse('booking.list')
+#class EventCreateView(
+#        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+#
+#    form_class = EventForm
+#    model = Booking
+#
+#    def get_success_url(self):
+#        return reverse('booking.list')
 
 
 #class EventListView(
@@ -39,22 +39,6 @@ class EventCreateView(
 #    model = Booking
 
 
-class EventUpdateNotesView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
-
-    form_class = EventNotesForm
-    model = Booking
-    template_name = 'booking/booking_notes_form.html'
-
-    #def get_context_data(self, **kwargs):
-    #    context = super(EventUpdateNotesView, self).get_context_data(**kwargs)
-    #    context.update(dict(
-    #        event=self.object,
-    #    ))
-    #    return context
-
-    def get_success_url(self):
-        return reverse('booking.list')
 
 
 class EventUpdateView(

@@ -34,10 +34,6 @@ urlpatterns = patterns(
         view=EventUpdateView.as_view(),
         name='event.update'
         ),
-    url(regex=r'^event/(?P<pk>\d+)/update/notes/$',
-        view=EventUpdateNotesView.as_view(),
-        name='event.update.notes'
-        ),
     #url(regex=r'^permission/$',
     #    view=PermissionListView.as_view(),
     #    name='event.permission.list'

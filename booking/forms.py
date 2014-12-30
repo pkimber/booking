@@ -22,6 +22,33 @@ class BookingEmptyForm(forms.ModelForm):
         fields = ()
 
 
+class BookingEventForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super(BookingEventForm, self).__init__(*args, **kwargs)
+        for name in ('description', 'location'): #, 'notes_public'):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = Booking
+        fields = (
+            'permission',
+            #'status',
+            'category',
+            'start_date',
+            'start_time',
+            'end_date',
+            'end_time',
+            'description',
+            'location',
+            #'notes_public',
+            #'notes_user',
+            #'notes_staff',
+        )
+
+
 class BookingForm(RequiredFieldForm):
     """
     Form for booking a self-catering cottage.
@@ -42,6 +69,23 @@ class BookingForm(RequiredFieldForm):
     class Meta:
         model = Booking
         fields = ('start_date', 'end_date', 'title', 'description')
+
+
+class BookingNotesForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super(BookingNotesForm, self).__init__(*args, **kwargs)
+        for name in ('notes_user', 'notes_staff'):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = Booking
+        fields = (
+            'notes_user',
+            'notes_staff',
+        )
 
 
 class CategoryForm(RequiredFieldForm):

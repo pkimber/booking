@@ -24,6 +24,7 @@ from base.view_utils import BaseMixin
 
 from .forms import (
     BookingForm,
+    BookingNotesForm,
     CategoryForm,
     LocationForm,
 )
@@ -39,7 +40,6 @@ from .models import (
 class BookingCreateView(
         LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
 
-    form_class = BookingForm
     model = Booking
 
     def get_success_url(self):
@@ -130,6 +130,17 @@ class BookingListMonthView(BookingListMixin):
     def get_queryset(self):
         d = self._get_date()
         return Booking.objects.public_month(d.month, d.year)
+
+
+class BookingUpdateNotesView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = BookingNotesForm
+    model = Booking
+    template_name = 'booking/booking_notes_form.html'
+
+    def get_success_url(self):
+        return reverse('booking.list')
 
 
 class BookingUpdateView(

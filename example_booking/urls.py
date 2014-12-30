@@ -9,6 +9,15 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
 
+from booking.forms import (
+    BookingForm,
+    BookingEventForm,
+)
+from booking.views import (
+    BookingCreateView,
+    BookingUpdateView,
+)
+
 from .views import HomeView
 
 admin.autodiscover()
@@ -25,6 +34,22 @@ urlpatterns = patterns(
         ),
     url(regex=r'^admin/',
         view=include(admin.site.urls)
+        ),
+    url(regex=r'^booking/create/$',
+        view=BookingCreateView.as_view(form_class=BookingEventForm),
+        name='booking.create'
+        ),
+    url(regex=r'^booking/create/cottage/$',
+        view=BookingCreateView.as_view(form_class=BookingForm),
+        name='booking.create.cottage'
+        ),
+    url(regex=r'^booking/(?P<pk>\d+)/update/$',
+        view=BookingUpdateView.as_view(form_class=BookingEventForm),
+        name='booking.update'
+        ),
+    url(regex=r'^booking/(?P<pk>\d+)/update/cottage/$',
+        view=BookingUpdateView.as_view(form_class=BookingForm),
+        name='booking.update.cottage'
         ),
     url(regex=r'^booking/',
         view=include('booking.urls')

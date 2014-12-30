@@ -44,11 +44,22 @@ class BookingSettings(SingletonModel):
 reversion.register(BookingSettings)
 
 
+class CategoryManager(models.Manager):
+
+    def create_category(self, description):
+        category = self.model(
+            description=description,
+        )
+        category.save()
+        return category
+
+
 class Category(TimeStampedModel):
 
     description = models.CharField(max_length=200)
     promote = models.BooleanField(default=False)
     routine = models.BooleanField(default=True)
+    objects = CategoryManager()
 
     class Meta:
         ordering = ('description',)
@@ -61,12 +72,23 @@ class Category(TimeStampedModel):
 reversion.register(Category)
 
 
+class LocationManager(models.Manager):
+
+    def create_location(self, description):
+        location = self.model(
+            description=description,
+        )
+        location.save()
+        return location
+
+
 class Location(TimeStampedModel):
 
     description = models.CharField(max_length=200)
     url = models.URLField(blank=True, null=True)
     url_map = models.URLField(blank=True, null=True)
     notes = models.TextField(blank=True)
+    objects = LocationManager()
 
     class Meta:
         ordering = ('description',)

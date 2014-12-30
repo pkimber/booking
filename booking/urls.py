@@ -7,11 +7,10 @@ from django.conf.urls import (
 )
 
 from .views import (
-    BookingCreateView,
     BookingDeleteView,
     BookingListMonthView,
     BookingListView,
-    BookingUpdateView,
+    BookingUpdateNotesView,
     CategoryCreateView,
     CategoryListView,
     CategoryUpdateView,
@@ -23,10 +22,6 @@ from .views import (
 
 urlpatterns = patterns(
     '',
-    url(regex=r'^add/$',
-        view=BookingCreateView.as_view(),
-        name='booking.create'
-        ),
     url(regex=r'^$',
         view=BookingListView.as_view(),
         name='booking.list'
@@ -35,13 +30,13 @@ urlpatterns = patterns(
         view=BookingDeleteView.as_view(),
         name='booking.delete'
         ),
-    url(regex=r'^(?P<pk>\d+)/update/$',
-        view=BookingUpdateView.as_view(),
-        name='booking.update'
-        ),
     url(regex=r'^(?P<year>\d{4})/(?P<month>\d+)/$',
         view=BookingListMonthView.as_view(),
         name='booking.list.month'
+        ),
+    url(regex=r'^(?P<pk>\d+)/update/notes/$',
+        view=BookingUpdateNotesView.as_view(),
+        name='booking.update.notes'
         ),
     url(regex=r'^category/$',
         view=CategoryListView.as_view(),

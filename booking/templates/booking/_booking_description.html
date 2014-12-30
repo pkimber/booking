@@ -1,9 +1,3 @@
-{% if b.category %}
-<strong>{{ b.category }}</strong>
-{% endif %}
-{% if b.location %}
-at {{ b.location.description }}
-{% endif %}
 {% if b.description %}
   {% autoescape off %}
   {{ b.description }}

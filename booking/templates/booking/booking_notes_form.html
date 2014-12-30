@@ -16,7 +16,7 @@
           <thead>
             <tr>
               <th>Date</th>
-              <th>Description and location</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -26,6 +26,7 @@
                 {% include 'booking/_booking_time.html' with b=object %}
               </td>
               <td>
+                {% include 'booking/_booking_title.html' with b=object %}
                 {% include 'booking/_booking_description.html' with b=object %}
               </td>
             </tr>

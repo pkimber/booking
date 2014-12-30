@@ -11,7 +11,7 @@ from django.test import TestCase
 
 from booking.models import Booking
 from booking.tests.scenario import (
-    default_scenario_booking,
+    demo_data,
     get_alpe_d_huez,
 )
 from login.tests.factories import TEST_PASSWORD
@@ -25,7 +25,7 @@ class TestView(TestCase):
 
     def setUp(self):
         default_scenario_login()
-        default_scenario_booking()
+        demo_data()
         staff = get_user_staff()
         # update simple content
         self.assertTrue(
@@ -37,7 +37,7 @@ class TestView(TestCase):
         start_date = today + timedelta(days=2)
         end_date = today + timedelta(days=5)
         response = self.client.post(
-            reverse('booking.create'),
+            reverse('booking.create.cottage'),
             dict(
                 start_date=start_date,
                 end_date=end_date,
@@ -57,7 +57,7 @@ class TestView(TestCase):
         start_date = today + timedelta(days=2)
         end_date = today + timedelta(days=5)
         response = self.client.post(
-            reverse('booking.create'),
+            reverse('booking.create.cottage'),
             dict(
                 start_date=start_date,
                 end_date=end_date,
@@ -75,7 +75,7 @@ class TestView(TestCase):
         today = datetime.today().date()
         start_date = today + timedelta(days=2)
         response = self.client.post(
-            reverse('booking.create'),
+            reverse('booking.create.cottage'),
             dict(
                 start_date=start_date,
                 title='Hatherleigh',
@@ -118,7 +118,7 @@ class TestView(TestCase):
     def test_update(self):
         b = get_alpe_d_huez()
         response = self.client.post(
-            reverse('booking.update', kwargs=dict(pk=b.pk)),
+            reverse('booking.update.cottage', kwargs=dict(pk=b.pk)),
             dict(
                 start_date=b.start_date,
                 end_date=b.end_date,

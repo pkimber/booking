@@ -9,7 +9,11 @@ from datetime import (
 from dateutil.relativedelta import relativedelta
 
 from base.tests.model_maker import clean_and_save
-from booking.models import Booking
+from booking.models import (
+    Booking,
+    Category,
+    Location,
+)
 
 
 def get_alpe_d_huez():
@@ -50,7 +54,7 @@ def next_weekday(d, weekday):
     return d + timedelta(days_ahead)
 
 
-def default_scenario_booking():
+def demo_data():
     # set-up some dates
     today = datetime.today().date()
     # 1st week last month starting Saturday
@@ -77,3 +81,6 @@ def default_scenario_booking():
     end_date = next_weekday(start_date, 5)
     make_booking(start_date, end_date, 'Alpe D Huez')
     make_booking(end_date, end_date + timedelta(days=4), 'Cornwall')
+    # misc
+    Category.objects.create_category('Meeting')
+    Location.objects.create_location('Community Centre')
