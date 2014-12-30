@@ -1,11 +1,11 @@
 {% extends 'project/base.html' %}
 
 {% block title %}
-  Event locations
+  Booking locations
 {% endblock title %}
 
 {% block sub_heading %}
-  Event locations
+  Booking locations
 {% endblock sub_heading %}
 
 {% block content %}
@@ -19,7 +19,7 @@
             </a>
           </li>
           <li>
-            <a href="{% url 'event.location.create' %}">
+            <a href="{% url 'booking.location.create' %}">
               <i class="fa fa-calendar"></i>
               Add location
             </a>
@@ -42,7 +42,7 @@
             {% for o in object_list %}
               <tr valign="top">
                 <td>
-                  <a href="{% url 'event.location.update' o.pk %}">
+                  <a href="{% url 'booking.location.update' o.pk %}">
                     <i class="fa fa-edit"></i>
                     {{ o.description }}
                   </a>

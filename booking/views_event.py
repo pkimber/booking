@@ -16,43 +16,11 @@ from braces.views import (
 from base.view_utils import BaseMixin
 
 from .forms_event import (
-    CategoryForm,
     EventForm,
     EventNotesForm,
-    LocationForm,
 )
-from .models import (
-    Booking,
-    Category,
-    Location,
-)
+from .models import Booking
 
-
-class CategoryCreateView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
-
-    form_class = CategoryForm
-    model = Category
-
-    def get_success_url(self):
-        return reverse('event.category.list')
-
-
-class CategoryListView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
-
-    model = Category
-    #template_name = 'dash/category.html'
-
-
-class CategoryUpdateView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
-
-    form_class = CategoryForm
-    model = Category
-
-    def get_success_url(self):
-        return reverse('event.category.list')
 
 
 class EventCreateView(
@@ -97,32 +65,6 @@ class EventUpdateView(
 
     def get_success_url(self):
         return reverse('booking.list')
-
-
-class LocationCreateView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
-
-    form_class = LocationForm
-    model = Location
-
-    def get_success_url(self):
-        return reverse('event.location.list')
-
-
-class LocationListView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
-
-    model = Location
-
-
-class LocationUpdateView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
-
-    form_class = LocationForm
-    model = Location
-
-    def get_success_url(self):
-        return reverse('event.location.list')
 
 
 #class PermissionCreateView(

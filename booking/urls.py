@@ -12,6 +12,12 @@ from .views import (
     BookingListMonthView,
     BookingListView,
     BookingUpdateView,
+    CategoryCreateView,
+    CategoryListView,
+    CategoryUpdateView,
+    LocationCreateView,
+    LocationListView,
+    LocationUpdateView,
 )
 
 
@@ -36,5 +42,29 @@ urlpatterns = patterns(
     url(regex=r'^(?P<year>\d{4})/(?P<month>\d+)/$',
         view=BookingListMonthView.as_view(),
         name='booking.list.month'
+        ),
+    url(regex=r'^category/$',
+        view=CategoryListView.as_view(),
+        name='booking.category.list'
+        ),
+    url(regex=r'^category/create/$',
+        view=CategoryCreateView.as_view(),
+        name='booking.category.create'
+        ),
+    url(regex=r'^category/(?P<pk>\d+)/update/$',
+        view=CategoryUpdateView.as_view(),
+        name='booking.category.update'
+        ),
+    url(regex=r'^location/$',
+        view=LocationListView.as_view(),
+        name='booking.location.list'
+        ),
+    url(regex=r'^location/create/$',
+        view=LocationCreateView.as_view(),
+        name='booking.location.create'
+        ),
+    url(regex=r'^location/(?P<pk>\d+)/update/$',
+        view=LocationUpdateView.as_view(),
+        name='booking.location.update'
         ),
 )

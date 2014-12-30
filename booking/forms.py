@@ -8,7 +8,11 @@ from base.form_utils import (
     set_widget_required,
 )
 
-from .models import Booking
+from .models import (
+    Booking,
+    Category,
+    Location,
+)
 
 
 class BookingEmptyForm(forms.ModelForm):
@@ -38,3 +42,40 @@ class BookingForm(RequiredFieldForm):
     class Meta:
         model = Booking
         fields = ('start_date', 'end_date', 'title', 'description')
+
+
+class CategoryForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        for name in ('description',):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = Category
+        fields = (
+            'description',
+            'promote',
+            'routine',
+        )
+
+
+class LocationForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super(LocationForm, self).__init__(*args, **kwargs)
+        for name in ('description', 'url', 'url_map', 'notes'):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = Location
+        fields = (
+            'description',
+            'url',
+            'url_map',
+            'notes',
+        )

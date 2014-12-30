@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 
 from django.views.generic import TemplateView
 
-from booking.models import Booking
+from booking.models import (
+    Booking,
+    BookingSettings,
+)
 from booking.service import (
     grouper,
     HtmlCalendar,
@@ -19,6 +22,7 @@ class HomeView(TemplateView):
         calendars = HtmlCalendar().get_calendars()
         grouped = grouper(calendars, 3)
         context.update(dict(
+            booking_settings=BookingSettings.load(),
             calendar=list(grouped),
             public_calendar=Booking.objects.public_calendar(),
         ))

@@ -20,13 +20,24 @@ def default_permission():
 
 class BookingSettings(SingletonModel):
 
-    notes_user_staff = models.BooleanField(default=False)
+    display_permissions = models.BooleanField(
+        default=False,
+        help_text="Display permissions on the list of bookings."
+    )
+    notes_user_staff = models.BooleanField(
+        default=False,
+        help_text=(
+            "Allow a member of staff to edit notes for logged "
+            "in users (and members of staff)"
+        )
+    )
 
     class Meta:
         verbose_name = 'Booking settings'
 
     def __str__(self):
-        return "Edit notes for user and staff: {}".format(
+        return "Booking settings (permissions: {}, notes: {})".format(
+            self.display_permissions,
             self.notes_user_staff,
         )
 

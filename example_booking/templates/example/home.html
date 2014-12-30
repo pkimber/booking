@@ -34,24 +34,24 @@
             </li>
           {% endif %}
         </ul>
-        <div class="l-box">
-          <h3>Public bookings for the next couple of months</h3>
-          {% for b in public_calendar %}
-            {% include 'booking/_booking.html' %}
-          {% endfor %}
-        </div>
-        {% for c in calendar %}
-          <div class="pure-g">
-            {% for month in c %}
-              <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-                <div class="l-box">
-                  {{ month }}
-                </div>
-              </div>
-            {% endfor %}
-          </div>
+      </div>
+      <div class="l-box">
+        <h3>Public bookings for the next couple of months</h3>
+        {% for b in public_calendar %}
+          {% include 'booking/_booking.html' %}
         {% endfor %}
       </div>
+      {% for c in calendar %}
+        <div class="pure-g">
+          {% for month in c %}
+            <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+              <div class="l-box">
+                {{ month }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock content %}

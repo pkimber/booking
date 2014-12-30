@@ -47,29 +47,29 @@ class TestViewPerm(PermTestCase):
         self.assert_staff_only(url)
 
     def test_event_category_create(self):
-        self.assert_staff_only(reverse('event.category.create'))
+        self.assert_staff_only(reverse('booking.category.create'))
 
     def test_event_category_list(self):
-        self.assert_staff_only(reverse('event.category.list'))
+        self.assert_staff_only(reverse('booking.category.list'))
 
     def test_event_category_update(self):
         category = CategoryFactory()
         url = reverse(
-            'event.category.update',
+            'booking.category.update',
             kwargs=dict(pk=category.pk)
         )
         self.assert_staff_only(url)
 
     def test_event_location_create(self):
-        self.assert_staff_only(reverse('event.location.create'))
+        self.assert_staff_only(reverse('booking.location.create'))
 
     def test_event_location_list(self):
-        self.assert_staff_only(reverse('event.location.list'))
+        self.assert_staff_only(reverse('booking.location.list'))
 
     def test_event_location_update(self):
         location = LocationFactory()
         url = reverse(
-            'event.location.update',
+            'booking.location.update',
             kwargs=dict(pk=location.pk)
         )
         self.assert_staff_only(url)

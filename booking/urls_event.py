@@ -7,16 +7,10 @@ from django.conf.urls import (
 )
 
 from .views_event import (
-    CategoryCreateView,
-    CategoryListView,
-    CategoryUpdateView,
     EventCreateView,
     #EventListView,
     EventUpdateNotesView,
     EventUpdateView,
-    LocationCreateView,
-    LocationListView,
-    LocationUpdateView,
     #PermissionCreateView,
     #PermissionListView,
     #PermissionUpdateView,
@@ -44,18 +38,6 @@ urlpatterns = patterns(
         view=EventUpdateNotesView.as_view(),
         name='event.update.notes'
         ),
-    url(regex=r'^location/$',
-        view=LocationListView.as_view(),
-        name='event.location.list'
-        ),
-    url(regex=r'^location/create/$',
-        view=LocationCreateView.as_view(),
-        name='event.location.create'
-        ),
-    url(regex=r'^location/(?P<pk>\d+)/update/$',
-        view=LocationUpdateView.as_view(),
-        name='event.location.update'
-        ),
     #url(regex=r'^permission/$',
     #    view=PermissionListView.as_view(),
     #    name='event.permission.list'
@@ -80,16 +62,4 @@ urlpatterns = patterns(
     #    view=StatusUpdateView.as_view(),
     #    name='event.status.update'
     #    ),
-    url(regex=r'^category/$',
-        view=CategoryListView.as_view(),
-        name='event.category.list'
-        ),
-    url(regex=r'^category/create/$',
-        view=CategoryCreateView.as_view(),
-        name='event.category.create'
-        ),
-    url(regex=r'^category/(?P<pk>\d+)/update/$',
-        view=CategoryUpdateView.as_view(),
-        name='event.category.update'
-        ),
 )

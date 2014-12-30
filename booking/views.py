@@ -22,10 +22,17 @@ from braces.views import (
 
 from base.view_utils import BaseMixin
 
-from .forms import BookingForm
+from .forms import (
+    BookingForm,
+    CategoryForm,
+    LocationForm,
+)
+
 from .models import (
     Booking,
     BookingSettings,
+    Category,
+    Location,
 )
 
 
@@ -139,3 +146,56 @@ class BookingUpdateView(
                 month=self.object.start_date.month
             )
         )
+
+
+class CategoryCreateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+
+    form_class = CategoryForm
+    model = Category
+
+    def get_success_url(self):
+        return reverse('booking.category.list')
+
+
+class CategoryListView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
+
+    model = Category
+    #template_name = 'dash/category.html'
+
+
+class CategoryUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = CategoryForm
+    model = Category
+
+    def get_success_url(self):
+        return reverse('booking.category.list')
+
+
+class LocationCreateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+
+    form_class = LocationForm
+    model = Location
+
+    def get_success_url(self):
+        return reverse('booking.location.list')
+
+
+class LocationListView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
+
+    model = Location
+
+
+class LocationUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = LocationForm
+    model = Location
+
+    def get_success_url(self):
+        return reverse('booking.location.list')

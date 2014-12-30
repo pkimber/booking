@@ -15,6 +15,9 @@
       {% else %}
         {% include 'booking/_booking_title.html' %}
       {% endif %}
+      {% if user.is_staff %}
+        {% include 'booking/_booking_permission.html' %}
+      {% endif %}
       {% include 'booking/_booking_description.html' %}
       {% include 'booking/_booking_notes_user.html' %}
       {% include 'booking/_booking_notes_staff.html' %}
