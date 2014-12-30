@@ -11,35 +11,60 @@
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="l-box">
-        <div class="pure-menu pure-menu-open pure-menu-horizontal">
-          <ul>
-            <li>
-              <a href="{% url 'booking.list' %}">
-                <i class="fa fa-calendar"></i>
-                Home
-              </a>
-            </li>
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          <li>
+            <a href="{% url 'project.dash' %}">
+              <i class="fa fa-reply"></i>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'booking.list' %}">
+              <i class="fa fa-calendar"></i>
+              Calendar
+            </a>
+          </li>
+          {% if user.is_staff %}
             <li>
               <a href="{% url "booking.create" %}">
                 <i class="fa fa-calendar-o"></i>
                 New booking
               </a>
             </li>
+          {% endif %}
+          <li>
+            <a href="{% url "booking.list.month" first_prev_month|date:"Y" first_prev_month|date:"m" %}">
+              <i class="fa fa-calendar"></i>
+              {{ first_prev_month|date:"M Y" }}
+            </a>
+          </li>
+          <li>
+            <a href="{% url "booking.list.month" first_next_month|date:"Y" first_next_month|date:"m" %}">
+              <i class="fa fa-calendar"></i>
+              {{ first_next_month|date:"M Y" }}
+            </a>
+          </li>
+          {% if user.is_staff %}
             <li>
-              <a href="{% url "booking.list.month" first_prev_month|date:"Y" first_prev_month|date:"m" %}">
+              <a href="{% url 'event.location.list' %}">
                 <i class="fa fa-calendar"></i>
-                {{ first_prev_month|date:"M Y" }}
+                Locations
               </a>
             </li>
             <li>
-              <a href="{% url "booking.list.month" first_next_month|date:"Y" first_next_month|date:"m" %}">
+              <a href="{% url 'event.category.list' %}">
                 <i class="fa fa-calendar"></i>
-                {{ first_next_month|date:"M Y" }}
+                Categories
               </a>
             </li>
-          </ul>
-        </div>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pure-g">
+    <div class="pure-u-1">
+      <div class="l-box">
         <table class="pure-table pure-table-bordered">
           <thead>
             <tr>
@@ -47,7 +72,9 @@
               <th>From</th>
               <th>To</th>
               <th>Description</th>
-              <th>Delete</th>
+              {% if user.is_staff %}
+                <th>Delete</th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -58,12 +85,12 @@
                 </td>
                 <td>
                   {% if not b.is_current %}<del>{% endif %}
-                  {{ b.from_date|date:"D jS M Y" }}
+                  {{ b.start_date|date:"D jS M Y" }}
                   {% if not b.is_current %}</del>{% endif %}
                 </td>
                 <td>
                   {% if not b.is_current %}<del>{% endif %}
-                  {{ b.to_date|date:"D jS M Y" }}
+                  {{ b.end_date|date:"D jS M Y" }}
                   {% if not b.is_current %}</del>{% endif %}
                 </td>
                 <td>
@@ -80,12 +107,14 @@
                     {{ b.description|urlize|linebreaksbr }}
                   {% endif %}
                 </td>
-                <td>
-                  <a href="{% url "booking.delete" b.pk %}">
-                    <i class="fa fa-times"></i>
-                    <small>Delete</small>
-                  </a>
-                </td>
+                {% if user.is_staff %}
+                  <td>
+                    <a href="{% url "booking.delete" b.pk %}">
+                      <i class="fa fa-times"></i>
+                      <small>Delete</small>
+                    </a>
+                  </td>
+                {% endif %}
               </tr>
             {% endfor %}
           </tbody>

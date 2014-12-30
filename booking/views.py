@@ -65,8 +65,7 @@ class BookingDeleteView(
         return reverse('booking.list')
 
 
-class BookingListView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
+class BookingListView(LoginRequiredMixin, BaseMixin, ListView):
 
     model = Booking
 
@@ -87,8 +86,7 @@ class BookingListView(
         return Booking.objects.bookings()[:31]
 
 
-class BookingListMonthView(
-        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
+class BookingListMonthView(LoginRequiredMixin, BaseMixin, ListView):
 
     model = Booking
 

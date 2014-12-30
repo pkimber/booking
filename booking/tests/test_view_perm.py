@@ -22,10 +22,18 @@ class TestViewPerm(PermTestCase):
         self.setup_users()
 
     def test_event_create(self):
-        self._assert_staff(reverse('event.create'))
+        self.assert_staff_only(reverse('event.create'))
 
     def test_event_list(self):
-        self._assert_staff(reverse('booking.list'))
+        self.assert_logged_in(reverse('booking.list'))
+
+    def test_event_list_month(self):
+        today = timezone.now().date()
+        url = reverse(
+            'booking.list.month',
+            kwargs=dict(year=today.year, month=today.month),
+        )
+        self.assert_logged_in(url)
 
     def test_event_update(self):
         event = BookingFactory(
@@ -36,13 +44,13 @@ class TestViewPerm(PermTestCase):
             'event.update',
             kwargs=dict(pk=event.pk)
         )
-        self._assert_staff(url)
+        self.assert_staff_only(url)
 
     def test_event_category_create(self):
-        self._assert_staff(reverse('event.category.create'))
+        self.assert_staff_only(reverse('event.category.create'))
 
     def test_event_category_list(self):
-        self._assert_staff(reverse('event.category.list'))
+        self.assert_staff_only(reverse('event.category.list'))
 
     def test_event_category_update(self):
         category = CategoryFactory()
@@ -50,13 +58,13 @@ class TestViewPerm(PermTestCase):
             'event.category.update',
             kwargs=dict(pk=category.pk)
         )
-        self._assert_staff(url)
+        self.assert_staff_only(url)
 
     def test_event_location_create(self):
-        self._assert_staff(reverse('event.location.create'))
+        self.assert_staff_only(reverse('event.location.create'))
 
     def test_event_location_list(self):
-        self._assert_staff(reverse('event.location.list'))
+        self.assert_staff_only(reverse('event.location.list'))
 
     def test_event_location_update(self):
         location = LocationFactory()
@@ -64,13 +72,13 @@ class TestViewPerm(PermTestCase):
             'event.location.update',
             kwargs=dict(pk=location.pk)
         )
-        self._assert_staff(url)
+        self.assert_staff_only(url)
 
     #def test_event_permission_create(self):
-    #    self._assert_staff(reverse('event.permission.create'))
+    #    self.assert_staff_only(reverse('event.permission.create'))
 
     #def test_event_permission_list(self):
-    #    self._assert_staff(reverse('event.permission.list'))
+    #    self.assert_staff_only(reverse('event.permission.list'))
 
     #def test_event_permission_update(self):
     #    permission = PermissionFactory()
@@ -78,13 +86,13 @@ class TestViewPerm(PermTestCase):
     #        'event.permission.update',
     #        kwargs=dict(pk=permission.pk)
     #    )
-    #    self._assert_staff(url)
+    #    self.assert_staff_only(url)
 
     #def test_event_status_create(self):
-    #    self._assert_staff(reverse('event.status.create'))
+    #    self.assert_staff_only(reverse('event.status.create'))
 
     #def test_event_status_list(self):
-    #    self._assert_staff(reverse('event.status.list'))
+    #    self.assert_staff_only(reverse('event.status.list'))
 
     #def test_event_status_update(self):
     #    status = StatusFactory()
@@ -92,4 +100,4 @@ class TestViewPerm(PermTestCase):
     #        'event.status.update',
     #        kwargs=dict(pk=status.pk)
     #    )
-    #    self._assert_staff(url)
+    #    self.assert_staff_only(url)

@@ -22,15 +22,17 @@
           <li>
             <a href="{% url 'booking.list' %}">
               <i class="fa fa-calendar"></i>
-              Home
+              Calendar
             </a>
           </li>
-          <li>
-            <a href="{% url 'booking.create' %}">
-              <i class="fa fa-calendar-o"></i>
-              New booking
-            </a>
-          </li>
+          {% if user.is_staff %}
+            <li>
+              <a href="{% url 'booking.create' %}">
+                <i class="fa fa-calendar-o"></i>
+                New booking
+              </a>
+            </li>
+          {% endif %}
         </ul>
         {% for c in calendar %}
           <div class="pure-g">
