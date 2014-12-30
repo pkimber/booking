@@ -14,16 +14,15 @@ from booking.models import (
 from .factories import (
     BookingFactory,
     CategoryFactory,
-    PermissionFactory,
 )
 
 
 class TestEvent(TestCase):
 
     def test_public_calendar(self):
-        public = PermissionFactory(slug=Permission.PUBLIC)
-        user = PermissionFactory(slug=Permission.USER)
-        staff = PermissionFactory(slug=Permission.STAFF)
+        public = Permission.objects.get(slug=Permission.PUBLIC)
+        user = Permission.objects.get(slug=Permission.USER)
+        staff = Permission.objects.get(slug=Permission.STAFF)
         BookingFactory(title='a', permission=public)
         BookingFactory(title='b', permission=user)
         BookingFactory(title='c', permission=staff)
@@ -41,7 +40,7 @@ class TestEvent(TestCase):
         one = today + relativedelta(days=7)
         two = today + relativedelta(days=14)
         year = today + relativedelta(years=1)
-        public = PermissionFactory(slug=Permission.PUBLIC)
+        public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
@@ -71,7 +70,7 @@ class TestEvent(TestCase):
     def test_public_delete(self):
         today = timezone.now().date()
         one = today + relativedelta(days=7)
-        public = PermissionFactory(slug=Permission.PUBLIC)
+        public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         start = timezone.now().time()
         BookingFactory(
@@ -95,7 +94,7 @@ class TestEvent(TestCase):
         one = today + relativedelta(days=7)
         six = today + relativedelta(months=6)
         year = today + relativedelta(years=1)
-        public = PermissionFactory(slug=Permission.PUBLIC)
+        public = Permission.objects.get(slug=Permission.PUBLIC)
         #publish = StatusFactory(publish=True)
         #pending = StatusFactory(publish=False)
         promote = CategoryFactory(promote=True)

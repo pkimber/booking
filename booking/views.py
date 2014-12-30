@@ -125,7 +125,7 @@ class BookingListMonthView(BookingListMixin):
 
     def get_queryset(self):
         d = self._get_date()
-        return Booking.objects.month(d.month, d.year)
+        return Booking.objects.public_month(d.month, d.year)
 
 
 class BookingUpdateView(

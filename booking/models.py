@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
@@ -14,6 +15,10 @@ import reversion
 
 from base.model_utils import TimeStampedModel
 from base.singleton import SingletonModel
+
+
+def default_permission():
+    return Permission.objects.get(slug=Permission.PUBLIC).pk
 
 
 class BookingSettings(SingletonModel):
@@ -109,20 +114,35 @@ reversion.register(Permission)
 
 class BookingManager(models.Manager):
 
+    def _current(self):
+        """Return all current bookings."""
+        return self.model.objects.exclude(deleted=True)
+
     def _eight_months(self):
         today = timezone.now().date()
         return today + relativedelta(months=8)
+
+    def _filter_by_month(self, qs, month, year):
+        """
+        Filter booking objects which are in the month.
+
+        If the start date or end date are in the month, then include them.
+
+        """
+        return qs.filter(
+            (Q(start_date__month=month) & Q(start_date__year=year))
+            |
+            (Q(end_date__month=month) & Q(end_date__year=year))
+        )
 
     def _two_months(self):
         today = timezone.now().date()
         return today + relativedelta(months=2)
 
     def _public(self):
-        return self.model.objects.filter(
+        return self._current().filter(
             permission__slug=Permission.PUBLIC,
             #status__publish=True,
-        ).exclude(
-            deleted=True
         )
 
     def bookings(self):
@@ -145,23 +165,14 @@ class BookingManager(models.Manager):
             start_date__lte=end_date,
         )
 
-    def month(self, month, year):
-        """Return booking objects for a month.
-
-        If the from date or to date are in the month, then include them.
-
-        """
-        return self.model.objects.filter(
-            (Q(start_date__month=month) & Q(start_date__year=year))
-            |
-            (Q(end_date__month=month) & Q(end_date__year=year))
-        )
-
     def public_calendar(self):
         return self._public().filter(
             start_date__gte=timezone.now().date(),
             start_date__lte=self._two_months(),
         )
+
+    def public_month(self, month, year):
+        return self._filter_by_month(self._public(), month, year)
 
     def public_promoted(self):
         return self._public().filter(
@@ -173,7 +184,7 @@ class BookingManager(models.Manager):
 
 class Booking(TimeStampedModel):
 
-    permission= models.ForeignKey(Permission, blank=True, null=True)
+    permission= models.ForeignKey(Permission, default=default_permission)
     category = models.ForeignKey(Category, blank=True, null=True)
     title = models.CharField(max_length=200, blank=True)
     start_date = models.DateField(help_text='(dd/mm/yyyy)')
@@ -235,12 +246,5 @@ class Booking(TimeStampedModel):
 
     def is_current(self):
         return not self._is_in_the_past()
-
-    @property
-    def css_class_name(self):
-        if self.permission:
-            return permission.slug
-        else:
-            return Permission.PUBLIC
 
 reversion.register(Booking)

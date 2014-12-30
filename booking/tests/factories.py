@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import factory
+
 from django.utils import timezone
 
 from booking.models import (
@@ -24,10 +25,11 @@ class LocationFactory(factory.django.DjangoModelFactory):
         model = Location
 
 
-class PermissionFactory(factory.django.DjangoModelFactory):
-
-    class Meta:
-        model = Permission
+#class PermissionFactory(factory.django.DjangoModelFactory):
+#    """TODO Remove this factory when the default permission is set."""
+#
+#    class Meta:
+#        model = Permission
 
 
 class BookingFactory(factory.django.DjangoModelFactory):
@@ -37,5 +39,5 @@ class BookingFactory(factory.django.DjangoModelFactory):
 
     category = factory.SubFactory(CategoryFactory)
     location = factory.SubFactory(LocationFactory)
-    permission = factory.SubFactory(PermissionFactory)
+    #permission = factory.SubFactory(PermissionFactory)
     start_date = timezone.now().date()

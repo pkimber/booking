@@ -12,7 +12,7 @@ from .factories import (
     BookingFactory,
     CategoryFactory,
     LocationFactory,
-    PermissionFactory,
+    #PermissionFactory,
 )
 
 
