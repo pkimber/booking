@@ -44,6 +44,7 @@ class BookingEventForm(RequiredFieldForm):
             'end_time',
             'description',
             'location',
+            'picture',
         )
 
 

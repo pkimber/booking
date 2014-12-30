@@ -158,7 +158,6 @@ class BookingUpdateNotesView(
 class BookingUpdateView(
         LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
 
-    form_class = BookingForm
     model = Booking
 
     def get_success_url(self):
