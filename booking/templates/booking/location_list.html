@@ -35,14 +35,26 @@
         <table class="pure-table pure-table-bordered">
           <thead>
             <tr>
-              <th>Locations</th>
+              <th>Title</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
             {% for o in object_list %}
               <tr valign="top">
                 <td>
-                  {% include 'booking/_location.html' %}
+                  <a href="{% url 'booking.location.update' o.pk %}">
+                    <i class="fa fa-edit"></i>
+                    {{ o.title }}
+                  </a>
+                </td>
+                <td>
+                  {% autoescape off %}
+                    {{ o.description }}
+                  {% endautoescape %}
+                  <a href="{% url 'booking.location' o.pk %}">
+                    Click to see the location detail page...
+                  </a>
                 </td>
               </tr>
             {% endfor %}
