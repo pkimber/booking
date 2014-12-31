@@ -1,4 +1,5 @@
 {% extends 'project/base.html' %}
+{% load thumbnail %}
 
 {% block title %}
   Booking locations
@@ -34,35 +35,14 @@
         <table class="pure-table pure-table-bordered">
           <thead>
             <tr>
-              <th>Description</th>
-              <th>Links</th>
+              <th>Locations</th>
             </tr>
           </thead>
           <tbody>
             {% for o in object_list %}
               <tr valign="top">
                 <td>
-                  <a href="{% url 'booking.location.update' o.pk %}">
-                    <i class="fa fa-edit"></i>
-                    {{ o.description }}
-                  </a>
-                  {% if o.notes %}
-                    <br />
-                    {{ o.notes }}
-                  {% endif %}
-                </td>
-                <td>
-                  {% if o.url %}
-                    {{ o.url }}
-                  {% endif %}
-                  {% if o.url and o.url_map %}
-                    <br />
-                  {% endif %}
-                  {% if o.url_map %}
-                    <strong>Map</strong>
-                    <br />
-                    {{ o.url_map }}
-                  {% endif %}
+                  {% include 'booking/_location.html' %}
                 </td>
               </tr>
             {% endfor %}

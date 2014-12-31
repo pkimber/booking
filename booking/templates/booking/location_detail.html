@@ -1,0 +1,40 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}
+  {{ object.title }}
+{% endblock title %}
+
+{% block sub_heading %}
+  {{ object.title }}
+{% endblock sub_heading %}
+
+{% block content %}
+  <div class="pure-g">
+    <div class="pure-u-1">
+      <div class="pure-menu pure-menu-open pure-menu-horizontal">
+        <ul>
+          {% if user.is_staff %}
+            <li>
+              <a href="{% url 'project.dash' %}">
+                <i class="fa fa-reply"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'booking.location.update' object.pk %}">
+                <i class="fa fa-edit"></i>
+                Edit location
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'booking.location.list' %}">
+                <i class="fa fa-calendar"></i>
+                Locations
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      {% include 'booking/_location.html' with o=object %}
+    </div>
+  </div>
+{% endblock content %}

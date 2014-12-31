@@ -30,6 +30,7 @@ class BookingEventForm(RequiredFieldForm):
             self.fields[name].widget.attrs.update(
                 {'class': 'pure-input-2-3'}
             )
+        set_widget_required(self.fields['category'])
         set_widget_required(self.fields['location'])
         set_widget_required(self.fields['permission'])
 
@@ -116,7 +117,7 @@ class LocationForm(RequiredFieldForm):
 
     def __init__(self, *args, **kwargs):
         super(LocationForm, self).__init__(*args, **kwargs)
-        for name in ('description', 'url', 'url_map', 'notes'):
+        for name in ('title', 'address', 'url', 'url_map', 'description'):
             self.fields[name].widget.attrs.update(
                 {'class': 'pure-input-2-3'}
             )
@@ -124,8 +125,10 @@ class LocationForm(RequiredFieldForm):
     class Meta:
         model = Location
         fields = (
-            'description',
+            'title',
+            'address',
             'url',
             'url_map',
-            'notes',
+            'description',
+            'picture',
         )

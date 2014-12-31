@@ -15,6 +15,7 @@ from .views import (
     CategoryListView,
     CategoryUpdateView,
     LocationCreateView,
+    LocationDetailView,
     LocationListView,
     LocationUpdateView,
 )
@@ -57,6 +58,10 @@ urlpatterns = patterns(
     url(regex=r'^location/create/$',
         view=LocationCreateView.as_view(),
         name='booking.location.create'
+        ),
+    url(regex=r'^location/(?P<pk>\d+)/$',
+        view=LocationDetailView.as_view(),
+        name='booking.location'
         ),
     url(regex=r'^location/(?P<pk>\d+)/update/$',
         view=LocationUpdateView.as_view(),

@@ -1,0 +1,37 @@
+{% load thumbnail %}
+{% if user.is_staff %}
+  <a href="{% url 'booking.location.update' o.pk %}">
+    <i class="fa fa-edit"></i>
+    {{ o.title }}
+  </a>
+{% else %}
+  {% if o.url %}
+  <a href="{{ o.url }}" target="_blank">
+    {{ o.title }}
+  </a>
+  {% else %}
+    {{ o.title }}
+  {% endif %}
+{% endif %}
+{% if o.address %}
+  <br />
+  {{ o.address|linebreaksbr }}
+{% endif %}
+{% if o.url_map %}
+  <br />
+  <a href="{{ o.url_map }}" target="_blank">
+    <i class="fa fa-external-link"></i>
+    Click here for a map....
+  </a>
+{% endif %}
+{% autoescape off %}
+  {{ o.description }}
+{% endautoescape %}
+{% if o.url %}
+  <a href="{{ o.url }}" target="_blank">
+    {% if o.picture %}
+      <img class="pure-img" src="{% thumbnail o.picture 150x150 crop %}" />
+    {% endif %}
+    {{ o.url }}
+  </a>
+{% endif %}

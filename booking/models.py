@@ -84,10 +84,12 @@ class LocationManager(models.Manager):
 
 class Location(TimeStampedModel):
 
-    description = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    address = models.TextField(blank=True)
     url = models.URLField(blank=True, null=True)
     url_map = models.URLField(blank=True, null=True)
-    notes = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    picture = models.ImageField(upload_to='booking', blank=True)
     objects = LocationManager()
 
     class Meta:
@@ -96,7 +98,7 @@ class Location(TimeStampedModel):
         verbose_name_plural = 'Locations'
 
     def __str__(self):
-        return '{}'.format(self.description)
+        return '{}'.format(self.title)
 
 reversion.register(Location)
 

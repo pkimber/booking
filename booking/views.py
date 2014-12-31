@@ -11,6 +11,7 @@ from django.http import Http404
 from django.views.generic import (
     CreateView,
     DeleteView,
+    DetailView,
     ListView,
     UpdateView,
 )
@@ -205,6 +206,11 @@ class LocationCreateView(
 
     def get_success_url(self):
         return reverse('booking.location.list')
+
+
+class LocationDetailView(BaseMixin, DetailView):
+
+    model = Location
 
 
 class LocationListView(

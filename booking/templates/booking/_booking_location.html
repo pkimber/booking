@@ -1,0 +1,6 @@
+{% if b.location %}
+  at
+  <a href="{% url 'booking.location' b.location.pk %}">
+    {{ b.location.title }}
+  </a>
+{% endif %}

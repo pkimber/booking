@@ -60,6 +60,14 @@ class TestViewPerm(PermTestCase):
     def test_event_location_create(self):
         self.assert_staff_only(reverse('booking.location.create'))
 
+    def test_event_location_detail(self):
+        location = LocationFactory()
+        url = reverse(
+            'booking.location',
+            kwargs=dict(pk=location.pk)
+        )
+        self.assert_any(url)
+
     def test_event_location_list(self):
         self.assert_staff_only(reverse('booking.location.list'))
 

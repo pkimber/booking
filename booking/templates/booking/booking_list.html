@@ -31,20 +31,20 @@
           </li>
           {% if user.is_staff %}
             <li>
-              <a href="{% url "booking.create" %}">
+              <a href="{% url 'booking.create' %}">
                 <i class="fa fa-calendar-o"></i>
                 New booking
               </a>
             </li>
           {% endif %}
           <li>
-            <a href="{% url "booking.list.month" first_prev_month|date:"Y" first_prev_month|date:"m" %}">
+            <a href="{% url 'booking.list.month' first_prev_month|date:"Y" first_prev_month|date:"m" %}">
               <i class="fa fa-calendar"></i>
               {{ first_prev_month|date:"M Y" }}
             </a>
           </li>
           <li>
-            <a href="{% url "booking.list.month" first_next_month|date:"Y" first_next_month|date:"m" %}">
+            <a href="{% url 'booking.list.month' first_next_month|date:"Y" first_next_month|date:"m" %}">
               <i class="fa fa-calendar"></i>
               {{ first_next_month|date:"M Y" }}
             </a>
