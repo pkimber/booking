@@ -20,15 +20,26 @@ def get_readme():
 
 setup(
     name='kb-booking',
-    packages=['booking', 'booking.migrations', 'booking.tests', 'booking.management', 'booking.management.commands'],
+    packages=['example_booking', 'booking', 'booking.migrations', 'booking.tests', 'booking.management', 'booking.management.commands'],
     package_data={
+        'example_booking': [
+            'static/*.*',
+            'static/example/*.*',
+            'static/example/css/*.*',
+            'templates/*.*',
+            'templates/example/*.*',
+            'templates/project/*.*',
+        ],
+
         'booking': [
             'static/*.*',
+            'static/booking/*.*',
+            'static/booking/css/*.*',
             'templates/*.*',
             'templates/booking/*.*',
         ],
     },
-    version='0.0.11',
+    version='0.0.12',
     description='booking',
     author='Patrick Kimber',
     author_email='code@pkimber.net',

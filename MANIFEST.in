@@ -1,3 +1,5 @@
+recursive-include example_booking/static *
+recursive-include example_booking/templates *
 recursive-include booking/static *
 recursive-include booking/templates *
 
