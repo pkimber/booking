@@ -5,17 +5,19 @@
     <div class="pure-u-1 pure-u-md-6-24">
       {% if not b.is_current %}<del>{% endif %}
       {% include 'booking/_booking_date.html' %}
-      {% include 'booking/_booking_time.html' %}
       {% if not b.is_current %}</del>{% endif %}
       {% if user.is_staff %}
         <br />
         {% include 'booking/_booking_permission.html' %}
       {% endif %}
       {% if b.picture %}
-        <img class="pure-img" src="{% thumbnail b.picture 150x150 crop %}" />
+        <div class="r-box">
+          <img class="pure-img" src="{% thumbnail b.picture 200x141 crop %}" />
+        </div>
       {% endif %}
     </div>
     <div class="pure-u-1 pure-u-md-18-24">
+      {% include 'booking/_booking_time.html' %}
       {% if user.is_staff and b.is_current %}
         <a href="{% url "booking.update" b.pk %}">
           <i class="fa fa-edit"></i>

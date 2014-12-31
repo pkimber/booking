@@ -1,5 +1,4 @@
 {% if b.start_time or b.end_time %}
-  <br />
   {{ b.start_time|date:'g:ia' }}
   {% if b.end_time %} - {{ b.end_time|date:'g:ia' }}{% endif %}
 {% endif %}
