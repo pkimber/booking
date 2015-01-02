@@ -44,9 +44,11 @@
   <div class="pure-u-1 pure-u-md-1-2">
     {% if o.url %}
       <a href="{{ o.url }}" target="_blank">
-        {% if o.picture %}
-          <img class="pure-img" src="{% thumbnail o.picture 150x150 crop %}" />
-        {% endif %}
+    {% endif %}
+    {% if o.picture %}
+      <img class="pure-img" src="{% thumbnail o.picture 150x150 crop %}" />
+    {% endif %}
+    {% if o.url %}
       </a>
     {% endif %}
   </div>
