@@ -26,7 +26,7 @@ class BookingEventForm(RequiredFieldForm):
 
     def __init__(self, *args, **kwargs):
         super(BookingEventForm, self).__init__(*args, **kwargs)
-        for name in ('description', 'location'):
+        for name in ('title', 'description', 'location'):
             self.fields[name].widget.attrs.update(
                 {'class': 'pure-input-2-3'}
             )
@@ -43,6 +43,7 @@ class BookingEventForm(RequiredFieldForm):
             'start_time',
             'end_date',
             'end_time',
+            'title',
             'description',
             'location',
             'picture',
