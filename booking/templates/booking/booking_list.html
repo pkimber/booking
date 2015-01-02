@@ -50,18 +50,22 @@
             </a>
           </li>
           {% if user.is_staff %}
-            <li>
-              <a href="{% url 'booking.location.list' %}">
-                <i class="fa fa-calendar"></i>
-                Locations
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'booking.category.list' %}">
-                <i class="fa fa-calendar"></i>
-                Categories
-              </a>
-            </li>
+            {% if booking_settings.display_categories %}
+              <li>
+                <a href="{% url 'booking.category.list' %}">
+                  <i class="fa fa-calendar"></i>
+                  Categories
+                </a>
+              </li>
+            {% endif %}
+            {% if booking_settings.display_locations %}
+              <li>
+                <a href="{% url 'booking.location.list' %}">
+                  <i class="fa fa-calendar"></i>
+                  Locations
+                </a>
+              </li>
+            {% endif %}
           {% endif %}
         </ul>
       </div>

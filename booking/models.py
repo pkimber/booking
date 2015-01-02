@@ -20,9 +20,17 @@ def default_permission():
 
 class BookingSettings(SingletonModel):
 
+    display_categories = models.BooleanField(
+        default=False,
+        help_text=("Does this project use 'Categories'?")
+    )
     display_permissions = models.BooleanField(
         default=False,
         help_text="Display permissions on the list of bookings."
+    )
+    display_locations = models.BooleanField(
+        default=False,
+        help_text=("Does this project use 'Locations'?")
     )
     notes_user_staff = models.BooleanField(
         default=False,
