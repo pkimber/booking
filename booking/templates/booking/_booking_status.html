@@ -1,10 +1,25 @@
 <small>
   [
+    {% if booking_settings.display_permissions %}
+      {% if b.permission.slug == 'staff' %}
+        <span class="staff-text">
+          <i class="fa fa-lock"></i>
+      {% elif b.permission.slug == 'user' %}
+        <span class="user-text">
+          <i class="fa fa-user"></i>
+      {% else %}
+        <span class="public-text">
+      {% endif %}
+        {{ b.permission.slug }}
+      </span>
+      &nbsp;
+      |
+    {% endif %}
     {% if booking_settings.notes_user_staff %}
       &nbsp;
       <a href="{% url 'booking.update.notes' b.pk %}">
         <i class="fa fa-edit"></i>
-        Edit user/staff notes
+        user/staff
       </a>
       &nbsp;
       |
@@ -12,7 +27,6 @@
     &nbsp;
     <a href="{% url 'booking.delete' b.pk %}">
       <i class="fa fa-times"></i>
-      Delete booking
     </a>
     &nbsp;
   ]

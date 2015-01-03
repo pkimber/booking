@@ -60,11 +60,16 @@ class BookingDeleteView(
 
     def delete(self, request, *args, **kwargs):
         result = super(BookingDeleteView, self).delete(request, *args, **kwargs)
+        end_date = ''
+        if self.object.end_date:
+            end_date = ' to {}, '.format(
+                self.object.end_date.strftime('%d/%m/%Y')
+            )
         messages.info(
             self.request,
-            "Deleted booking from {} to {}, {}".format(
+            "Deleted booking from {}{} {}".format(
                 self.object.start_date.strftime('%d/%m/%Y'),
-                self.object.end_date.strftime('%d/%m/%Y'),
+                end_date,
                 self.object.title,
             )
         )

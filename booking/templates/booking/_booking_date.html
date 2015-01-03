@@ -1,5 +1,8 @@
-{{ b.start_date|date:'l jS F' }}
+{{ b.start_date|date:'l jS' }}
 {% if b.end_date %}
   <br />
-  {{ b.end_date|date:'l jS F' }}
+  {{ b.end_date|date:'l jS' }}
+  {% if b.end_date.month != b.start_date.month %}
+    <small>{{ b.end_date|date:'F' }}</small>
+  {% endif %}
 {% endif %}

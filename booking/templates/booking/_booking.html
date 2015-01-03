@@ -6,10 +6,6 @@
       {% if not b.is_current %}<del>{% endif %}
       {% include 'booking/_booking_date.html' %}
       {% if not b.is_current %}</del>{% endif %}
-      {% if user.is_staff %}
-        <br />
-        {% include 'booking/_booking_permission.html' %}
-      {% endif %}
       {% if b.picture %}
         <div class="r-box">
           <img class="pure-img" src="{% thumbnail b.picture 200x141 crop %}" />
