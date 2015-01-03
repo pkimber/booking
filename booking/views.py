@@ -6,8 +6,12 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import Http404
+from django.http import (
+    Http404,
+    HttpResponse,
+)
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -29,13 +33,13 @@ from .forms import (
     CategoryForm,
     LocationForm,
 )
-
 from .models import (
     Booking,
     BookingSettings,
     Category,
     Location,
 )
+from .service import PdfCalendar
 
 
 class BookingCreateView(
@@ -201,6 +205,20 @@ class CategoryUpdateView(
 
     def get_success_url(self):
         return reverse('booking.category.list')
+
+
+def _get_response(file_name):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
+    return response
+
+
+@login_required
+def download_calendar(request):
+    response = _get_response('calendar.pdf')
+    PdfCalendar().report(response, request.user)
+    return response
 
 
 class LocationCreateView(

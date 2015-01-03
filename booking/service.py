@@ -1,9 +1,15 @@
 # -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
+import bleach
 import calendar
+
 from datetime import datetime
 from itertools import zip_longest
+from reportlab import platypus
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
 
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import (
@@ -11,6 +17,8 @@ from dateutil.rrule import (
     DAILY,
 )
 
+from django.utils.dateformat import DateFormat
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from booking.models import Booking
@@ -157,3 +165,141 @@ class HtmlCalendar(object):
             d = d + relativedelta(months=+1, day=1)
             result.append(mark_safe(html))
         return result
+
+
+class MyReport(object):
+    """Copy of this class in 'booking'.  Where can I put the shared code?"""
+
+    def __init__(self):
+        # Use the sample style sheet.
+        style_sheet = getSampleStyleSheet()
+        self.body = style_sheet["BodyText"]
+        self.head_1 = style_sheet["Heading1"]
+        self.head_2 = style_sheet["Heading2"]
+        self.GRID_LINE_WIDTH = 0.25
+
+    def _bold(self, text):
+        return self._para('<b>{}</b>'.format(text))
+
+    def _head(self, text):
+        return platypus.Paragraph(text, self.head_2)
+
+    def _image(self, file_name):
+        return platypus.Image(os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            'static',
+            file_name
+        ))
+
+    def _para(self, text):
+        return platypus.Paragraph(text, self.body)
+
+    def _round(self, value):
+        return value.quantize(Decimal('.01'))
+
+
+class PdfCalendar(MyReport):
+
+    def report(self, response, user):
+        # Create the document template
+        doc = platypus.SimpleDocTemplate(
+            response,
+            title='Calendar',
+            pagesize=A4
+        )
+        # Container for the 'Flowable' objects
+        elements = []
+        elements.append(self._head('Calendar'))
+        elements.append(platypus.Spacer(1, 12))
+        #elements.append(self._table_lines(invoice))
+        elements.append(self._calendar())
+        elements.append(self._para(
+            'Printed {} by {}'.format(
+                timezone.now().strftime('%d/%m/%Y %H:%M'),
+                user.username
+            )
+        ))
+        doc.build(elements)
+
+    def _calendar(self):
+        lines = []
+        year = 0
+        month = 0
+        for b in Booking.objects.user_calendar():
+            if b.start_date.year == year and b.start_date.month == month:
+                pass
+            else:
+                lines.append([
+                    self._bold(DateFormat(b.start_date).format('F Y')),
+                    ''
+                ])
+                month = b.start_date.month
+                year = b.start_date.year
+            lines.append([
+                self._para(self._booking_date(b)),
+                self._description(b)
+            ])
+        # initial styles
+        style = [
+            ('GRID', (0, 0), (-1, -1), self.GRID_LINE_WIDTH, colors.gray),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (2, 0), (-1, -1), 'RIGHT'),
+        ]
+        # column widths
+        column_widths = [110, 330]
+        # draw the table
+        return platypus.Table(
+            lines,
+            colWidths=column_widths,
+            repeatRows=1,
+            style=style,
+        )
+
+    def _booking_date(self, b):
+        result = []
+        result.append(DateFormat(b.start_date).format('l jS'))
+        if b.end_date:
+            end_date = DateFormat(b.end_date).format('l jS')
+            end_month = ''
+            if b.end_date.month != b.start_date.month:
+                end_month = ' {}'.format(DateFormat(b.end_date).format('M'))
+            result.append('{}{}'.format(end_date, end_month))
+        return '<br />'.join(result)
+
+    def _strip_html(self, html):
+        from django.utils.html import strip_tags
+        return strip_tags(html)
+        """a wrapper for bleach.clean() that strips ALL tags from the input."""
+        tags = ['br', 'p']
+        attr = {}
+        styles = []
+        return bleach.clean(
+            html, tags=tags, attributes=attr, styles=styles, strip=True
+        )
+
+    def _description(self, b):
+        result = []
+        category = ''
+        end_time = ''
+        location = ''
+        start_time = ''
+        title = ''
+        if b.start_time or b.end_time:
+            start_time = '{} '.format(DateFormat(b.start_time).format('g:ia'))
+            if b.end_time:
+                end_time = '- {} '.format(DateFormat(b.end_time).format('g:ia'))
+        if b.title:
+            title = '{} '.format(b.title)
+        if b.category:
+            category = '{} '.format(b.category)
+        if b.location:
+            location = 'at {} '.format(b.location.title)
+        result.append('{}{}{}{}{}'.format(
+            start_time, end_time, title, category, location
+        ))
+        description = [self._para('<br />'.join(result))]
+        if b.description:
+            description.append(self._para(self._strip_html(b.description)))
+        if b.notes_user:
+            description.append(self._para(self._strip_html(b.notes_user)))
+        return description
