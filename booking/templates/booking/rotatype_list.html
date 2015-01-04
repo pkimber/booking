@@ -35,6 +35,7 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Order</th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +46,9 @@
                     <i class="fa fa-edit"></i>
                     {{ o.name }}
                   </a>
+                </td>
+                <td>
+                  {{ o.order }}
                 </td>
               </tr>
             {% endfor %}

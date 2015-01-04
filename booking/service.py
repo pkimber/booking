@@ -302,4 +302,10 @@ class PdfCalendar(MyReport):
             description.append(self._para(self._strip_html(b.description)))
         if b.notes_user:
             description.append(self._para(self._strip_html(b.notes_user)))
+        rota_list = b.rota_set.current()
+        if rota_list.count():
+            result = []
+            for rota in rota_list:
+                result.append('<b>{}</b>: {}'.format(rota.rota.name, rota.name))
+            description.append(self._para(' '.join(result)))
         return description

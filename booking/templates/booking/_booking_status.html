@@ -1,5 +1,5 @@
-{# only display this section if the context contains 'booking_settings' #}
-{% if booking_settings %}
+{# only display this section if the context contains 'booking_edit' #}
+{% if booking_edit %}
   <small>
     [
       {% if booking_settings.display_permissions %}
@@ -29,6 +29,7 @@
       &nbsp;
       <a href="{% url 'booking.delete' b.pk %}">
         <i class="fa fa-times"></i>
+        Booking
       </a>
       &nbsp;
     ]

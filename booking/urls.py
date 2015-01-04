@@ -19,9 +19,12 @@ from .views import (
     LocationDetailView,
     LocationListView,
     LocationUpdateView,
+    RotaCreateView,
+    RotaDeleteView,
     RotaTypeCreateView,
     RotaTypeListView,
     RotaTypeUpdateView,
+    RotaUpdateView,
 )
 
 
@@ -74,6 +77,18 @@ urlpatterns = patterns(
     url(regex=r'^location/(?P<pk>\d+)/update/$',
         view=LocationUpdateView.as_view(),
         name='booking.location.update'
+        ),
+    url(regex=r'^rota/(?P<pk>\d+)/create/$',
+        view=RotaCreateView.as_view(),
+        name='booking.rota.create'
+        ),
+    url(regex=r'^rota/(?P<pk>\d+)/delete/$',
+        view=RotaDeleteView.as_view(),
+        name='booking.rota.delete'
+        ),
+    url(regex=r'^rota/(?P<pk>\d+)/update/$',
+        view=RotaUpdateView.as_view(),
+        name='booking.rota.update'
         ),
     url(regex=r'^rota/type/$',
         view=RotaTypeListView.as_view(),

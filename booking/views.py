@@ -32,6 +32,8 @@ from .forms import (
     BookingNotesForm,
     CategoryForm,
     LocationForm,
+    RotaEmptyForm,
+    RotaForm,
     RotaTypeForm,
 )
 from .models import (
@@ -39,9 +41,20 @@ from .models import (
     BookingSettings,
     Category,
     Location,
+    Rota,
     RotaType,
 )
 from .service import PdfCalendar
+
+
+def _url_booking_list_month(booking):
+    return reverse(
+        'booking.list.month',
+        kwargs=dict(
+            year=booking.start_date.year,
+            month=booking.start_date.month
+        )
+    )
 
 
 class BookingCreateView(
@@ -50,13 +63,7 @@ class BookingCreateView(
     model = Booking
 
     def get_success_url(self):
-        return reverse(
-            'booking.list.month',
-            kwargs=dict(
-                year=self.object.start_date.year,
-                month=self.object.start_date.month
-            )
-        )
+        return _url_booking_list_month(self.object)
 
 
 class BookingDeleteView(
@@ -90,6 +97,7 @@ class BookingListMixin(LoginRequiredMixin, BaseMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(BookingListMixin, self).get_context_data(**kwargs)
         context.update(dict(
+            booking_edit=True,
             booking_settings=BookingSettings.load(),
         ))
         return context
@@ -173,13 +181,7 @@ class BookingUpdateView(
     model = Booking
 
     def get_success_url(self):
-        return reverse(
-            'booking.list.month',
-            kwargs=dict(
-                year=self.object.start_date.year,
-                month=self.object.start_date.month
-            )
-        )
+        return _url_booking_list_month(self.object)
 
 
 class CategoryCreateView(
@@ -196,7 +198,6 @@ class CategoryListView(
         LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
 
     model = Category
-    #template_name = 'dash/category.html'
 
 
 class CategoryUpdateView(
@@ -252,6 +253,56 @@ class LocationUpdateView(
 
     def get_success_url(self):
         return reverse('booking.location.list')
+
+
+class RotaCreateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+
+    form_class = RotaForm
+    model = Rota
+
+    def _get_booking(self):
+        pk = self.kwargs.get('pk', None)
+        return Booking.objects.get(pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super(RotaCreateView, self).get_context_data(**kwargs)
+        context.update(dict(booking=self._get_booking()))
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.booking = self._get_booking()
+        return super(RotaCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return _url_booking_list_month(self.object.booking)
+
+
+class RotaDeleteView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = RotaEmptyForm
+    model = Rota
+    template_name = 'booking/rota_remove_form.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.deleted = True
+        return super(RotaDeleteView, self).form_valid(form)
+
+    def get_success_url(self):
+        return _url_booking_list_month(self.object.booking)
+
+
+class RotaUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = RotaForm
+    model = Rota
+
+    def get_success_url(self):
+        return _url_booking_list_month(self.object.booking)
 
 
 class RotaTypeCreateView(

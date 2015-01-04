@@ -9,6 +9,7 @@ from booking.models import (
     Booking,
     Category,
     Location,
+    Rota,
     RotaType,
 )
 
@@ -37,5 +38,22 @@ class BookingFactory(factory.django.DjangoModelFactory):
 
 class RotaTypeFactory(factory.django.DjangoModelFactory):
 
+    @factory.sequence
+    def order(n):
+        return n
+
     class Meta:
         model = RotaType
+
+
+class RotaFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = Rota
+
+    booking = factory.SubFactory(BookingFactory)
+    rota = factory.SubFactory(RotaTypeFactory)
+
+    @factory.sequence
+    def name(n):
+        return 'name_{:02d}'.format(n)

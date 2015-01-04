@@ -23,12 +23,6 @@
               <i class="fa fa-reply"></i>
             </a>
           </li>
-          <li>
-            <a href="{% url 'booking.list' %}">
-              <i class="fa fa-calendar"></i>
-              Calendar
-            </a>
-          </li>
           {% if user.is_staff %}
             <li>
               <a href="{% url 'booking.create' %}">

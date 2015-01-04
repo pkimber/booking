@@ -314,9 +314,10 @@ reversion.register(Booking)
 class RotaType(TimeStampedModel):
 
     name = models.CharField(max_length=200)
+    order = models.IntegerField()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('order',)
         verbose_name = 'Rota type'
         verbose_name_plural = 'Rota types'
 
@@ -326,14 +327,22 @@ class RotaType(TimeStampedModel):
 reversion.register(RotaType)
 
 
+class RotaManager(models.Manager):
+
+    def current(self):
+        return self.model.objects.exclude(deleted=True)
+
+
 class Rota(TimeStampedModel):
 
     booking = models.ForeignKey(Booking)
     rota = models.ForeignKey(RotaType)
     name = models.CharField(max_length=200)
+    deleted = models.BooleanField(default=False)
+    objects = RotaManager()
 
     class Meta:
-        ordering = ('booking', 'rota', 'name')
+        ordering = ('booking', 'rota__order', 'name')
         verbose_name = 'Rota'
         verbose_name_plural = 'Rotas'
 

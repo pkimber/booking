@@ -12,6 +12,7 @@ from .factories import (
     BookingFactory,
     CategoryFactory,
     LocationFactory,
+    RotaFactory,
     RotaTypeFactory,
 )
 
@@ -78,6 +79,18 @@ class TestViewPerm(PermTestCase):
             kwargs=dict(pk=location.pk)
         )
         self.assert_staff_only(url)
+
+    def test_rota_create(self):
+        booking = BookingFactory()
+        self.assert_staff_only(
+            reverse('booking.rota.create', kwargs=dict(pk=booking.pk))
+        )
+
+    def test_rota_update(self):
+        rota = RotaFactory()
+        self.assert_staff_only(
+            reverse('booking.rota.update', kwargs=dict(pk=rota.pk))
+        )
 
     def test_rota_type_create(self):
         self.assert_staff_only(reverse('booking.rota.type.create'))
