@@ -43,6 +43,7 @@ class BookingSettings(SingletonModel):
             "in users (and members of staff)"
         )
     )
+    pdf_heading = models.CharField(max_length=200, blank=True)
 
     class Meta:
         verbose_name = 'Booking settings'

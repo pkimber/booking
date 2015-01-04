@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Rota',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=200)),
@@ -22,25 +22,25 @@ class Migration(migrations.Migration):
                 ('booking', models.ForeignKey(to='booking.Booking')),
             ],
             options={
+                'verbose_name': 'Rota',
                 'verbose_name_plural': 'Rotas',
                 'ordering': ('booking', 'rota__order', 'name'),
-                'verbose_name': 'Rota',
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='RotaType',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=200)),
                 ('order', models.IntegerField()),
             ],
             options={
+                'verbose_name': 'Rota type',
                 'verbose_name_plural': 'Rota types',
                 'ordering': ('order',),
-                'verbose_name': 'Rota type',
             },
             bases=(models.Model,),
         ),
@@ -53,7 +53,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bookingsettings',
             name='display_rota',
-            field=models.BooleanField(help_text="Does this project use 'Rotas'?", default=False),
+            field=models.BooleanField(default=False, help_text="Does this project use 'Rotas'?"),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='bookingsettings',
+            name='pdf_heading',
+            field=models.CharField(max_length=200, blank=True),
             preserve_default=True,
         ),
     ]

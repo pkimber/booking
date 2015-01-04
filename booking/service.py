@@ -21,7 +21,10 @@ from django.utils.dateformat import DateFormat
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from booking.models import Booking
+from booking.models import (
+    Booking,
+    BookingSettings,
+)
 
 
 def grouper(iterable, n, fillvalue=None):
@@ -168,7 +171,6 @@ class HtmlCalendar(object):
 
 
 class MyReport(object):
-    """Copy of this class in 'booking'.  Where can I put the shared code?"""
 
     def __init__(self):
         # Use the sample style sheet.
@@ -181,24 +183,14 @@ class MyReport(object):
     def _bold(self, text):
         return self._para('<b>{}</b>'.format(text))
 
-    def _head(self, text):
-        return platypus.Paragraph(text, self.head_2)
+    def _head_1(self, text):
+        return platypus.Paragraph(text, self.head_1)
 
-    def _image(self, file_name):
-        import os
-        file_name = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            'static',
-            file_name
-        )
-        print(file_name)
-        return platypus.Image(file_name)
+    def _head_2(self, text):
+        return platypus.Paragraph(text, self.head_2)
 
     def _para(self, text):
         return platypus.Paragraph(text, self.body)
-
-    def _round(self, value):
-        return value.quantize(Decimal('.01'))
 
 
 class PdfCalendar(MyReport):
@@ -212,11 +204,15 @@ class PdfCalendar(MyReport):
         )
         # Container for the 'Flowable' objects
         elements = []
-        elements.append(self._head('Calendar'))
-        elements.append(self._image('abc'))
+        booking_settings = BookingSettings.load()
+        if booking_settings.pdf_heading:
+            elements.append(self._head_1(booking_settings.pdf_heading))
+        elements.append(self._head_2('Calendar'))
         elements.append(platypus.Spacer(1, 12))
         #elements.append(self._table_lines(invoice))
-        elements.append(self._calendar())
+        calendar = self._calendar()
+        if calendar:
+            elements.append(calendar)
         elements.append(self._para(
             'Printed {} by {}'.format(
                 timezone.now().strftime('%d/%m/%Y %H:%M'),
@@ -251,13 +247,16 @@ class PdfCalendar(MyReport):
         ]
         # column widths
         column_widths = [100, 340]
-        # draw the table
-        return platypus.Table(
-            lines,
-            colWidths=column_widths,
-            repeatRows=1,
-            style=style,
-        )
+        # draw the table if there is some data
+        result = None
+        if lines:
+            result = platypus.Table(
+                lines,
+                colWidths=column_widths,
+                repeatRows=1,
+                style=style,
+            )
+        return result
 
     def _booking_date(self, b):
         result = []
