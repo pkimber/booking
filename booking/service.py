@@ -176,7 +176,7 @@ class MyReport(object):
         self.body = style_sheet["BodyText"]
         self.head_1 = style_sheet["Heading1"]
         self.head_2 = style_sheet["Heading2"]
-        self.GRID_LINE_WIDTH = 0.25
+        self.GRID_LINE_WIDTH = 0.1
 
     def _bold(self, text):
         return self._para('<b>{}</b>'.format(text))
@@ -185,11 +185,14 @@ class MyReport(object):
         return platypus.Paragraph(text, self.head_2)
 
     def _image(self, file_name):
-        return platypus.Image(os.path.join(
+        import os
+        file_name = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             'static',
             file_name
-        ))
+        )
+        print(file_name)
+        return platypus.Image(file_name)
 
     def _para(self, text):
         return platypus.Paragraph(text, self.body)
@@ -210,6 +213,7 @@ class PdfCalendar(MyReport):
         # Container for the 'Flowable' objects
         elements = []
         elements.append(self._head('Calendar'))
+        elements.append(self._image('abc'))
         elements.append(platypus.Spacer(1, 12))
         #elements.append(self._table_lines(invoice))
         elements.append(self._calendar())
@@ -246,7 +250,7 @@ class PdfCalendar(MyReport):
             ('ALIGN', (2, 0), (-1, -1), 'RIGHT'),
         ]
         # column widths
-        column_widths = [110, 330]
+        column_widths = [100, 340]
         # draw the table
         return platypus.Table(
             lines,
@@ -267,15 +271,16 @@ class PdfCalendar(MyReport):
         return '<br />'.join(result)
 
     def _strip_html(self, html):
-        from django.utils.html import strip_tags
-        return strip_tags(html)
-        """a wrapper for bleach.clean() that strips ALL tags from the input."""
+        """a wrapper for bleach.clean() that strips nearly tags."""
         tags = ['br', 'p']
         attr = {}
         styles = []
-        return bleach.clean(
+        result = bleach.clean(
             html, tags=tags, attributes=attr, styles=styles, strip=True
         )
+        result = result.replace('</p>', '<br />')
+        result = result.replace('<p>', '')
+        return result
 
     def _description(self, b):
         result = []

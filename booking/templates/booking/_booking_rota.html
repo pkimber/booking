@@ -1,5 +1,4 @@
 {% if booking_settings.display_rota %}
-  <br />
   {% for rota in b.rota_set.current %}
     {% if booking_edit %}
       <a href="{% url 'booking.rota.update' rota.pk %}">
