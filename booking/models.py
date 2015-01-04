@@ -32,6 +32,10 @@ class BookingSettings(SingletonModel):
         default=False,
         help_text=("Does this project use 'Locations'?")
     )
+    display_rota = models.BooleanField(
+        default=False,
+        help_text=("Does this project use 'Rotas'?")
+    )
     notes_user_staff = models.BooleanField(
         default=False,
         help_text=(
@@ -305,3 +309,35 @@ class Booking(TimeStampedModel):
         return not self._is_in_the_past()
 
 reversion.register(Booking)
+
+
+class RotaType(TimeStampedModel):
+
+    name = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Rota type'
+        verbose_name_plural = 'Rota types'
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+reversion.register(RotaType)
+
+
+class Rota(TimeStampedModel):
+
+    booking = models.ForeignKey(Booking)
+    rota = models.ForeignKey(RotaType)
+    name = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ('booking', 'rota', 'name')
+        verbose_name = 'Rota'
+        verbose_name_plural = 'Rotas'
+
+    def __str__(self):
+        return '{}'.format(self.booking, self.rota.name, self.name)
+
+reversion.register(Rota)

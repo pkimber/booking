@@ -12,6 +12,7 @@ from .models import (
     Booking,
     Category,
     Location,
+    RotaType,
 )
 
 
@@ -132,4 +133,20 @@ class LocationForm(RequiredFieldForm):
             'url_map',
             'description',
             'picture',
+        )
+
+
+class RotaTypeForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super(RotaTypeForm, self).__init__(*args, **kwargs)
+        for name in ('name',):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = RotaType
+        fields = (
+            'name',
         )

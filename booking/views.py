@@ -32,12 +32,14 @@ from .forms import (
     BookingNotesForm,
     CategoryForm,
     LocationForm,
+    RotaTypeForm,
 )
 from .models import (
     Booking,
     BookingSettings,
     Category,
     Location,
+    RotaType,
 )
 from .service import PdfCalendar
 
@@ -250,3 +252,29 @@ class LocationUpdateView(
 
     def get_success_url(self):
         return reverse('booking.location.list')
+
+
+class RotaTypeCreateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+
+    form_class = RotaTypeForm
+    model = RotaType
+
+    def get_success_url(self):
+        return reverse('booking.rota.type.list')
+
+
+class RotaTypeListView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, ListView):
+
+    model = RotaType
+
+
+class RotaTypeUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = RotaTypeForm
+    model = RotaType
+
+    def get_success_url(self):
+        return reverse('booking.rota.type.list')
