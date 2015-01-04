@@ -43,6 +43,14 @@
               {{ first_next_month|date:"M Y" }}
             </a>
           </li>
+          {% if not display_today %}
+            <li>
+              <a href="{% url 'booking.list' %}">
+                <i class="fa fa-calendar"></i>
+                Today
+              </a>
+            </li>
+          {% endif %}
           <li>
             <a href="{% url 'booking.download.calendar' %}">
               <i class="fa fa-cloud-download"></i>

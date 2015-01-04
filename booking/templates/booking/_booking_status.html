@@ -14,24 +14,24 @@
       {% endif %}
         {{ b.permission.slug }}
       </span>
-      <br />
+      &nbsp;
     {% endif %}
     <a href="{% url 'booking.delete' b.pk %}">
       <i class="fa fa-times"></i>
       Booking
     </a>
     <br />
-    {% if booking_settings.notes_user_staff %}
-      <a href="{% url 'booking.update.notes' b.pk %}">
-        <i class="fa fa-edit"></i>
-        User/staff
-      </a>
-      <br />
-    {% endif %}
     {% if booking_settings.display_rota %}
       <a href="{% url 'booking.rota.create' b.pk %}">
         <i class="fa fa-plus"></i>
         Rota
+      </a>
+      &nbsp;
+    {% endif %}
+    {% if booking_settings.notes_user_staff %}
+      <a href="{% url 'booking.update.notes' b.pk %}">
+        <i class="fa fa-edit"></i>
+        Notes
       </a>
     {% endif %}
   </small>

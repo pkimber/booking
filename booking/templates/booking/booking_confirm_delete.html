@@ -16,24 +16,11 @@
           <p>
             Are you sure you want to delete this booking?
           </p>
-          <p>
-            From
-            <strong>{{ booking.start_date|date:"D jS M Y" }}</strong>
-            {% if booking.end_date %}
-              to
-              <strong>{{ booking.end_date|date:"D jS M Y" }}</strong>
-            {% endif %}
-          </p>
-          {% if booking.title %}
-            <p>
-              <strong>{{ booking.title }}</strong>
-            </p>
-          {% endif %}
-          {% if booking.description %}
-            <p>
-              {{ booking.description }}
-            </p>
-          {% endif %}
+          {% include 'booking/_booking_date.html' with b=booking %}
+          {% include 'booking/_booking_time.html' with b=booking %}
+          {% include 'booking/_booking_title.html' with b=booking %}
+          <br />
+          <br />
           <input type="submit" value="Delete" class="pure-button pure-button-primary" />
         </form>
       </div>

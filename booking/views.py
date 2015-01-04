@@ -97,35 +97,12 @@ class BookingListMixin(LoginRequiredMixin, BaseMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(BookingListMixin, self).get_context_data(**kwargs)
         context.update(dict(
-            booking_edit=True,
             booking_settings=BookingSettings.load(),
         ))
         return context
 
 
-class BookingListView(BookingListMixin):
-
-    model = Booking
-
-    def get_context_data(self, **kwargs):
-        context = super(BookingListView, self).get_context_data(**kwargs)
-        today = datetime.today().date()
-        first_next_month = today + relativedelta(months=+1, day=1)
-        first_prev_month = today + relativedelta(months=-1, day=1)
-        context.update(dict(
-            first_next_month=first_next_month,
-            first_prev_month=first_prev_month,
-            sub_heading="Home",
-        ))
-        return context
-
-    def get_queryset(self):
-        return Booking.objects.calendar(self.request.user)
-
-
-class BookingListMonthView(BookingListMixin):
-
-    model = Booking
+class BookingListMonthMixin(BookingListMixin):
 
     def _get_date(self):
         month = int(self.kwargs.get('month', 0))
@@ -136,7 +113,7 @@ class BookingListMonthView(BookingListMixin):
             raise Http404("Invalid date.")
 
     def get_context_data(self, **kwargs):
-        context = super(BookingListMonthView, self).get_context_data(**kwargs)
+        context = super(BookingListMonthMixin, self).get_context_data(**kwargs)
         d = self._get_date()
         first_next_month = d + relativedelta(months=+1, day=1)
         first_prev_month = d + relativedelta(months=-1, day=1)
@@ -150,6 +127,50 @@ class BookingListMonthView(BookingListMixin):
     def get_queryset(self):
         d = self._get_date()
         return Booking.objects.month(self.request.user, d.month, d.year)
+
+
+class BookingListTodayMixin(BookingListMixin):
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListTodayMixin, self).get_context_data(**kwargs)
+        today = datetime.today().date()
+        first_next_month = today + relativedelta(months=+1, day=1)
+        first_prev_month = today + relativedelta(months=-1, day=1)
+        context.update(dict(
+            booking_settings=BookingSettings.load(),
+            first_next_month=first_next_month,
+            first_prev_month=first_prev_month,
+            display_today=True,
+            sub_heading="Home",
+        ))
+        return context
+
+    def get_queryset(self):
+        return Booking.objects.calendar(self.request.user)
+
+
+class BookingListView(BookingListTodayMixin):
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListView, self).get_context_data(**kwargs)
+        context.update(dict(
+            booking_edit=True,
+        ))
+        return context
+
+    model = Booking
+
+
+class BookingListMonthView(BookingListMonthMixin):
+
+    model = Booking
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListMonthView, self).get_context_data(**kwargs)
+        context.update(dict(
+            booking_edit=True,
+        ))
+        return context
 
 
 class BookingUpdateNotesView(
