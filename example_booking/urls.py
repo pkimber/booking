@@ -18,7 +18,10 @@ from booking.views import (
     BookingUpdateView,
 )
 
-from .views import HomeView
+from .views import (
+    HomeView,
+    SettingsView,
+)
 
 admin.autodiscover()
 
@@ -54,12 +57,13 @@ urlpatterns = patterns(
     url(regex=r'^booking/',
         view=include('booking.urls')
         ),
-    #url(regex=r'^event/',
-    #    view=include('booking.urls_event')
-    #    ),
-    url(r'^home/user/$',
+    url(regex=r'^home/user/$',
         view=RedirectView.as_view(url=reverse_lazy('project.home')),
         name='project.dash'
+        ),
+    url(regex=r'^settings/$',
+        view=SettingsView.as_view(),
+        name='project.settings'
         ),
 )
 

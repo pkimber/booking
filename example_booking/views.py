@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.views.generic import TemplateView
 
+from base.view_utils import BaseMixin
 from booking.models import (
     Booking,
     BookingSettings,
@@ -13,7 +14,7 @@ from booking.service import (
 )
 
 
-class HomeView(TemplateView):
+class HomeView(BaseMixin, TemplateView):
 
     template_name = 'example/home.html'
 
@@ -25,5 +26,17 @@ class HomeView(TemplateView):
             booking_settings=BookingSettings.load(),
             calendar=list(grouped),
             public_calendar=Booking.objects.public_calendar(),
+        ))
+        return context
+
+
+class SettingsView(BaseMixin, TemplateView):
+
+    template_name = 'example/settings.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SettingsView, self).get_context_data(**kwargs)
+        context.update(dict(
+            booking_settings=BookingSettings.load(),
         ))
         return context

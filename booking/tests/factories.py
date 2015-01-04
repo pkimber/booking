@@ -9,6 +9,7 @@ from booking.models import (
     Booking,
     Category,
     Location,
+    RotaType,
 )
 
 
@@ -32,3 +33,9 @@ class BookingFactory(factory.django.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
     location = factory.SubFactory(LocationFactory)
     start_date = timezone.now().date()
+
+
+class RotaTypeFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = RotaType

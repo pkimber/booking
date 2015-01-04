@@ -12,7 +12,7 @@ from .factories import (
     BookingFactory,
     CategoryFactory,
     LocationFactory,
-    #PermissionFactory,
+    RotaTypeFactory,
 )
 
 
@@ -79,30 +79,16 @@ class TestViewPerm(PermTestCase):
         )
         self.assert_staff_only(url)
 
-    #def test_event_permission_create(self):
-    #    self.assert_staff_only(reverse('event.permission.create'))
+    def test_rota_type_create(self):
+        self.assert_staff_only(reverse('booking.rota.type.create'))
 
-    #def test_event_permission_list(self):
-    #    self.assert_staff_only(reverse('event.permission.list'))
+    def test_rota_type_list(self):
+        self.assert_staff_only(reverse('booking.rota.type.list'))
 
-    #def test_event_permission_update(self):
-    #    permission = PermissionFactory()
-    #    url = reverse(
-    #        'event.permission.update',
-    #        kwargs=dict(pk=permission.pk)
-    #    )
-    #    self.assert_staff_only(url)
-
-    #def test_event_status_create(self):
-    #    self.assert_staff_only(reverse('event.status.create'))
-
-    #def test_event_status_list(self):
-    #    self.assert_staff_only(reverse('event.status.list'))
-
-    #def test_event_status_update(self):
-    #    status = StatusFactory()
-    #    url = reverse(
-    #        'event.status.update',
-    #        kwargs=dict(pk=status.pk)
-    #    )
-    #    self.assert_staff_only(url)
+    def test_rota_type_update(self):
+        rota_type = RotaTypeFactory()
+        url = reverse(
+            'booking.rota.type.update',
+            kwargs=dict(pk=rota_type.pk)
+        )
+        self.assert_staff_only(url)
