@@ -1,44 +1,32 @@
+h3, h4 {
+    margin-bottom: 0px;
+}
+
+.content {
+    max-width: 900px;
+}
+
+.left-box {
+    padding-top: 1.3em;
+    padding-right: 0.5em;
+}
+
 .event {
     border-top: 1px solid #D3D3D3;
     margin-bottom: 3px;
     padding-top: 3px;
 }
 
-.notes {
-    text-align: right;
-    border-top: 1px solid #E0E0E0;
-}
-
-.pending {
-    background: rgb(220, 220, 220);
-}
-
-.public {
-    border-left: 1px solid #989898;
-    padding-left: 10px;
-    padding-top: 6px;
-}
-
-.public-text {
-    background: #66FF33;
+.section {
+    border-top: 1px solid #989898;
+    margin-top: 22px;
+    margin-bottom: 5px;
 }
 
 .staff {
-    background: #FF9999;
-}
-
-.staff-text {
-    background: #FF9999;
-}
-
-.status {
-    text-align: right;
+    background: #FAE6E6;
 }
 
 .user {
-    background: #FFFF00;
-}
-
-.user-text {
-    background: #FFFF00;
+    background: #FFFFCC;
 }

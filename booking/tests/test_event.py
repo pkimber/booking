@@ -27,7 +27,7 @@ class TestEvent(TestCase):
         BookingFactory(title='b', permission=user)
         BookingFactory(title='c', permission=staff)
         BookingFactory(title='d')
-        events = Booking.objects.public_calendar()
+        events = Booking.objects._public_calendar()
         self.assertEquals(
             ['a', 'd'],
             [e.title for e in events]
@@ -47,7 +47,7 @@ class TestEvent(TestCase):
         BookingFactory(title='c', start_date=year, start_time=start)
         # do NOT include this one because it for yesterday
         BookingFactory(title='d', start_date=b4, start_time=start)
-        events = Booking.objects.public_calendar()
+        events = Booking.objects._public_calendar()
         self.assertEquals(
             ['a', 'b'],
             [e.title for e in events]

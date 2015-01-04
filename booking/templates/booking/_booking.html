@@ -12,24 +12,33 @@
         </div>
       {% endif %}
     </div>
-    <div class="pure-u-1 pure-u-md-18-24">
-      {% include 'booking/_booking_time.html' %}
+    {% if booking_edit %}
+      <div class="pure-u-1 pure-u-md-14-24">
+    {% else %}
+      <div class="pure-u-1 pure-u-md-18-24">
+    {% endif %}
       {% if user.is_staff and booking_edit and b.is_current %}
         <a href="{% url "booking.update" b.pk %}">
           <i class="fa fa-edit"></i>
+          {% include 'booking/_booking_time.html' %}
           {% include 'booking/_booking_title.html' %}
         </a>
       {% else %}
+        {% include 'booking/_booking_time.html' %}
         {% include 'booking/_booking_title.html' %}
       {% endif %}
       {% include 'booking/_booking_location.html' %}
+      {% include 'booking/_booking_rota.html' %}
       {% include 'booking/_booking_description.html' %}
       {% include 'booking/_booking_notes_user.html' %}
-      {% include 'booking/_booking_rota.html' %}
       {% include 'booking/_booking_notes_staff.html' %}
-      {% if user.is_staff and b.is_current %}
-        {% include 'booking/_booking_status.html' %}
-      {% endif %}
     </div>
+    {% if booking_edit %}
+      <div class="pure-u-1 pure-u-md-4-24">
+        {% if user.is_staff %}
+          {% include 'booking/_booking_status.html' %}
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
 </div>

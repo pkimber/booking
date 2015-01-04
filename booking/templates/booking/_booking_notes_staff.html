@@ -1,8 +1,7 @@
-{% if user.is_staff %}
-  {% if b.notes_staff %}
-    <small class="staff">[ Staff ]</small>
+{% if user.is_staff and b.notes_staff %}
+  <div class="staff">
     {% autoescape off %}
       {{ b.notes_staff }}
     {% endautoescape %}
-  {% endif %}
+  </div>
 {% endif %}

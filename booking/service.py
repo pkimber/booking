@@ -210,7 +210,7 @@ class PdfCalendar(MyReport):
         elements.append(self._head_2('Calendar'))
         elements.append(platypus.Spacer(1, 12))
         #elements.append(self._table_lines(invoice))
-        calendar = self._calendar()
+        calendar = self._calendar(user)
         if calendar:
             elements.append(calendar)
         elements.append(self._para(
@@ -221,11 +221,11 @@ class PdfCalendar(MyReport):
         ))
         doc.build(elements)
 
-    def _calendar(self):
+    def _calendar(self, user):
         lines = []
         year = 0
         month = 0
-        for b in Booking.objects.user_calendar():
+        for b in Booking.objects.calendar(user):
             if b.start_date.year == year and b.start_date.month == month:
                 pass
             else:

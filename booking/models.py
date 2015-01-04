@@ -203,22 +203,56 @@ class BookingManager(models.Manager):
             #status__publish=True,
         )
 
+    def _public_calendar(self):
+        return self._filter_by_date(
+            self._public(), timezone.now().date(), self._two_months()
+        )
+
+    def _public_month(self, month, year):
+        """Public bookings for this month."""
+        return self._filter_by_month(self._public(), month, year)
+
+    def _staff_calendar(self):
+        return self._filter_by_date(
+            self._current(), timezone.now().date(), self._two_months()
+        )
+
+    def _staff_month(self, month, year):
+        return self._filter_by_month(self._current(), month, year)
+
     def _user(self):
         return self._current().filter(
             permission__slug__in=(Permission.PUBLIC, Permission.USER),
         )
 
-    def public_calendar(self):
+    def _user_calendar(self):
         return self._filter_by_date(
-            self._public(), timezone.now().date(), self._two_months()
+            self._user(), timezone.now().date(), self._two_months()
         )
+
+    def _user_month(self, month, year):
+        return self._filter_by_month(self._user(), month, year)
+
+    def calendar(self, user):
+        if user.is_staff:
+            result = self._staff_calendar()
+        elif user.is_authenticated():
+            result = self._user_calendar()
+        else:
+            result = self._public_calendar()
+        return result
+
+    def month(self, user, month, year):
+        if user.is_staff:
+            result = self._staff_month(month, year)
+        elif user.is_authenticated():
+            result = self._user_month(month, year)
+        else:
+            result = self._public_month(month, year)
+        return result
 
     def public_calendar_widget(self, start_date, end_date):
         return self._filter_by_date(self._public(), start_date,end_date)
-
-    def public_month(self, month, year):
-        """Public bookings for this month."""
-        return self._filter_by_month(self._public(), month, year)
 
     def public_promoted(self):
         return self._public().filter(
@@ -226,22 +260,6 @@ class BookingManager(models.Manager):
             start_date__lte=self._eight_months(),
             category__promote=True,
         )
-
-    def user_calendar(self):
-        return self._filter_by_date(
-            self._user(), timezone.now().date(), self._two_months()
-        )
-
-    def user_month(self, month, year):
-        return self._filter_by_month(self._user(), month, year)
-
-    def staff_calendar(self):
-        return self._filter_by_date(
-            self._current(), timezone.now().date(), self._two_months()
-        )
-
-    def staff_month(self, month, year):
-        return self._filter_by_month(self._current(), month, year)
 
 
 class Booking(TimeStampedModel):
@@ -309,6 +327,9 @@ class Booking(TimeStampedModel):
     def is_current(self):
         return not self._is_in_the_past()
 
+    def rota(self):
+        return self.rota_set.exclude(deleted=True)
+
 reversion.register(Booking)
 
 
@@ -328,19 +349,12 @@ class RotaType(TimeStampedModel):
 reversion.register(RotaType)
 
 
-class RotaManager(models.Manager):
-
-    def current(self):
-        return self.model.objects.exclude(deleted=True)
-
-
 class Rota(TimeStampedModel):
 
     booking = models.ForeignKey(Booking)
     rota = models.ForeignKey(RotaType)
     name = models.CharField(max_length=200)
     deleted = models.BooleanField(default=False)
-    objects = RotaManager()
 
     class Meta:
         ordering = ('booking', 'rota__order', 'name')

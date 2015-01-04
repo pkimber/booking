@@ -1,5 +1,8 @@
 {% if booking_settings.display_rota %}
-  {% for rota in b.rota_set.current %}
+  {% for rota in b.rota %}
+    {% if forloop.first %}
+      <br />
+    {% endif %}
     {% if booking_edit %}
       <a href="{% url 'booking.rota.update' rota.pk %}">
         <i class="fa fa-edit"></i>
@@ -11,26 +14,11 @@
       {{ rota.name }}
     {% endif %}
     {% if booking_edit and user.is_staff %}
-      <small>
-        &nbsp;
-        <a href="{% url 'booking.rota.delete' rota.pk %}">
-          <i class="fa fa-times"></i>
-        </a>
-        &nbsp;
-      </small>
+      &nbsp;
+      <a href="{% url 'booking.rota.delete' rota.pk %}">
+        <i class="fa fa-times"></i>
+      </a>
+      &nbsp;
     {% endif %}
   {% endfor %}
-  {% if booking_edit %}
-    <small>
-      [
-        &nbsp;
-        <a href="{% url 'booking.rota.create' b.pk %}">
-          <i class="fa fa-plus"></i>
-          Rota
-        </a>
-        &nbsp;
-      ]
-    </small>
-  {% endif %}
-  <br />
 {% endif %}

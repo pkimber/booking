@@ -120,13 +120,7 @@ class BookingListView(BookingListMixin):
         return context
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            qs = Booking.objects.staff_calendar()
-        elif self.request.user.is_authenticated():
-            qs = Booking.objects.user_calendar()
-        else:
-            qs = Booking.objects.public_calendar()
-        return qs
+        return Booking.objects.calendar(self.request.user)
 
 
 class BookingListMonthView(BookingListMixin):
@@ -155,13 +149,7 @@ class BookingListMonthView(BookingListMixin):
 
     def get_queryset(self):
         d = self._get_date()
-        if self.request.user.is_staff:
-            qs = Booking.objects.staff_month(d.month, d.year)
-        elif self.request.user.is_authenticated():
-            qs = Booking.objects.user_month(d.month, d.year)
-        else:
-            qs = Booking.objects.public_month(d.month, d.year)
-        return qs
+        return Booking.objects.month(self.request.user, d.month, d.year)
 
 
 class BookingUpdateNotesView(
@@ -300,6 +288,11 @@ class RotaUpdateView(
 
     form_class = RotaForm
     model = Rota
+
+    def get_context_data(self, **kwargs):
+        context = super(RotaUpdateView, self).get_context_data(**kwargs)
+        context.update(dict(booking=self.object.booking))
+        return context
 
     def get_success_url(self):
         return _url_booking_list_month(self.object.booking)

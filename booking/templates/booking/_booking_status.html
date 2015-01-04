@@ -1,37 +1,38 @@
 {# only display this section if the context contains 'booking_edit' #}
 {% if booking_edit %}
   <small>
-    [
-      {% if booking_settings.display_permissions %}
-        {% if b.permission.slug == 'staff' %}
-          <span class="staff-text">
-            <i class="fa fa-lock"></i>
-        {% elif b.permission.slug == 'user' %}
-          <span class="user-text">
-            <i class="fa fa-user"></i>
-        {% else %}
-          <span class="public-text">
-        {% endif %}
-          {{ b.permission.slug }}
-        </span>
-        &nbsp;
-        |
+    {% if booking_settings.display_permissions %}
+      {% if b.permission.slug == 'staff' %}
+        <span class="staff">
+          <i class="fa fa-lock"></i>
+      {% elif b.permission.slug == 'user' %}
+        <span class="user">
+          <i class="fa fa-user"></i>
+      {% else %}
+        <span>
+          <i class="fa fa-globe"></i>
       {% endif %}
-      {% if booking_settings.notes_user_staff %}
-        &nbsp;
-        <a href="{% url 'booking.update.notes' b.pk %}">
-          <i class="fa fa-edit"></i>
-          user/staff
-        </a>
-        &nbsp;
-        |
-      {% endif %}
-      &nbsp;
-      <a href="{% url 'booking.delete' b.pk %}">
-        <i class="fa fa-times"></i>
-        Booking
+        {{ b.permission.slug }}
+      </span>
+      <br />
+    {% endif %}
+    <a href="{% url 'booking.delete' b.pk %}">
+      <i class="fa fa-times"></i>
+      Booking
+    </a>
+    <br />
+    {% if booking_settings.notes_user_staff %}
+      <a href="{% url 'booking.update.notes' b.pk %}">
+        <i class="fa fa-edit"></i>
+        User/staff
       </a>
-      &nbsp;
-    ]
+      <br />
+    {% endif %}
+    {% if booking_settings.display_rota %}
+      <a href="{% url 'booking.rota.create' b.pk %}">
+        <i class="fa fa-plus"></i>
+        Rota
+      </a>
+    {% endif %}
   </small>
 {% endif %}

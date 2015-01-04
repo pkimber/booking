@@ -1,11 +1,7 @@
-{% if user.is_authenticated %}
-  {% if b.notes_user %}
-    {# only display this section if the context contains 'booking_settings' #}
-    {% if booking_edit and user.is_staff %}
-      <small class="user">[ User ]</small>
-    {% endif %}
+{% if user.is_authenticated and b.notes_user %}
+  <div class="user">
     {% autoescape off %}
       {{ b.notes_user }}
     {% endautoescape %}
-  {% endif %}
+  </div>
 {% endif %}
