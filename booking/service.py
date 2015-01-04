@@ -233,8 +233,8 @@ class PdfCalendar(MyReport):
                     self._bold(DateFormat(b.start_date).format('F Y')),
                     ''
                 ])
-                month = b.start_date.month
                 year = b.start_date.year
+                month = b.start_date.month
             lines.append([
                 self._para(self._booking_date(b)),
                 self._description(b)
@@ -253,7 +253,6 @@ class PdfCalendar(MyReport):
             result = platypus.Table(
                 lines,
                 colWidths=column_widths,
-                repeatRows=1,
                 style=style,
             )
         return result
