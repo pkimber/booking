@@ -195,6 +195,10 @@ class MyReport(object):
 
 class PdfCalendar(MyReport):
 
+    def __init__(self):
+        super().__init__()
+        self.previous_date = None
+
     def report(self, response, user):
         # Create the document template
         doc = platypus.SimpleDocTemplate(
@@ -259,9 +263,13 @@ class PdfCalendar(MyReport):
 
     def _booking_date(self, b):
         result = []
-        result.append(DateFormat(b.start_date).format('l jS'))
+        if b.start_date == self.previous_date and not b.end_date:
+            pass
+        else:
+            result.append(DateFormat(b.start_date).format('jS l'))
+            self.previous_date = b.start_date
         if b.end_date:
-            end_date = DateFormat(b.end_date).format('l jS')
+            end_date = ' - {}'.format(DateFormat(b.end_date).format('jS l'))
             end_month = ''
             if b.end_date.month != b.start_date.month:
                 end_month = ' {}'.format(DateFormat(b.end_date).format('M'))

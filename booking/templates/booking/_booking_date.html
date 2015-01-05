@@ -1,7 +1,10 @@
-{{ b.start_date|date:'l jS' }}
+{% if duplicate_date and not b.end_date %}
+{% else %}
+  {{ b.start_date|date:'jS l' }}
+{% endif %}
 {% if b.end_date %}
   <br />
-  {{ b.end_date|date:'l jS' }}
+  - {{ b.end_date|date:'jS l' }}
   {% if b.end_date.month != b.start_date.month %}
     <small>{{ b.end_date|date:'F' }}</small>
   {% endif %}

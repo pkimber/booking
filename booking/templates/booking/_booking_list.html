@@ -10,5 +10,9 @@
       </div>
     </div>
   {% endifchanged %}
-  {% include 'booking/_booking.html' %}
+  {% ifchanged b.start_date %}
+    {% include 'booking/_booking.html' %}
+  {% else %}
+    {% include 'booking/_booking.html' with duplicate_date=True %}
+  {% endifchanged %}
 {% endfor %}
