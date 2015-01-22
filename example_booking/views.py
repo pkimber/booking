@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.views.generic import TemplateView
+from django.contrib.auth.models import AnonymousUser
 
 from base.view_utils import BaseMixin
 from booking.models import (
@@ -25,7 +26,7 @@ class HomeView(BaseMixin, TemplateView):
         context.update(dict(
             booking_settings=BookingSettings.load(),
             calendar=list(grouped),
-            public_calendar=Booking.objects.public_calendar(),
+            public_calendar=Booking.objects.calendar(user=AnonymousUser()),
         ))
         return context
 
