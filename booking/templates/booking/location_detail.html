@@ -11,22 +11,22 @@
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <ul>
+      <div class="pure-menu pure-menu-horizontal">
+        <ul class="pure-menu-list">
           {% if user.is_staff %}
-            <li>
-              <a href="{% url 'project.dash' %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'project.dash' %}" class="pure-menu-link">
                 <i class="fa fa-reply"></i>
               </a>
             </li>
-            <li>
-              <a href="{% url 'booking.location.update' object.pk %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'booking.location.update' object.pk %}" class="pure-menu-link">
                 <i class="fa fa-edit"></i>
                 Edit location
               </a>
             </li>
-            <li>
-              <a href="{% url 'booking.location.list' %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'booking.location.list' %}" class="pure-menu-link">
                 <i class="fa fa-calendar"></i>
                 Locations
               </a>

@@ -4,6 +4,10 @@
   Booking
 {% endblock title %}
 
+{% block sub_title %}
+  Home
+{% endblock sub_title %}
+
 {% block heading %}
   Booking
 {% endblock heading %}
@@ -11,6 +15,12 @@
 {% block sub_heading %}
   Example App
 {% endblock sub_heading %}
+
+{% block menu %}
+  <li class="pure-menu-item">
+    <a class="pure-menu-link" href="{% url 'project.settings' %}">Settings</a>
+  </li>
+{% endblock menu %}
 
 {% block footer %}
 {% endblock footer %}

@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from dateutil.relativedelta import relativedelta
 
 from django.core.exceptions import ValidationError
@@ -87,9 +85,9 @@ reversion.register(Category)
 
 class LocationManager(models.Manager):
 
-    def create_location(self, description):
+    def create_location(self, title):
         location = self.model(
-            description=description,
+            title=title,
         )
         location.save()
         return location
