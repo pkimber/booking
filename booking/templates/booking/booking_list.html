@@ -32,13 +32,13 @@
             </li>
           {% endif %}
           <li class="pure-menu-item">
-            <a href="{% url 'booking.list.month' first_prev_month|date:"Y" first_prev_month|date:"m" %}" class="pure-menu-link">
+            <a href="{% url 'booking.list.month' first_prev_month|date:'Y' first_prev_month|date:'m' %}" class="pure-menu-link">
               <i class="fa fa-calendar"></i>
               {{ first_prev_month|date:"M Y" }}
             </a>
           </li>
           <li class="pure-menu-item">
-            <a href="{% url 'booking.list.month' first_next_month|date:"Y" first_next_month|date:"m" %}" class="pure-menu-link">
+            <a href="{% url 'booking.list.month' first_next_month|date:'Y' first_next_month|date:'m' %}" class="pure-menu-link">
               <i class="fa fa-calendar"></i>
               {{ first_next_month|date:"M Y" }}
             </a>

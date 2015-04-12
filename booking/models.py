@@ -109,7 +109,7 @@ class Location(TimeStampedModel):
     objects = LocationManager()
 
     class Meta:
-        ordering = ('description',)
+        ordering = ('title',)
         verbose_name = 'Location'
         verbose_name_plural = 'Locations'
 
