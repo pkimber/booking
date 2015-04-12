@@ -50,7 +50,14 @@
             </td>
             <td>
               {% if not object.is_current %}<del>{% endif %}
-              {% include 'booking/_booking_date.html' with b=object %}
+              {{ object.start_date|date:'l jS F' }}
+              {% if object.end_date %}
+                <br />
+                - {{ object.end_date|date:'l jS' }}
+                {% if object.end_date.month != object.start_date.month %}
+                  {{ object.end_date|date:'F' }}
+                {% endif %}
+              {% endif %}
               {% if not object.is_current %}</del>{% endif %}
             </td>
           </tr>
