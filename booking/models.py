@@ -52,6 +52,11 @@ class BookingSettings(SingletonModel):
             self.notes_user_staff,
         )
 
+    @property
+    def edit_from_detail(self):
+        """Do we edit events from the detail page?"""
+        return self.notes_user_staff or self.display_rota
+
 reversion.register(BookingSettings)
 
 

@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -29,7 +27,8 @@ from base.view_utils import BaseMixin
 
 from .forms import (
     BookingForm,
-    BookingNotesForm,
+    BookingNotesStaffForm,
+    BookingNotesUserForm,
     CategoryForm,
     LocationForm,
     RotaEmptyForm,
@@ -45,6 +44,14 @@ from .models import (
     RotaType,
 )
 from .service import PdfCalendar
+
+
+def _url_booking(booking):
+    """If we are editing from the detail form."""
+    if BookingSettings.load().edit_from_detail:
+        return reverse('booking.detail', args=[booking.pk])
+    else:
+        return _url_booking_list_month(booking)
 
 
 def _url_booking_list_month(booking):
@@ -63,7 +70,7 @@ class BookingCreateView(
     model = Booking
 
     def get_success_url(self):
-        return _url_booking_list_month(self.object)
+        return _url_booking(self.object)
 
 
 class BookingDeleteView(
@@ -90,6 +97,19 @@ class BookingDeleteView(
 
     def get_success_url(self):
         return reverse('booking.list')
+
+
+class BookingDetailView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, DetailView):
+
+    model = Booking
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingDetailView, self).get_context_data(**kwargs)
+        context.update(dict(
+            booking_settings=BookingSettings.load(),
+        ))
+        return context
 
 
 class BookingListMixin(LoginRequiredMixin, BaseMixin, ListView):
@@ -173,15 +193,26 @@ class BookingListMonthView(BookingListMonthMixin):
         return context
 
 
-class BookingUpdateNotesView(
+class BookingUpdateNotesStaffView(
         LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
 
-    form_class = BookingNotesForm
+    form_class = BookingNotesStaffForm
     model = Booking
     template_name = 'booking/booking_notes_form.html'
 
     def get_success_url(self):
-        return reverse('booking.list')
+        return _url_booking(self.object)
+
+
+class BookingUpdateNotesUserView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = BookingNotesUserForm
+    model = Booking
+    template_name = 'booking/booking_notes_form.html'
+
+    def get_success_url(self):
+        return _url_booking(self.object)
 
 
 class BookingUpdateView(
@@ -190,7 +221,7 @@ class BookingUpdateView(
     model = Booking
 
     def get_success_url(self):
-        return _url_booking_list_month(self.object)
+        return _url_booking(self.object)
 
 
 class CategoryCreateView(
@@ -285,7 +316,7 @@ class RotaCreateView(
         return super(RotaCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return _url_booking_list_month(self.object.booking)
+        return _url_booking(self.object.booking)
 
 
 class RotaDeleteView(
@@ -301,7 +332,7 @@ class RotaDeleteView(
         return super(RotaDeleteView, self).form_valid(form)
 
     def get_success_url(self):
-        return _url_booking_list_month(self.object.booking)
+        return _url_booking(self.object.booking)
 
 
 class RotaUpdateView(
@@ -316,7 +347,7 @@ class RotaUpdateView(
         return context
 
     def get_success_url(self):
-        return _url_booking_list_month(self.object.booking)
+        return _url_booking(self.object.booking)
 
 
 class RotaTypeCreateView(
