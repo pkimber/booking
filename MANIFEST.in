@@ -1,5 +1,3 @@
-recursive-include example_booking/static *
-recursive-include example_booking/templates *
 recursive-include booking/static *
 recursive-include booking/templates *
 
@@ -8,4 +6,4 @@ include README
 include requirements/*.txt
 include *.txt
 
-prune example/
+prune example_booking/
