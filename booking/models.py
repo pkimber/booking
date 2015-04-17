@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from dateutil.relativedelta import relativedelta
 
 from django.core.exceptions import ValidationError
@@ -54,6 +52,11 @@ class BookingSettings(SingletonModel):
             self.notes_user_staff,
         )
 
+    @property
+    def edit_from_detail(self):
+        """Do we edit events from the detail page?"""
+        return self.notes_user_staff or self.display_rota
+
 reversion.register(BookingSettings)
 
 
@@ -87,9 +90,9 @@ reversion.register(Category)
 
 class LocationManager(models.Manager):
 
-    def create_location(self, description):
+    def create_location(self, title):
         location = self.model(
-            description=description,
+            title=title,
         )
         location.save()
         return location
@@ -106,7 +109,7 @@ class Location(TimeStampedModel):
     objects = LocationManager()
 
     class Meta:
-        ordering = ('description',)
+        ordering = ('title',)
         verbose_name = 'Location'
         verbose_name_plural = 'Locations'
 

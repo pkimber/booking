@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.conf.urls import (
     patterns,
     url,
@@ -8,9 +6,11 @@ from django.conf.urls import (
 
 from .views import (
     BookingDeleteView,
+    BookingDetailView,
     BookingListMonthView,
     BookingListView,
-    BookingUpdateNotesView,
+    BookingUpdateNotesStaffView,
+    BookingUpdateNotesUserView,
     CategoryCreateView,
     CategoryListView,
     CategoryUpdateView,
@@ -34,6 +34,10 @@ urlpatterns = patterns(
         view=BookingListView.as_view(),
         name='booking.list'
         ),
+    url(regex=r'^(?P<pk>\d+)/$',
+        view=BookingDetailView.as_view(),
+        name='booking.detail'
+        ),
     url(regex=r'^(?P<pk>\d+)/delete/$',
         view=BookingDeleteView.as_view(),
         name='booking.delete'
@@ -42,9 +46,13 @@ urlpatterns = patterns(
         view=BookingListMonthView.as_view(),
         name='booking.list.month'
         ),
-    url(regex=r'^(?P<pk>\d+)/update/notes/$',
-        view=BookingUpdateNotesView.as_view(),
-        name='booking.update.notes'
+    url(regex=r'^(?P<pk>\d+)/update/notes/staff/$',
+        view=BookingUpdateNotesStaffView.as_view(),
+        name='booking.update.notes.staff'
+        ),
+    url(regex=r'^(?P<pk>\d+)/update/notes/user/$',
+        view=BookingUpdateNotesUserView.as_view(),
+        name='booking.update.notes.user'
         ),
     url(regex=r'^category/$',
         view=CategoryListView.as_view(),

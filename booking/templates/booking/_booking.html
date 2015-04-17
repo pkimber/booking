@@ -18,8 +18,12 @@
       <div class="pure-u-1 pure-u-md-18-24">
     {% endif %}
       {% if user.is_staff and booking_edit and b.is_current %}
-        <a href="{% url "booking.update" b.pk %}">
+        {% if booking_settings.edit_from_detail %}
+          <a href="{% url 'booking.detail' b.pk %}">
+        {% else %}
+          <a href="{% url 'booking.update' b.pk %}">
           <i class="fa fa-edit"></i>
+        {% endif %}
           {% include 'booking/_booking_time.html' %}
           {% include 'booking/_booking_title.html' %}
         </a>

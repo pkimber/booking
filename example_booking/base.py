@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 """ Django settings """
 from django.core.urlresolvers import reverse_lazy
 
@@ -94,7 +92,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'example_booking.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'example.wsgi.application'
+WSGI_APPLICATION = 'example_booking.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -125,6 +123,7 @@ LOCAL_APPS = (
     'base',
     'booking',
     'login',
+    'mail',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

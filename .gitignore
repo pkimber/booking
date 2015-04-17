@@ -43,3 +43,7 @@ venv-*
 
 # private info
 .private
+
+# media
+media/
+media-private/

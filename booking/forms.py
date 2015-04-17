@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django import forms
 
 from base.form_utils import (
@@ -74,9 +72,9 @@ class BookingForm(RequiredFieldForm):
         fields = ('start_date', 'end_date', 'title', 'description')
 
 
-class BookingNotesForm(RequiredFieldForm):
+class BookingNotesStaffForm(RequiredFieldForm):
     """
-    Notes for logged in users and members of staff.
+    Notes for members of staff.
 
     This form will only be used if 'booking.BookingSettings.notes_user_staff'
     is set to 'True'.
@@ -84,17 +82,37 @@ class BookingNotesForm(RequiredFieldForm):
     """
 
     def __init__(self, *args, **kwargs):
-        super(BookingNotesForm, self).__init__(*args, **kwargs)
-        for name in ('notes_user', 'notes_staff'):
-            self.fields[name].widget.attrs.update(
-                {'class': 'pure-input-2-3'}
-            )
+        super(BookingNotesStaffForm, self).__init__(*args, **kwargs)
+        self.fields['notes_staff'].widget.attrs.update(
+            {'class': 'pure-input-2-3'}
+        )
+
+    class Meta:
+        model = Booking
+        fields = (
+            'notes_staff',
+        )
+
+
+class BookingNotesUserForm(RequiredFieldForm):
+    """
+    Notes for logged in users.
+
+    This form will only be used if 'booking.BookingSettings.notes_user_staff'
+    is set to 'True'.
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(BookingNotesUserForm, self).__init__(*args, **kwargs)
+        self.fields['notes_user'].widget.attrs.update(
+            {'class': 'pure-input-2-3'}
+        )
 
     class Meta:
         model = Booking
         fields = (
             'notes_user',
-            'notes_staff',
         )
 
 

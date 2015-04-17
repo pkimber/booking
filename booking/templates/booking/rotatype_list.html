@@ -11,15 +11,15 @@
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <ul>
-          <li>
-            <a href="{% url 'project.settings' %}">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="{% url 'project.settings' %}" class="pure-menu-link">
               <i class="fa fa-reply"></i>
             </a>
           </li>
-          <li>
-            <a href="{% url 'booking.rota.type.create' %}">
+          <li class="pure-menu-item">
+            <a href="{% url 'booking.rota.type.create' %}" class="pure-menu-link">
               <i class="fa fa-male"></i>
               Create rota type
             </a>

@@ -16,43 +16,43 @@
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <ul>
-          <li>
-            <a href="{% url 'project.dash' %}">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="{% url 'project.dash' %}" class="pure-menu-link">
               <i class="fa fa-reply"></i>
             </a>
           </li>
           {% if user.is_staff %}
-            <li>
-              <a href="{% url 'booking.create' %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'booking.create' %}" class="pure-menu-link">
                 <i class="fa fa-calendar-o"></i>
                 New booking
               </a>
             </li>
           {% endif %}
-          <li>
-            <a href="{% url 'booking.list.month' first_prev_month|date:"Y" first_prev_month|date:"m" %}">
+          <li class="pure-menu-item">
+            <a href="{% url 'booking.list.month' first_prev_month|date:'Y' first_prev_month|date:'m' %}" class="pure-menu-link">
               <i class="fa fa-calendar"></i>
               {{ first_prev_month|date:"M Y" }}
             </a>
           </li>
-          <li>
-            <a href="{% url 'booking.list.month' first_next_month|date:"Y" first_next_month|date:"m" %}">
+          <li class="pure-menu-item">
+            <a href="{% url 'booking.list.month' first_next_month|date:'Y' first_next_month|date:'m' %}" class="pure-menu-link">
               <i class="fa fa-calendar"></i>
               {{ first_next_month|date:"M Y" }}
             </a>
           </li>
           {% if not display_today %}
-            <li>
-              <a href="{% url 'booking.list' %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'booking.list' %}" class="pure-menu-link">
                 <i class="fa fa-calendar"></i>
                 Today
               </a>
             </li>
           {% endif %}
-          <li>
-            <a href="{% url 'booking.download.calendar' %}">
+          <li class="pure-menu-item">
+            <a href="{% url 'booking.download.calendar' %}" class="pure-menu-link">
               <i class="fa fa-cloud-download"></i>
               Download
             </a>

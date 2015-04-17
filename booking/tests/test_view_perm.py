@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
 from datetime import date
 from django.utils import timezone
 
@@ -24,6 +22,14 @@ class TestViewPerm(PermTestCase):
 
     def test_event_create(self):
         self.assert_staff_only(reverse('booking.create'))
+
+    def test_event_detail(self):
+        event = BookingFactory(start_date=date(2013, 3, 30))
+        url = reverse(
+            'booking.detail',
+            kwargs=dict(pk=event.pk)
+        )
+        self.assert_staff_only(url)
 
     def test_event_list(self):
         self.assert_logged_in(reverse('booking.list'))

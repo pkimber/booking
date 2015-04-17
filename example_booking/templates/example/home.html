@@ -17,17 +17,17 @@
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="pure-menu pure-menu-open pure-menu-horizontal">
-        <ul>
-          <li>
-            <a href="{% url 'booking.list' %}">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="{% url 'booking.list' %}" class="pure-menu-link">
               <i class="fa fa-calendar"></i>
               Bookings
             </a>
           </li>
           {% if user.is_staff %}
-            <li>
-              <a href="{% url 'booking.create' %}">
+            <li class="pure-menu-item">
+              <a href="{% url 'booking.create' %}" class="pure-menu-link">
                 <i class="fa fa-calendar-o"></i>
                 New booking
               </a>
@@ -35,6 +35,10 @@
           {% endif %}
         </ul>
       </div>
+    </div>
+  </div>
+  <div>
+    <div>
       <div class="l-box">
         <h3>Public bookings for the next couple of months</h3>
         {% for b in public_calendar %}
