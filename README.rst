@@ -30,12 +30,7 @@ Usage
 
 ::
 
-  py.test -x && \
-      touch temp.db && rm temp.db && \
-      django-admin migrate --noinput && \
-      django-admin demo_data_login && \
-      django-admin demo_data_booking && \
-      django-admin runserver
+ ../init_dev.sh
 
 Release
 =======
