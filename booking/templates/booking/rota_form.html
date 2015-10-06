@@ -1,17 +1,19 @@
-{% extends 'project/base.html' %}
+{% extends 'dash/base.html' %}
 
 {% block sub_title %}
   Rota
 {% endblock sub_title %}
 
 {% block sub_heading %}
-  Rota
+  Rota for {{ booking.start_date|date:'jS F Y' }}
 {% endblock sub_heading %}
 
 {% block content %}
   <div class="pure-g">
     <div class="pure-u-1">
       <div class="l-box">
+        <strong>{{ booking.start_date|date:'F Y' }}</strong>
+        <br>
         Rota for
         {% include 'booking/_booking_date.html' with b=booking %}
         {% include 'booking/_booking_time.html' with b=booking %}

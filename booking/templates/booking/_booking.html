@@ -20,6 +20,7 @@
       {% if user.is_staff and booking_edit and b.is_current %}
         {% if booking_settings.edit_from_detail %}
           <a href="{% url 'booking.detail' b.pk %}">
+          <i class="fa fa-edit"></i>
         {% else %}
           <a href="{% url 'booking.update' b.pk %}">
           <i class="fa fa-edit"></i>
