@@ -43,7 +43,11 @@ from .models import (
     Rota,
     RotaType,
 )
-from .service import PdfCalendar
+from .service import (
+    grouper,
+    HtmlCalendar,
+    PdfCalendar,
+)
 
 
 def _url_booking(booking):
@@ -222,6 +226,18 @@ class BookingUpdateView(
 
     def get_success_url(self):
         return _url_booking(self.object)
+
+
+class CalendarMixin(object):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendars = HtmlCalendar().get_calendars()
+        grouped = grouper(calendars, 3)
+        context.update(dict(
+            calendar=list(grouped),
+        ))
+        return context
 
 
 class CategoryCreateView(
