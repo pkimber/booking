@@ -31,37 +31,34 @@
   </div>
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="l-box">
-        <table class="pure-table pure-table-bordered">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
+      <table class="pure-table pure-table-bordered">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in object_list %}
+            <tr valign="top">
+              <td>
+                <a href="{% url 'booking.location.update' o.pk %}">
+                  <i class="fa fa-edit"></i>
+                  {{ o.title }}
+                </a>
+              </td>
+              <td>
+                {% autoescape off %}
+                  {{ o.description }}
+                {% endautoescape %}
+                <a href="{% url 'booking.location' o.pk %}">
+                  Click to see the location detail page...
+                </a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for o in object_list %}
-              <tr valign="top">
-                <td>
-                  <a href="{% url 'booking.location.update' o.pk %}">
-                    <i class="fa fa-edit"></i>
-                    {{ o.title }}
-                  </a>
-                </td>
-                <td>
-                  {% autoescape off %}
-                    {{ o.description }}
-                  {% endautoescape %}
-                  <a href="{% url 'booking.location' o.pk %}">
-                    Click to see the location detail page...
-                  </a>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 {% endblock content %}
-

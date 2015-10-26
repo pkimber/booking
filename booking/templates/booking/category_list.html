@@ -30,39 +30,37 @@
   </div>
   <div class="pure-g">
     <div class="pure-u-1">
-      <div class="l-box">
-        <table class="pure-table pure-table-bordered">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Property</th>
-              <th>Yes/No</th>
+      <table class="pure-table pure-table-bordered">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Property</th>
+            <th>Yes/No</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in object_list %}
+            <tr valign="top">
+              <td>
+                <a href="{% url 'booking.category.update' o.pk %}">
+                  <i class="fa fa-edit"></i>
+                  {{ o.description }}
+                </a>
+              </td>
+              <td>
+                Promote
+                <br />
+                Routine
+              </td>
+              <td>
+                {{ o.promote|yesno|capfirst }}
+                <br />
+                {{ o.routine|yesno|capfirst }}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for o in object_list %}
-              <tr valign="top">
-                <td>
-                  <a href="{% url 'booking.category.update' o.pk %}">
-                    <i class="fa fa-edit"></i>
-                    {{ o.description }}
-                  </a>
-                </td>
-                <td>
-                  Promote
-                  <br />
-                  Routine
-                </td>
-                <td>
-                  {{ o.promote|yesno|capfirst }}
-                  <br />
-                  {{ o.routine|yesno|capfirst }}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 {% endblock content %}
