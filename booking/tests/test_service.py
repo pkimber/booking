@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.test import TestCase
+import pytest
 
 from booking.service import (
     BookingCount,
@@ -10,40 +8,49 @@ from booking.service import (
 from booking.tests.scenario import demo_data
 
 
-class TestService(TestCase):
+@pytest.mark.django_db
+def test_get_bookings():
+    demo_data()
+    c = HtmlCalendar()
+    c._get_bookings()
 
-    def test_get_bookings(self):
-        demo_data()
-        c = HtmlCalendar()
-        c._get_bookings()
 
-    def test_get_calendars(self):
-        demo_data()
-        c = HtmlCalendar()
-        c.get_calendars()
+@pytest.mark.django_db
+def test_get_calendars():
+    demo_data()
+    c = HtmlCalendar()
+    c.get_calendars()
 
-    def test_booking_count(self):
-        c = BookingCount()
-        self.assertFalse(c.is_all_day())
-        self.assertFalse(c.is_afternoon())
-        self.assertFalse(c.is_morning())
 
-    def test_booking_count_afternoon(self):
-        c = BookingCount()
-        c.set_afternoon()
-        self.assertTrue(c.is_afternoon())
-        self.assertFalse(c.is_all_day())
+@pytest.mark.django_db
+def test_booking_count():
+    c = BookingCount()
+    assert c.is_all_day() is False
+    assert c.is_afternoon() is False
+    assert c.is_morning() is False
 
-    def test_booking_count_morning(self):
-        c = BookingCount()
-        c.set_morning()
-        self.assertTrue(c.is_morning())
-        self.assertFalse(c.is_all_day())
 
-    def test_booking_count_morning_and_afternoon(self):
-        c = BookingCount()
-        c.set_afternoon()
-        c.set_morning()
-        self.assertTrue(c.is_all_day())
-        self.assertFalse(c.is_afternoon())
-        self.assertFalse(c.is_morning())
+@pytest.mark.django_db
+def test_booking_count_afternoon():
+    c = BookingCount()
+    c.set_afternoon()
+    assert c.is_afternoon() is True
+    assert c.is_all_day() is False
+
+
+@pytest.mark.django_db
+def test_booking_count_morning():
+    c = BookingCount()
+    c.set_morning()
+    assert c.is_morning() is True
+    assert c.is_all_day() is False
+
+
+@pytest.mark.django_db
+def test_booking_count_morning_and_afternoon():
+    c = BookingCount()
+    c.set_afternoon()
+    c.set_morning()
+    assert c.is_all_day() is True
+    assert c.is_afternoon() is False
+    assert c.is_morning() is False
