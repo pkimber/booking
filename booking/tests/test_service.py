@@ -1,23 +1,46 @@
 # -*- encoding: utf-8 -*-
 import pytest
 
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from booking.service import (
     BookingCount,
     HtmlCalendar,
 )
-from booking.tests.scenario import demo_data
+from booking.tests.factories import BookingFactory
+
+
+def _demo_data():
+    # today
+    BookingFactory(
+        start_date=date.today(),
+        end_date=date.today()+relativedelta(days=2),
+    )
+    # in the past
+    start_date = date.today() + relativedelta(days=-10)
+    BookingFactory(
+        start_date=start_date,
+        end_date=start_date+relativedelta(days=3),
+    )
+    # in the future
+    start_date = date.today() + relativedelta(days=10)
+    BookingFactory(
+        start_date=start_date,
+        end_date=start_date+relativedelta(days=5),
+    )
 
 
 @pytest.mark.django_db
 def test_get_bookings():
-    demo_data()
+    _demo_data()
     c = HtmlCalendar()
     c._get_bookings()
 
 
 @pytest.mark.django_db
 def test_get_calendars():
-    demo_data()
+    _demo_data()
     c = HtmlCalendar()
     c.get_calendars()
 
