@@ -42,7 +42,9 @@ def test_get_bookings():
 def test_get_calendars():
     _demo_data()
     c = HtmlCalendar()
-    c.get_calendars()
+    result = c.get_calendars()
+    assert list is type(result)
+    assert 12 == len(result)
 
 
 @pytest.mark.django_db
@@ -54,8 +56,8 @@ def test_get_calendars_html():
     )
     c = HtmlCalendar()
     result = c.get_calendars(count=1)
-    assert type(result) is list
-    assert len(result) == 1
+    assert list is type(result)
+    assert 1 == len(result)
     html = result[0]
     assert "<td>02</td>" in html
     assert "<td class='afternoon'>03</td>" in html
