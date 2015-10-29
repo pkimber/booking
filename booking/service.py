@@ -156,11 +156,13 @@ class HtmlCalendar(object):
         html = html + "</table>"
         return html
 
-    def get_calendars(self):
+    def get_calendars(self, count=None):
         result = []
+        if not count:
+            count = 12
         bookings = self._get_bookings()
         d = self.start_date
-        for i in range(0, 12):
+        for i in range(0, count):
             html = self._generate_html(d, bookings)
             # move to the 1st day of the next month
             d = d + relativedelta(months=+1, day=1)
