@@ -230,9 +230,16 @@ class BookingUpdateView(
 
 class CalendarMixin(object):
 
+    def get_month_count(self):
+        try:
+            result = self.month_count
+        except AttributeError:
+            result = None
+        return result
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        calendars = HtmlCalendar().get_calendars()
+        calendars = HtmlCalendar().get_calendars(count=self.get_month_count())
         grouped = grouper(calendars, 3)
         context.update(dict(
             calendar=list(grouped),
