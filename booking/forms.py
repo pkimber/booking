@@ -22,6 +22,27 @@ class BookingEmptyForm(forms.ModelForm):
         fields = ()
 
 
+class BookingDayForm(RequiredFieldForm):
+    """
+    Form for booking one day at a time.
+
+    Require: 'start_date' and 'title'.
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in ('title', 'description'):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+        set_widget_required(self.fields['title'])
+
+    class Meta:
+        model = Booking
+        fields = ('start_date', 'title', 'description')
+
+
 class BookingEventForm(RequiredFieldForm):
 
     def __init__(self, *args, **kwargs):
