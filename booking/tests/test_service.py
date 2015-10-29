@@ -67,6 +67,20 @@ def test_get_calendars_html():
 
 
 @pytest.mark.django_db
+def test_get_calendars_no_end_date_html():
+    today = date.today()
+    BookingFactory(start_date=date(today.year, today.month, 3))
+    c = HtmlCalendar()
+    result = c.get_calendars(count=1)
+    assert list is type(result)
+    assert 1 == len(result)
+    html = result[0]
+    assert "<td>02</td>" in html
+    assert "<td class='booked'>03</td>" in html
+    assert "<td>04</td>" in html
+
+
+@pytest.mark.django_db
 def test_booking_count():
     c = BookingCount()
     assert c.is_all_day() is False

@@ -92,20 +92,26 @@ class HtmlCalendar(object):
 
     def _get_bookings(self):
         qs = Booking.objects.public_calendar_widget(
-            self.start_date, self.end_date
+            self.start_date,
+            self.end_date,
         )
         result = {}
         for b in qs:
             if not b.start_date in result:
                 result[b.start_date] = BookingCount()
             result[b.start_date].set_afternoon()
-            if not b.end_date in result:
-                result[b.end_date] = BookingCount()
-            result[b.end_date].set_morning()
-            for d in rrule(DAILY, dtstart=b.start_date, until=b.end_date):
-                if not d.date() in result:
-                    result[d.date()] = BookingCount()
-                result[d.date()].increment()
+            if b.end_date:
+                if not b.end_date in result:
+                    result[b.end_date] = BookingCount()
+                result[b.end_date].set_morning()
+                # fill the in-between dates
+                for d in rrule(DAILY, dtstart=b.start_date, until=b.end_date):
+                    if not d.date() in result:
+                        result[d.date()] = BookingCount()
+                    result[d.date()].increment()
+            else:
+                # start_date is the end date - set morning and afternoon
+                result[b.start_date].set_morning()
         return result
 
     def _generate_html(self, d, bookings):
