@@ -31,6 +31,7 @@ from .forms import (
     BookingNotesUserForm,
     CategoryForm,
     LocationForm,
+    RoomForm,
     RotaEmptyForm,
     RotaForm,
     RotaTypeForm,
@@ -40,6 +41,7 @@ from .models import (
     BookingSettings,
     Category,
     Location,
+    Room,
     Rota,
     RotaType,
 )
@@ -119,7 +121,7 @@ class BookingDetailView(
 class BookingListMixin(LoginRequiredMixin, BaseMixin, ListView):
 
     def get_context_data(self, **kwargs):
-        context = super(BookingListMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context.update(dict(
             booking_settings=BookingSettings.load(),
         ))
@@ -137,7 +139,7 @@ class BookingListMonthMixin(BookingListMixin):
             raise Http404("Invalid date.")
 
     def get_context_data(self, **kwargs):
-        context = super(BookingListMonthMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         d = self._get_date()
         first_next_month = d + relativedelta(months=+1, day=1)
         first_prev_month = d + relativedelta(months=-1, day=1)
@@ -156,12 +158,11 @@ class BookingListMonthMixin(BookingListMixin):
 class BookingListTodayMixin(BookingListMixin):
 
     def get_context_data(self, **kwargs):
-        context = super(BookingListTodayMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         today = datetime.today().date()
         first_next_month = today + relativedelta(months=+1, day=1)
         first_prev_month = today + relativedelta(months=-1, day=1)
         context.update(dict(
-            booking_settings=BookingSettings.load(),
             first_next_month=first_next_month,
             first_prev_month=first_prev_month,
             display_today=True,
@@ -316,6 +317,50 @@ class LocationUpdateView(
 
     def get_success_url(self):
         return reverse('booking.location.list')
+
+
+class RoomCreateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, CreateView):
+
+    form_class = RoomForm
+    model = Room
+
+    def _get_location(self):
+        pk = self.kwargs.get('pk', None)
+        return Location.objects.get(pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(dict(location=self._get_location()))
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.location = self._get_location()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('booking.location', args=[self.object.location.pk])
+
+
+class RoomDetailView(BaseMixin, DetailView):
+
+    model = Room
+
+
+class RoomUpdateView(
+        LoginRequiredMixin, StaffuserRequiredMixin, BaseMixin, UpdateView):
+
+    form_class = RoomForm
+    model = Room
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(dict(location=self.object.location))
+        return context
+
+    def get_success_url(self):
+        return reverse('booking.location', args = [self.object.location.pk])
 
 
 class RotaCreateView(

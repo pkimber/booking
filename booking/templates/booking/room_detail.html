@@ -20,27 +20,21 @@
               </a>
             </li>
             <li class="pure-menu-item">
-              <a href="{% url 'booking.location.update' object.pk %}" class="pure-menu-link">
+              <a href="{% url 'booking.room.update' object.pk %}" class="pure-menu-link">
                 <i class="fa fa-edit"></i>
-                Edit location
+                Edit Room
               </a>
             </li>
             <li class="pure-menu-item">
-              <a href="{% url 'booking.location.list' %}" class="pure-menu-link">
+              <a href="{% url 'booking.room.list' %}" class="pure-menu-link">
                 <i class="fa fa-calendar"></i>
-                Locations
-              </a>
-            </li>
-            <li class="pure-menu-item">
-              <a href="{% url 'booking.room.create' object.pk %}" class="pure-menu-link">
-                <i class="fa fa-plus"></i>
-                Add Room
+                Rooms
               </a>
             </li>
           {% endif %}
         </ul>
       </div>
-      {% include 'booking/_location.html' with o=object %}
+      {% include 'booking/_room.html' with o=object %}
     </div>
   </div>
 {% endblock content %}

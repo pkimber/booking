@@ -11,8 +11,10 @@ from dateutil.relativedelta import relativedelta
 from base.tests.model_maker import clean_and_save
 from booking.models import (
     Booking,
+    BookingSettings,
     Category,
     Location,
+    Room,
 )
 
 
@@ -54,7 +56,20 @@ def next_weekday(d, weekday):
     return d + timedelta(days_ahead)
 
 
+def configure_settings():
+    booking_settings = BookingSettings(
+        display_categories=True,
+        display_rota=True,
+        display_locations=True,
+        display_rooms=True,
+        display_permissions=True,
+        notes_user_staff=True,
+        pdf_heading='Booking App'
+    )
+    booking_settings.save()
+
 def demo_data():
+    configure_settings()
     # set-up some dates
     today = datetime.today().date()
     # 1st week last month starting Saturday
@@ -81,6 +96,13 @@ def demo_data():
     end_date = next_weekday(start_date, 5)
     make_booking(start_date, end_date, 'Alpe D Huez')
     make_booking(end_date, end_date + timedelta(days=4), 'Cornwall')
-    # misc
-    Category.objects.create_category('Meeting')
-    Location.objects.create_location('Community Centre')
+    # Categories
+    Category.objects.create_category('Meeting', per_day_booking=False)
+    Category.objects.create_category('Cottage Rental')
+    #Locations
+    Location.objects.create_location('Gale Force Cottage')
+    community_centre = Location.objects.create_location('Community Centre')
+    # Rooms
+    Room.objects.create_room(location=community_centre, title='Kitchen')
+    Room.objects.create_room(location=community_centre, title='Main Hall')
+    Room.objects.create_room(location=community_centre, title='Side Room 1')

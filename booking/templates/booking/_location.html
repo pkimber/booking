@@ -52,4 +52,16 @@
       </a>
     {% endif %}
   </div>
+  <div class="pure-u-1 pure-u-md-1-2">
+    {% if object.has_rooms %}
+      <h3>Rooms:</h3>
+      <ul>
+        {% for room in object.room_set.all %}
+          <li>
+            <a href="{% url 'booking.room.update' room.pk %}">{{ room.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
 </div>

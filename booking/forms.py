@@ -10,6 +10,7 @@ from .models import (
     Booking,
     Category,
     Location,
+    Room,
     Rota,
     RotaType,
 )
@@ -152,6 +153,7 @@ class CategoryForm(RequiredFieldForm):
             'description',
             'promote',
             'routine',
+            'per_day_booking',
         )
 
 
@@ -171,6 +173,23 @@ class LocationForm(RequiredFieldForm):
             'address',
             'url',
             'url_map',
+            'description',
+            'picture',
+        )
+
+class RoomForm(RequiredFieldForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in ('title', 'description'):
+            self.fields[name].widget.attrs.update(
+                {'class': 'pure-input-2-3'}
+            )
+
+    class Meta:
+        model = Room
+        fields = (
+            'title',
             'description',
             'picture',
         )

@@ -42,8 +42,7 @@
           {% for o in object_list %}
             <tr valign="top">
               <td>
-                <a href="{% url 'booking.location.update' o.pk %}">
-                  <i class="fa fa-edit"></i>
+                <a href="{% url 'booking.location' o.pk %}">
                   {{ o.title }}
                 </a>
               </td>
@@ -51,8 +50,9 @@
                 {% autoescape off %}
                   {{ o.description }}
                 {% endautoescape %}
-                <a href="{% url 'booking.location' o.pk %}">
-                  Click to see the location detail page...
+                <a href="{% url 'booking.location.update' o.pk %}">
+                  <i class="fa fa-edit"></i>
+                  Edit
                 </a>
               </td>
             </tr>

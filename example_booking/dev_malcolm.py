@@ -13,5 +13,7 @@ DATABASES = {
     }
 }
 
+INSTALLED_APPS += ('debug_toolbar', )
+
 # http://docs.celeryproject.org/en/2.5/django/unit-testing.html
 CELERY_ALWAYS_EAGER = True

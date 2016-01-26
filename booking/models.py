@@ -30,6 +30,10 @@ class BookingSettings(SingletonModel):
         default=False,
         help_text=("Does this project use 'Locations'?")
     )
+    display_rooms = models.BooleanField(
+        default=False,
+        help_text=("Does this project use 'Rooms'?")
+    )
     display_rota = models.BooleanField(
         default=False,
         help_text=("Does this project use 'Rotas'?")
@@ -62,9 +66,10 @@ reversion.register(BookingSettings)
 
 class CategoryManager(models.Manager):
 
-    def create_category(self, description):
+    def create_category(self, description, **kwargs):
         category = self.model(
             description=description,
+            per_day_booking=kwargs.get('per_day_booking', True)
         )
         category.save()
         return category
@@ -75,6 +80,10 @@ class Category(TimeStampedModel):
     description = models.CharField(max_length=200)
     promote = models.BooleanField(default=False)
     routine = models.BooleanField(default=True)
+    per_day_booking = models.BooleanField(
+        default=True,
+        help_text=("Is the minimum booking period one day?")
+    )
     objects = CategoryManager()
 
     class Meta:
@@ -103,7 +112,7 @@ class Location(TimeStampedModel):
     title = models.CharField(max_length=200)
     address = models.TextField(blank=True)
     url = models.URLField(blank=True, null=True)
-    url_map = models.URLField(blank=True, null=True)
+    url_map = models.URLField(max_length=512, blank=True, null=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='booking', blank=True)
     objects = LocationManager()
@@ -116,7 +125,40 @@ class Location(TimeStampedModel):
     def __str__(self):
         return '{}'.format(self.title)
 
+    @property
+    def has_rooms(self):
+        if BookingSettings.load().display_rooms:
+            return self.room_set.exists()
+        return False
+
 reversion.register(Location)
+
+
+class RoomManager(models.Manager):
+
+    def create_room(self, location, title):
+        room = self.model(location=location,title=title,)
+        room.save()
+        return room
+
+
+class Room(TimeStampedModel):
+
+    location = models.ForeignKey(Location, blank=True, null=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    picture = models.ImageField(upload_to='booking', blank=True)
+    objects = RoomManager()
+
+    class Meta:
+        ordering = ('title',)
+        verbose_name = 'Room'
+        verbose_name_plural = 'Rooms'
+
+    def __str__(self):
+        return '{}'.format(self.title)
+
+reversion.register(Room)
 
 
 class PermissionManager(models.Manager):
@@ -284,6 +326,7 @@ class Booking(TimeStampedModel):
         help_text="Please enter in 24 hour format e.g. 21:00",
     )
     location = models.ForeignKey(Location, blank=True, null=True)
+    room = models.ForeignKey(Room, blank=True, null=True)
     description = models.TextField(blank=True)
     picture = models.ImageField(upload_to='booking', blank=True)
     notes_user = models.TextField(
@@ -313,15 +356,35 @@ class Booking(TimeStampedModel):
         return self.end_date and self.end_date < timezone.now().date()
 
     def clean(self):
+        per_day_booking = True
+        if self.category:
+            per_day_booking = self.category.per_day_booking
+
         if self.end_date:
             if self.start_date > self.end_date:
                 raise ValidationError(
                     'A booking cannot end before it has started.'
                 )
-            if self.start_date == self.end_date:
-                raise ValidationError(
-                    'A booking cannot start and end on the same day.'
-                )
+            if per_day_booking:
+                if self.start_date == self.end_date:
+                    raise ValidationError(
+                        'A booking cannot start and end on the same day.'
+                    )
+            else:
+                if not self.start_time or not self.end_time:
+                    raise ValidationError(
+                        'A booking must have a start and end time'
+                    )
+
+                if not (
+                    self.end_date > self.start_date or (
+                        self.start_date == self.end_date and
+                        self.end_time > self.start_time
+                        )) :
+                    raise ValidationError(
+                        'A booking end time must be after the start time'
+                    )
+
         if self._is_in_the_past():
             raise ValidationError(
                 'You cannot make a booking in the past.'

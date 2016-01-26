@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import (
     datetime,
+    time,
     timedelta,
 )
 
@@ -12,7 +13,7 @@ from django.test import TestCase
 from base.tests.model_maker import clean_and_save
 from booking.models import Booking
 
-from .factories import BookingFactory
+from .factories import BookingFactory, CategoryFactory
 
 
 class TestBooking(TestCase):
@@ -71,6 +72,39 @@ class TestBooking(TestCase):
             end_date=next_week + timedelta(days=-2),
             title='Two days in the sun',
             ))
+
+    def test_end_time_before_start_time(self):
+        """Booking - start before the end!"""
+        category = CategoryFactory(per_day_booking=False)
+
+        today = datetime.today().date()
+        next_week = today + timedelta(days=7)
+        with self.assertRaises(ValidationError):
+            clean_and_save(BookingFactory(
+                category=category,
+                start_date=next_week,
+                end_date=next_week,
+                start_time=time(hour=9),
+                end_time=time(hour=8),
+                title='not an hour',
+            ))
+
+    def test_timed_booking(self):
+        """Booking - timed booking allows a two hour booking"""
+        category = CategoryFactory(per_day_booking=False)
+
+        today = datetime.today().date()
+        next_week = today + timedelta(days=7)
+        clean_and_save(BookingFactory(
+            category=category,
+            start_date=next_week,
+            end_date=next_week,
+            start_time=time(hour=11),
+            end_time=time(hour=13),
+            title='fun at lunchtime',
+        ))
+        b = Booking.objects.get(title='fun at lunchtime')
+        assert b.start_time == time(hour=11)
 
     def test_double_booking(self):
         """Don't allow a double booking.
