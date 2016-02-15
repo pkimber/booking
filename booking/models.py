@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
-import reversion
+from reversion import revisions as reversion
 
 from base.model_utils import TimeStampedModel
 from base.singleton import SingletonModel
