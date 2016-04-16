@@ -30,7 +30,7 @@ setup(
             'templates/booking/*.*',
         ],
     },
-    version='0.0.24',
+    version='0.0.25',
     description='booking',
     author='Patrick Kimber',
     author_email='code@pkimber.net',
