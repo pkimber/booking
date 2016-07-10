@@ -11,9 +11,8 @@ Virtual Environment
 
 ::
 
-  virtualenv --python=python3.4 venv-booking
+  virtualenv --python=python3 venv-booking
   source venv-booking/bin/activate
-  pip install --upgrade pip
 
   pip install -r requirements/local.txt
 
@@ -35,4 +34,4 @@ Usage
 Release
 =======
 
-https://www.pkimber.net/open/
+https://www.kbsoftware.co.uk/docs/
