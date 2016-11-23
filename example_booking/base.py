@@ -124,7 +124,6 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    'compressor',
     'easy_thumbnails',
     'reversion',
 )
