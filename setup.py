@@ -20,7 +20,7 @@ def get_readme():
 
 setup(
     name='kb-booking',
-    packages=['booking', 'booking.migrations', 'booking.management', 'booking.management.commands', 'booking.tests'],
+    packages=['booking', 'booking.management', 'booking.management.commands', 'booking.tests', 'booking.migrations'],
     package_data={
         'booking': [
             'static/*.*',
@@ -30,10 +30,10 @@ setup(
             'templates/booking/*.*',
         ],
     },
-    version='0.0.26',
+    version='0.0.27',
     description='booking',
-    author='Patrick Kimber',
-    author_email='code@pkimber.net',
+    author='Malcolm Dinsmore',
+    author_email='zebyea@gmail.com',
     url='git@github.com:pkimber/booking.git',
     classifiers=[
         'Development Status :: 1 - Planning',
