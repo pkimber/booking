@@ -23,6 +23,7 @@ from booking.models import (
     Booking,
     BookingSettings,
 )
+from report.pdf import MyReport
 
 
 def grouper(iterable, n, fillvalue=None):
@@ -174,29 +175,6 @@ class HtmlCalendar(object):
             d = d + relativedelta(months=+1, day=1)
             result.append(mark_safe(html))
         return result
-
-
-class MyReport(object):
-
-    def __init__(self):
-        # Use the sample style sheet.
-        style_sheet = getSampleStyleSheet()
-        self.body = style_sheet["BodyText"]
-        self.head_1 = style_sheet["Heading1"]
-        self.head_2 = style_sheet["Heading2"]
-        self.GRID_LINE_WIDTH = 0.1
-
-    def _bold(self, text):
-        return self._para('<b>{}</b>'.format(text))
-
-    def _head_1(self, text):
-        return platypus.Paragraph(text, self.head_1)
-
-    def _head_2(self, text):
-        return platypus.Paragraph(text, self.head_2)
-
-    def _para(self, text):
-        return platypus.Paragraph(text, self.body)
 
 
 class PdfCalendar(MyReport):
