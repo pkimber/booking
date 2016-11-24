@@ -1,8 +1,5 @@
 # -*- encoding: utf-8 -*-
-from django.conf.urls import (
-    patterns,
-    url,
-)
+from django.conf.urls import url
 
 from .views import (
     BookingDeleteView,
@@ -28,8 +25,7 @@ from .views import (
 )
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(regex=r'^$',
         view=BookingListView.as_view(),
         name='booking.list'
@@ -110,4 +106,4 @@ urlpatterns = patterns(
         view=RotaTypeUpdateView.as_view(),
         name='booking.rota.type.update'
         ),
-)
+]
